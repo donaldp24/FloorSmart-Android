@@ -9,7 +9,7 @@ import android.graphics.Rect;
  * Time: 9:57 PM
  * To change this template use File | Settings | File Templates.
  */
-public class CommonData {
+public class UIManager {
 
     //enum for transform
     public static final int TRANSFORM_ALPHA_FADE = 0;

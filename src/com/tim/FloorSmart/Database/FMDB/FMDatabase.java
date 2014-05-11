@@ -1,5 +1,6 @@
 package com.tim.FloorSmart.Database.FMDB;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
@@ -57,7 +58,8 @@ public class FMDatabase {
     }
 
     public boolean goodConnection() {
-        //
+        // have to re-implement
+        return false;
     }
 
     public void clearCachedStatements() {
@@ -69,23 +71,32 @@ public class FMDatabase {
     }
 
     public String lastErrorMessage() {
-        //
+        // have to re-implement
+        return "";
     }
 
     public int lastErrorCode() {
-        //
+        // have to re-implement.
+        return 0;
     }
 
     public boolean hadError() {
-        //
-    }
-
-    public int lastInsertRowId() {
-        //
+        // have to re-implement.
+        return false;
     }
 
     public Cursor executeQuery(String formatSql, Object ...arguments) {
         String sql = String.format(formatSql, arguments);
         return db.rawQuery(sql, null);
+    }
+
+    public boolean executeUpdate(String formatSql, Object ...arguments) {
+        String sql = String.format(formatSql, arguments);
+        db.execSQL(sql);
+        return true;
+    }
+
+    public long insert(String table, String nullColumnHack, ContentValues values) {
+        return db.insert(table, nullColumnHack, values);
     }
 }

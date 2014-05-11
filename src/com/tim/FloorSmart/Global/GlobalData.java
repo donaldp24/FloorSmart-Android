@@ -17,6 +17,9 @@ public class GlobalData {
     public static final String DATEFORMAT_US = "MM/dd/yyyy";
     public static final String DATEFORMAT_EU = "dd.MM.yyyy";
     public static final String DATEFORMAT_DB = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
+    public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
 
     // singleton
     private static GlobalData _sharedData;

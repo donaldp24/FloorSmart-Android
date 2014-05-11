@@ -11,15 +11,15 @@ public class TransformManager {
     // for activity animation ----------------------------------------
     public static int GetContinueInAnim()
     {
-        switch(CommonData.transformAnimation)
+        switch(UIManager.transformAnimation)
         {
-            case CommonData.TRANSFORM_ALPHA_FADE:
+            case UIManager.TRANSFORM_ALPHA_FADE:
                 //return R.anim.trans_in;
                 //return R.anim.right_in;
                 return R.anim.fade;
-            case CommonData.TRANSFORM_TRANSFORM_SLIDE:
+            case UIManager.TRANSFORM_TRANSFORM_SLIDE:
                 return R.anim.right_in;
-            case CommonData.TRANSFORM_ALPHA_SLIDE:
+            case UIManager.TRANSFORM_ALPHA_SLIDE:
                 return R.anim.right_in_alpha;
             default:
                 return R.anim.trans_in;
@@ -27,15 +27,15 @@ public class TransformManager {
     }
     public static int GetContinueOutAnim()
     {
-        switch (CommonData.transformAnimation)
+        switch (UIManager.transformAnimation)
         {
-            case CommonData.TRANSFORM_ALPHA_FADE:
+            case UIManager.TRANSFORM_ALPHA_FADE:
                 return R.anim.alpha;
                 //return R.anim.left_out;
-            case CommonData.TRANSFORM_TRANSFORM_SLIDE:
+            case UIManager.TRANSFORM_TRANSFORM_SLIDE:
                 //return R.anim.left_out;
                 return R.anim.alpha;
-            case CommonData.TRANSFORM_ALPHA_SLIDE:
+            case UIManager.TRANSFORM_ALPHA_SLIDE:
                 return R.anim.alpha;
             default:
                 return R.anim.alpha;
@@ -44,15 +44,15 @@ public class TransformManager {
 
     public static int GetBackInAnim()
     {
-        switch (CommonData.transformAnimation)
+        switch (UIManager.transformAnimation)
         {
-            case CommonData.TRANSFORM_ALPHA_FADE:
+            case UIManager.TRANSFORM_ALPHA_FADE:
                 //return R.anim.trans_out;
                 //return R.anim.left_in;
                 return R.anim.fade;
-            case CommonData.TRANSFORM_TRANSFORM_SLIDE:
+            case UIManager.TRANSFORM_TRANSFORM_SLIDE:
                 return R.anim.left_in;
-            case CommonData.TRANSFORM_ALPHA_SLIDE:
+            case UIManager.TRANSFORM_ALPHA_SLIDE:
                 return R.anim.left_in_alpha;
             default:
                 return R.anim.trans_out;
@@ -61,15 +61,15 @@ public class TransformManager {
 
     public static int GetBackOutAnim()
     {
-        switch (CommonData.transformAnimation)
+        switch (UIManager.transformAnimation)
         {
-            case CommonData.TRANSFORM_ALPHA_FADE:
+            case UIManager.TRANSFORM_ALPHA_FADE:
                 return R.anim.alpha;
                 //return R.anim.right_out;
-            case CommonData.TRANSFORM_TRANSFORM_SLIDE:
+            case UIManager.TRANSFORM_TRANSFORM_SLIDE:
                 //return R.anim.right_out;
                 return R.anim.alpha;
-            case CommonData.TRANSFORM_ALPHA_SLIDE:
+            case UIManager.TRANSFORM_ALPHA_SLIDE:
                 return R.anim.alpha;
             default:
                 return R.anim.alpha;
@@ -79,9 +79,9 @@ public class TransformManager {
 
     public static int GetVideoInAnim()
     {
-        switch (CommonData.transformAnimation)
+        switch (UIManager.transformAnimation)
         {
-            case CommonData.TRANSFORM_ALPHA_FADE:
+            case UIManager.TRANSFORM_ALPHA_FADE:
                 return R.anim.video_in;
             default:
                 return R.anim.video_in;
@@ -89,9 +89,9 @@ public class TransformManager {
     }
     public static int GetVideoOutAnim()
     {
-        switch (CommonData.transformAnimation)
+        switch (UIManager.transformAnimation)
         {
-            case CommonData.TRANSFORM_ALPHA_FADE:
+            case UIManager.TRANSFORM_ALPHA_FADE:
                 return R.anim.video_out;
             default:
                 return R.anim.video_out;
