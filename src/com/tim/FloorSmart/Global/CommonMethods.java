@@ -78,20 +78,20 @@ public class CommonMethods {
         return sqft;
     }
 
-    public static void Log(String tag, String msg) {
-        Log.v(tag, msg);
+    public static void Log(String tag, String formatMsg, Object ...values) {
+        Log.v(tag, String.format(formatMsg, values));
     }
 
-    public static void Log(String msg) {
-        Log.v(GlobalData.TAG, msg);
+    public static void Log(String formatMsg, Object ...values) {
+        Log.v(CommonDefs.TAG, String.format(formatMsg, values));
     }
 
     public static int compareOnlyDate(Date date1, Date date2)
     {
-        String str1 = CommonMethods.date2str(date1, GlobalData.DATE_FORMAT);
-        String str2 = CommonMethods.date2str(date2, GlobalData.DATE_FORMAT);
-        Date date3 = CommonMethods.str2date(str1, GlobalData.DATE_FORMAT);
-        Date date4 = CommonMethods.str2date(str2, GlobalData.DATE_FORMAT);
+        String str1 = CommonMethods.date2str(date1, CommonDefs.DATE_FORMAT);
+        String str2 = CommonMethods.date2str(date2, CommonDefs.DATE_FORMAT);
+        Date date3 = CommonMethods.str2date(str1, CommonDefs.DATE_FORMAT);
+        Date date4 = CommonMethods.str2date(str2, CommonDefs.DATE_FORMAT);
         return date3.compareTo(date4);
     }
 }

@@ -3,6 +3,7 @@ package com.tim.FloorSmart.Database;
 import android.content.ContentValues;
 import android.database.Cursor;
 import com.tim.FloorSmart.Database.FMDB.FMDatabase;
+import com.tim.FloorSmart.Global.CommonDefs;
 import com.tim.FloorSmart.Global.CommonMethods;
 import com.tim.FloorSmart.Global.GlobalData;
 
@@ -615,7 +616,7 @@ public class DataManager {
         {
             do {
                 String strDateOnly = results.getString(0); //[[results stringForColumn:@"read_date"] substringToIndex:10];
-                Date date = CommonMethods.str2date(strDateOnly, GlobalData.DATE_FORMAT);
+                Date date = CommonMethods.str2date(strDateOnly, CommonDefs.DATE_FORMAT);
                 arrDates.add(date);
             } while (results.moveToNext());
         }
@@ -624,7 +625,7 @@ public class DataManager {
 
     public ArrayList<FSReading> getReadings(long locProductID, Date date) {
         ArrayList<FSReading> arrReadingsList = new ArrayList<FSReading>();
-        String strDate = CommonMethods.date2str(date, GlobalData.DATE_FORMAT);
+        String strDate = CommonMethods.date2str(date, CommonDefs.DATE_FORMAT);
         String sql = String.format("SELECT * FROM tbl_reading WHERE deleted = 0 AND  read_locproductid = %ld AND SUBSTR(read_date, 1, 10) = '%s'", locProductID, strDate);
         Cursor results = _database.executeQuery(sql);
         if (results.moveToFirst())
@@ -633,7 +634,7 @@ public class DataManager {
                 FSReading reading = new FSReading();
                 reading.readID = results.getLong(results.getColumnIndex("read_id"));
                 reading.readLocProductID = results.getLong(results.getColumnIndex("read_locproductid"));
-                reading.readTimestamp = CommonMethods.str2date(results.getString(results.getColumnIndex("read_date")), GlobalData.DATETIME_FORMAT);
+                reading.readTimestamp = CommonMethods.str2date(results.getString(results.getColumnIndex("read_date")), CommonDefs.DATETIME_FORMAT);
                 reading.readUuid = results.getString(results.getColumnIndex("read_uuid"));
                 reading.readRH = results.getLong(results.getColumnIndex("read_rh"));
                 reading.readConvRH = results.getDouble(results.getColumnIndex("read_convrh"));
@@ -651,7 +652,7 @@ public class DataManager {
     }
 
     public int getReadingsCount(long locProductID, Date date) {
-        String strDate = CommonMethods.date2str(date, GlobalData.DATE_FORMAT);
+        String strDate = CommonMethods.date2str(date, CommonDefs.DATE_FORMAT);
         String sql = String.format("SELECT count(*) AS allcount FROM tbl_reading WHERE deleted = 0 AND read_locproductid = %ld AND SUBSTR(read_date, 1, 10) = '%s'", locProductID, strDate);
         Cursor results = _database.executeQuery(sql);
         if (results.moveToFirst())
@@ -693,7 +694,7 @@ public class DataManager {
      */
         ContentValues values = new ContentValues();
         values.put("read_locproductid", reading.readLocProductID);
-        values.put("read_date", CommonMethods.date2str(reading.readTimestamp, GlobalData.DATETIME_FORMAT));
+        values.put("read_date", CommonMethods.date2str(reading.readTimestamp, CommonDefs.DATETIME_FORMAT));
         values.put("read_uuid", reading.readUuid);
         values.put("read_rh", reading.readRH);
         values.put("read_convrh", reading.readConvRH);
@@ -716,7 +717,7 @@ public class DataManager {
         String sql;
         sql = String.format("UPDATE tbl_reading set read_locproductid = %ld, read_date = '%s', read_uuid = '%s', read_rh = %ld, read_convrh = %f, read_temp = %ld, read_convtemp = %f, read_battery = %ld, read_depth = %ld, read_gravity = %ld, read_material = %ld, read_mc = %ld",
                 reading.readLocProductID,
-                CommonMethods.date2str(reading.readTimestamp, GlobalData.DATETIME_FORMAT),
+                CommonMethods.date2str(reading.readTimestamp, CommonDefs.DATETIME_FORMAT),
                 reading.readUuid,
                 reading.readRH,
                 reading.readConvRH,
