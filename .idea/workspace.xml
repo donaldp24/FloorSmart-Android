@@ -5,20 +5,13 @@
       <config />
     </shared>
   </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="floorsmart" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="a07c33b3-42b0-49f2-be46-526f93e65288" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/tim/FloorSmart/Global/CommonDefs.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/EmulatorReadingParser.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ReadingParser.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManager.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManagerListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/SensorReadingParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/tim/FloorSmart/Global/CommonMethods.java" afterPath="$PROJECT_DIR$/src/com/tim/FloorSmart/Global/CommonMethods.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/tim/FloorSmart/Database/DataManager.java" afterPath="$PROJECT_DIR$/src/com/tim/FloorSmart/Database/DataManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/tim/FloorSmart/Global/GlobalData.java" afterPath="$PROJECT_DIR$/src/com/tim/FloorSmart/Global/GlobalData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project.properties" afterPath="$PROJECT_DIR$/project.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManager.java" afterPath="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/tim/FloorSmart/SplashScreen.java" afterPath="$PROJECT_DIR$/src/com/tim/FloorSmart/SplashScreen.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="FloorSmart.iws" />
@@ -74,6 +67,23 @@
       </breakpoint>
     </breakpoint_any>
     <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
+    <line_breakpoints>
+      <breakpoint url="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManager.java" line="109" class="com.tim.FloorSmart.Scan.ScanManager$1" package="com.tim.FloorSmart.Scan">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </line_breakpoints>
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -86,7 +96,7 @@
       <file leaf-file-name="CommonDefs.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Global/CommonDefs.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="0" selection-start="387" selection-end="387" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="399">
+            <state line="13" column="0" selection-start="387" selection-end="387" vertical-scroll-proportion="0.0" vertical-offset="247" max-vertical-offset="399">
               <folding />
             </state>
           </provider>
@@ -95,22 +105,19 @@
       <file leaf-file-name="UIManager.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/UIManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="0" selection-start="520" selection-end="520" vertical-scroll-proportion="0.0" vertical-offset="89" max-vertical-offset="608">
+            <state line="19" column="0" selection-start="520" selection-end="520" vertical-scroll-proportion="0.0" vertical-offset="361" max-vertical-offset="608">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ScanManager.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ScanManager.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="0" selection-start="1853" selection-end="1853" vertical-scroll-proportion="0.0" vertical-offset="1358" max-vertical-offset="3800">
+            <state line="110" column="14" selection-start="5361" selection-end="5361" vertical-scroll-proportion="0.45" vertical-offset="1923" max-vertical-offset="3876">
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#597#5325#0" expanded="true" />
-                <element signature="e#5310#5311#0" expanded="true" />
-                <element signature="e#6701#7210#0" expanded="true" />
-                <element signature="e#7199#7200#0" expanded="true" />
+                <element signature="e#597#5360#0" expanded="true" />
+                <element signature="e#5345#5346#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -119,7 +126,7 @@
       <file leaf-file-name="ScanManagerListener.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManagerListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="38" selection-start="113" selection-end="113" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
+            <state line="6" column="4" selection-start="118" selection-end="338" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
               <folding />
             </state>
           </provider>
@@ -129,10 +136,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/EmulatorReadingParser.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="55" column="79" selection-start="2217" selection-end="2217" vertical-scroll-proportion="0.0" vertical-offset="811" max-vertical-offset="2508">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#932#948#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -140,17 +144,19 @@
       <file leaf-file-name="DataManager.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/DataManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="719" column="72" selection-start="32172" selection-end="32172" vertical-scroll-proportion="0.0" vertical-offset="13499" max-vertical-offset="14003">
+            <state line="719" column="72" selection-start="32172" selection-end="32172" vertical-scroll-proportion="0.0" vertical-offset="13661" max-vertical-offset="14155">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SplashScreen.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="SplashScreen.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/SplashScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="49" selection-start="187" selection-end="187" vertical-scroll-proportion="0.2205029" vertical-offset="0" max-vertical-offset="517">
-              <folding />
+            <state line="28" column="26" selection-start="729" selection-end="729" vertical-scroll-proportion="0.0" vertical-offset="281" max-vertical-offset="798">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -158,7 +164,7 @@
       <file leaf-file-name="CommonMethods.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Global/CommonMethods.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="88" column="30" selection-start="2341" selection-end="2341" vertical-scroll-proportion="0.0" vertical-offset="1364" max-vertical-offset="1881">
+            <state line="88" column="30" selection-start="2341" selection-end="2341" vertical-scroll-proportion="0.0" vertical-offset="1672" max-vertical-offset="1957">
               <folding />
             </state>
           </provider>
@@ -168,10 +174,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/SensorReadingParser.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="61" column="29" selection-start="2487" selection-end="2487" vertical-scroll-proportion="0.0" vertical-offset="2004" max-vertical-offset="2508">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#930#946#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -179,7 +182,7 @@
       <file leaf-file-name="ReadingParser.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ReadingParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="39" selection-start="174" selection-end="174" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="551">
+            <state line="8" column="39" selection-start="174" selection-end="174" vertical-scroll-proportion="0.0" vertical-offset="152" max-vertical-offset="551">
               <folding />
             </state>
           </provider>
@@ -211,13 +214,14 @@
         <option value="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ReadingParser.java" />
         <option value="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManagerListener.java" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManager.java" />
         <option value="$PROJECT_DIR$/src/com/tim/FloorSmart/Global/GlobalData.java" />
         <option value="$PROJECT_DIR$/src/com/tim/FloorSmart/Global/CommonDefs.java" />
         <option value="$PROJECT_DIR$/src/com/tim/FloorSmart/Global/CommonMethods.java" />
         <option value="$PROJECT_DIR$/src/com/tim/FloorSmart/Database/DataManager.java" />
         <option value="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/EmulatorReadingParser.java" />
         <option value="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/SensorReadingParser.java" />
+        <option value="$PROJECT_DIR$/src/com/tim/FloorSmart/SplashScreen.java" />
+        <option value="$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManager.java" />
       </list>
     </option>
   </component>
@@ -255,6 +259,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -301,6 +306,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FloorSmart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Scan" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FloorSmart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FloorSmart-Android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="res" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -308,7 +335,6 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -562,6 +588,8 @@
       <option name="NETWORK_LATENCY" value="none" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <RunnerSettings RunnerId="AndroidDebugRunner" />
+      <ConfigurationWrapper RunnerId="AndroidDebugRunner" />
       <method />
     </configuration>
     <list size="1">
@@ -588,11 +616,13 @@
       <workItem from="1399646683988" duration="1020000" />
       <workItem from="1399684352232" duration="10399000" />
       <workItem from="1400113857235" duration="14362000" />
+      <workItem from="1400240527493" duration="1199000" />
+      <workItem from="1400297597444" duration="3196000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37534000" />
+    <option name="totallyTimeSpent" value="41929000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="722" extended-state="6" />
@@ -603,27 +633,28 @@
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6099291" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6187943" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -650,51 +681,37 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSJob.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="17" selection-start="185" selection-end="185" vertical-scroll-proportion="0.0" vertical-offset="190" max-vertical-offset="342">
-          <folding />
-        </state>
+        <state line="10" column="17" selection-start="185" selection-end="185" vertical-scroll-proportion="0.0" vertical-offset="190" max-vertical-offset="342" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSLocation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="17" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0" vertical-offset="133" max-vertical-offset="342">
-          <folding />
-        </state>
+        <state line="7" column="17" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0" vertical-offset="133" max-vertical-offset="342" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSProduct.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0" vertical-offset="190" max-vertical-offset="437">
-          <folding />
-        </state>
+        <state line="10" column="0" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0" vertical-offset="190" max-vertical-offset="437" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSLocProduct.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="69" selection-start="373" selection-end="373" vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="380">
-          <folding />
-        </state>
+        <state line="12" column="69" selection-start="373" selection-end="373" vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="380" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSReading.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="60" selection-start="1356" selection-end="1356" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1767">
-          <folding />
-        </state>
+        <state line="63" column="60" selection-start="1356" selection-end="1356" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1767" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FMDB/FMDBHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="29" selection-start="671" selection-end="681" vertical-scroll-proportion="0.0" vertical-offset="437" max-vertical-offset="741">
-          <folding />
-        </state>
+        <state line="23" column="29" selection-start="671" selection-end="681" vertical-scroll-proportion="0.0" vertical-offset="437" max-vertical-offset="741" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FMDB/FMDatabase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="23" selection-start="106" selection-end="106" vertical-scroll-proportion="0.0" vertical-offset="95" max-vertical-offset="247">
-          <folding />
-        </state>
+        <state line="5" column="23" selection-start="106" selection-end="106" vertical-scroll-proportion="0.0" vertical-offset="95" max-vertical-offset="247" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Global/CommonMethods.java">
@@ -713,60 +730,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Global/GlobalData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="10" selection-start="1789" selection-end="1789" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1634">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="70" column="10" selection-start="1789" selection-end="1789" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1634" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSJob.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="17" selection-start="185" selection-end="185" vertical-scroll-proportion="0.0" vertical-offset="190" max-vertical-offset="342">
-          <folding />
-        </state>
+        <state line="10" column="17" selection-start="185" selection-end="185" vertical-scroll-proportion="0.0" vertical-offset="190" max-vertical-offset="342" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSLocation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="17" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0" vertical-offset="133" max-vertical-offset="342">
-          <folding />
-        </state>
+        <state line="7" column="17" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0" vertical-offset="133" max-vertical-offset="342" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSProduct.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0" vertical-offset="190" max-vertical-offset="437">
-          <folding />
-        </state>
+        <state line="10" column="0" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0" vertical-offset="190" max-vertical-offset="437" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSLocProduct.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="69" selection-start="373" selection-end="373" vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="380">
-          <folding />
-        </state>
+        <state line="12" column="69" selection-start="373" selection-end="373" vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="380" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSReading.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="60" selection-start="1356" selection-end="1356" vertical-scroll-proportion="0.0" vertical-offset="855" max-vertical-offset="1767">
-          <folding />
-        </state>
+        <state line="63" column="60" selection-start="1356" selection-end="1356" vertical-scroll-proportion="0.0" vertical-offset="855" max-vertical-offset="1767" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FMDB/FMDBHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="29" selection-start="671" selection-end="681" vertical-scroll-proportion="0.0" vertical-offset="114" max-vertical-offset="741">
-          <folding />
-        </state>
+        <state line="23" column="29" selection-start="671" selection-end="681" vertical-scroll-proportion="0.0" vertical-offset="114" max-vertical-offset="741" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FMDB/FMDatabase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="23" selection-start="106" selection-end="106" vertical-scroll-proportion="0.0" vertical-offset="95" max-vertical-offset="247">
-          <folding />
-        </state>
+        <state line="5" column="23" selection-start="106" selection-end="106" vertical-scroll-proportion="0.0" vertical-offset="95" max-vertical-offset="247" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Global/CommonMethods.java">
@@ -844,9 +843,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSReading.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="159" column="0" selection-start="4723" selection-end="4723" vertical-scroll-proportion="0.0" vertical-offset="2846" max-vertical-offset="3363">
-          <folding />
-        </state>
+        <state line="159" column="0" selection-start="4723" selection-end="4723" vertical-scroll-proportion="0.0" vertical-offset="2846" max-vertical-offset="3363" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
@@ -858,44 +855,32 @@
     </entry>
     <entry file="file://E:/Tools/Android_Development/android-sdk_r12-windows/android-sdk-windows/sources/android-18/android/bluetooth/BluetoothAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1506" column="16" selection-start="63992" selection-end="63992" vertical-scroll-proportion="0.3326886" vertical-offset="27701" max-vertical-offset="32376">
-          <folding />
-        </state>
+        <state line="1506" column="16" selection-start="63992" selection-end="63992" vertical-scroll-proportion="0.3326886" vertical-offset="27701" max-vertical-offset="32376" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FMDB/FMDatabase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="27" selection-start="1039" selection-end="1039" vertical-scroll-proportion="0.036750484" vertical-offset="551" max-vertical-offset="1881">
-          <folding />
-        </state>
+        <state line="39" column="27" selection-start="1039" selection-end="1039" vertical-scroll-proportion="0.036750484" vertical-offset="551" max-vertical-offset="1881" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSJob.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="28" selection-start="196" selection-end="196" vertical-scroll-proportion="0.36750484" vertical-offset="0" max-vertical-offset="517">
-          <folding />
-        </state>
+        <state line="10" column="28" selection-start="196" selection-end="196" vertical-scroll-proportion="0.36750484" vertical-offset="0" max-vertical-offset="517" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSLocation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="17" selection-start="122" selection-end="122" vertical-scroll-proportion="0.25725338" vertical-offset="0" max-vertical-offset="517">
-          <folding />
-        </state>
+        <state line="7" column="17" selection-start="122" selection-end="122" vertical-scroll-proportion="0.25725338" vertical-offset="0" max-vertical-offset="517" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSProduct.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="240" selection-end="240" vertical-scroll-proportion="0.36750484" vertical-offset="0" max-vertical-offset="517">
-          <folding />
-        </state>
+        <state line="10" column="0" selection-start="240" selection-end="240" vertical-scroll-proportion="0.36750484" vertical-offset="0" max-vertical-offset="517" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FSLocProduct.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="69" selection-start="373" selection-end="373" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="380">
-          <folding />
-        </state>
+        <state line="12" column="69" selection-start="373" selection-end="373" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="380" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/DataManager.java">
@@ -907,9 +892,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Database/FMDB/FMDBHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="0" selection-start="402" selection-end="402" vertical-scroll-proportion="0.0" vertical-offset="171" max-vertical-offset="1007">
-          <folding />
-        </state>
+        <state line="13" column="0" selection-start="402" selection-end="402" vertical-scroll-proportion="0.0" vertical-offset="171" max-vertical-offset="1007" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Global/CommonDefs.java">
@@ -922,29 +905,6 @@
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/EmulatorReadingParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="55" column="79" selection-start="2217" selection-end="2217" vertical-scroll-proportion="0.0" vertical-offset="811" max-vertical-offset="2508">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#932#948#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="0" selection-start="1853" selection-end="1853" vertical-scroll-proportion="0.0" vertical-offset="1358" max-vertical-offset="3800">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#597#5325#0" expanded="true" />
-            <element signature="e#5310#5311#0" expanded="true" />
-            <element signature="e#6701#7210#0" expanded="true" />
-            <element signature="e#7199#7200#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManagerListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="38" selection-start="113" selection-end="113" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
           <folding />
         </state>
       </provider>
@@ -952,10 +912,7 @@
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/SensorReadingParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="61" column="29" selection-start="2487" selection-end="2487" vertical-scroll-proportion="0.0" vertical-offset="2004" max-vertical-offset="2508">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#930#946#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -982,11 +939,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Global/GlobalData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="149" column="5" selection-start="5162" selection-end="5162" vertical-scroll-proportion="0.70599616" vertical-offset="2466" max-vertical-offset="2983">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="149" column="5" selection-start="5162" selection-end="5162" vertical-scroll-proportion="0.70599616" vertical-offset="2466" max-vertical-offset="2983" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Global/CommonMethods.java">
@@ -996,10 +949,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManagerListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="4" selection-start="118" selection-end="338" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/SplashScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="49" selection-start="187" selection-end="187" vertical-scroll-proportion="0.2205029" vertical-offset="0" max-vertical-offset="517">
-          <folding />
+        <state line="28" column="26" selection-start="729" selection-end="729" vertical-scroll-proportion="0.0" vertical-offset="281" max-vertical-offset="798">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/tim/FloorSmart/Scan/ScanManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="110" column="14" selection-start="5361" selection-end="5361" vertical-scroll-proportion="0.45" vertical-offset="1923" max-vertical-offset="3876">
+          <folding>
+            <element signature="e#597#5360#0" expanded="true" />
+            <element signature="e#5345#5346#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
