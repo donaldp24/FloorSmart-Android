@@ -31,6 +31,8 @@ public class SplashScreen extends Activity implements ScanManagerListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
+        GlobalData._mainContext = getApplicationContext();
+
         mainLayout = (RelativeLayout)findViewById(R.id.RLSplashRoot);
         mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {

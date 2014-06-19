@@ -40,6 +40,13 @@ public class DataManager {
         return _sharedInstance;
     }
 
+    public static DataManager sharedInstance() {
+        if (_sharedInstance == null) {
+            _sharedInstance = new DataManager(GlobalData._mainContext);
+        }
+        return _sharedInstance;
+    }
+
     // job
     public ArrayList<FSJob> getAllJobs() {
         ArrayList<FSJob> arrJobList = new ArrayList<FSJob>();

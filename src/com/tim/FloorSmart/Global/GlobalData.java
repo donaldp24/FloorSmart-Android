@@ -37,6 +37,7 @@ public class GlobalData {
 
     // singleton
     private static GlobalData _sharedData;
+    public static Context _mainContext;
 
     // properties (setting)
     public int  settingTemp; // temperature unit
