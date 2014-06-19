@@ -19,8 +19,6 @@ import java.util.Date;
 
 public class JobOverviewActivity extends Activity{
 
-    private ScanManager manager;
-
     RelativeLayout mainLayout;
     boolean bInitialized = false;
     /**

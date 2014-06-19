@@ -29,7 +29,7 @@ public class EmulatorReadingParser implements ReadingParser {
     @Override
     public HashMap<String, Object> parseData(byte[] manufactureData, int offset) {
         HashMap<String, Object> sensorData = new HashMap<String, Object>();
-        CommonMethods.Log("SensorReadingParser");
+        CommonMethods.Log("EmulatorReadingParser");
 
         int rhValueOffset = kRHValueOffset + offset;
         int tempValueOffset = kTempValueOffset + offset;
@@ -41,11 +41,11 @@ public class EmulatorReadingParser implements ReadingParser {
 
         String uuidString = uuidFromData(manufactureData, offset);
 
-        int rh = manufactureData[rhValueOffset + 1] * 0xFF + manufactureData[rhValueOffset];
+        int rh = ((manufactureData[rhValueOffset + 1] << 8) | (manufactureData[rhValueOffset] & 0xFF));
         rh = correctEndian(rh);
-        int temp = manufactureData[tempValueOffset + 1] * 0xFF + manufactureData[tempValueOffset];
+        int temp = ((manufactureData[tempValueOffset + 1] << 8) | (manufactureData[tempValueOffset] & 0xFF));
         temp = correctEndian(temp);
-        int mc = manufactureData[mcValueOffset + 1] * 0xFF + manufactureData[mcValueOffset];
+        int mc = ((manufactureData[mcValueOffset + 1] << 8) | (manufactureData[mcValueOffset] & 0xFF));
         mc = correctEndian(mc);
 
         int batteryLevel = manufactureData[batteryLevelValueOffset];
@@ -69,7 +69,7 @@ public class EmulatorReadingParser implements ReadingParser {
         sensorData.put(kSensorDataMaterialKey, material);
         sensorData.put(kSensorDataMCKey, mc);
 
-        CommonMethods.Log("SensorReadingParser parsing result ; RH:%hu(%.2f), Temp:%hu(%.2f), BT:%hhu, D:%hhu, SG:%hhu, MT:%hhu, MC:%hu", rh, convrh, temp, convtemp, batteryLevel, depth, gravity, material, mc);
+        CommonMethods.Log("EmulatorReadingParser parsing result ; RH:%hu(%.2f), Temp:%hu(%.2f), BT:%hhu, D:%hhu, SG:%hhu, MT:%hhu, MC:%hu", rh, convrh, temp, convtemp, batteryLevel, depth, gravity, material, mc);
 
         // return immutable dictionary
         return sensorData;

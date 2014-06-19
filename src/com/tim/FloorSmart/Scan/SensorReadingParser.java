@@ -41,11 +41,11 @@ public class SensorReadingParser implements ReadingParser {
 
         String uuidString = uuidFromData(manufactureData, offset);
 
-        int rh = manufactureData[rhValueOffset + 1] * 0xFF + manufactureData[rhValueOffset];
+        int rh = ((manufactureData[rhValueOffset + 1] << 8) | (manufactureData[rhValueOffset] & 0xFF));
         rh = correctEndian(rh);
-        int temp = manufactureData[tempValueOffset + 1] * 0xFF + manufactureData[tempValueOffset];
+        int temp = ((manufactureData[tempValueOffset + 1] << 8) | (manufactureData[tempValueOffset] & 0xFF));
         temp = correctEndian(temp);
-        int mc = manufactureData[mcValueOffset + 1] * 0xFF + manufactureData[mcValueOffset];
+        int mc = ((manufactureData[mcValueOffset + 1] << 8) | (manufactureData[mcValueOffset] & 0xFF));
         mc = correctEndian(mc);
 
         int batteryLevel = manufactureData[batteryLevelValueOffset];

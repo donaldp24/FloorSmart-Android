@@ -5,16 +5,26 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import com.tim.FloorSmart.Global.CommonMethods;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by donald on 5/15/14.
  */
 public class ScanManager {
 
+    private static ScanManager _sharedInstance = null;
     private ScanManagerListener listener = null;
     private BluetoothAdapter mBluetoothAdapter = null;
     private static final long SCAN_PERIOD = 5000;
+    private boolean mCalled = false;
+
+    private static final int kPackageID = 0x9133B9DE;
 
     // Device scan callback.
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
@@ -23,90 +33,106 @@ public class ScanManager {
                 @Override
                 public void onLeScan(final BluetoothDevice device, int rssi, final byte[] scanRecord)
                 {
+                    if (mCalled)
+                        return;
+
+                    mCalled = true;
+
                     CommonMethods.Log("didDiscoverPeripheral:name=[%s]", device.getName());
                     CommonMethods.Log("scanRecord : %s", ScanManager.bytesToHex(scanRecord));
 
-                    /*
-                    String name = [advertisementData valueForKey:CBAdvertisementDataLocalNameKey];
-                    NSData *manufacturedData = [advertisementData valueForKey:CBAdvertisementDataManufacturerDataKey];
-                    NSDictionary *serviceDict = [advertisementData valueForKey:CBAdvertisementDataServiceDataKey];
-                    NSArray *serviceUUIDsArray = [advertisementData valueForKey:CBAdvertisementDataServiceUUIDsKey];
-                    NSArray *overflowServiceUUIDsArray = [advertisementData valueForKey:CBAdvertisementDataOverflowServiceUUIDsKey];
-                    NSNumber *transmitPower = [advertisementData valueForKey:CBAdvertisementDataTxPowerLevelKey];
+                    byte[] manufacturedData = null;
+                    byte[] emulatorServiceUuid = null;
+                    HashMap<String, Object> sensorData = null;
+                    int offset = 0;
 
-                    NSMutableData* dataToParse = nil;
-                    NSInteger offset = 0;
-                    NSDictionary *sensorData;
+                    // parsing scanRecord
+                    int index = 0;
+                    while (index < scanRecord.length)
+                    {
+                        int length = scanRecord[index++];
 
-                    if (manufacturedData)
+                        // Done once we run out of records
+                        if (length == 0)
+                            break;
 
-                        NSString * dataToParseString = @"";
-                        for (int ix=0; ix<manufacturedData.length; ix++)
+                        int type = scanRecord[index];
+
+                        //Done if our record isn't a valid type
+                        if (type == 0)
+                            break;
+
+                        byte[] data = Arrays.copyOfRange(scanRecord, index + 1, index + length);
+
+                        // manufactureData
+                        if (type == 0xff)
+                            manufacturedData = Arrays.copyOfRange(scanRecord, index + 1, index + length);
+                        if (type == 0x07)
                         {
-                            unsigned char c;
-                            [manufacturedData getBytes:&c range:NSMakeRange(ix, 1)];
-                            dataToParseString = [dataToParseString stringByAppendingFormat:@"%02X ",c];
+                            emulatorServiceUuid = Arrays.copyOfRange(scanRecord, index + 1, index + length);
+                            // reverse
+                            ArrayUtils.reverse(emulatorServiceUuid);
                         }
-                        NSLog(@"Debug output manufacture data: %@",dataToParseString);
 
-                        if(![[manufacturedData subdataWithRange:NSMakeRange(0, 4)] isEqualToData:
-                        [NSData dataWithBytes:&kPackageID length:4]])
+                        index += length;
+                    }
+
+                    // parse sensor data
+                    if (manufacturedData != null)
+                    {
+                        String dataToParseString = bytesToHex(manufacturedData);
+                        CommonMethods.Log("Debug output manufacture data: %s", dataToParseString);
+
+                        if (manufacturedData.length < 4 ||
+                                byteArrayToIntWithBigEndian(subArray(manufacturedData, 0, 4)) != kPackageID)
                         {
-                            NSLog(@"Third party package was received.");
-                            [[self delegate] scanManager:self didFindThirdPackage:manufacturedData];
-                            return;
+                            CommonMethods.Log("Third party package was received.");
+                            if (listener != null)
+                                listener.didFindThirdPackage(ScanManager.this);
                         }
+                        else
+                        {
+                            offset = 0;
+                            SensorReadingParser parser = new SensorReadingParser();
+                            sensorData = parser.parseData(manufacturedData, offset);
 
-                        dataToParse = (NSMutableData*)manufacturedData;
-                        offset = 0;
+                            if (listener != null)
+                                listener.didFindSensor(ScanManager.this, sensorData);
+                        }
+                    }
+                    else if (emulatorServiceUuid != null)
+                    {
+                        CommonMethods.Log("Debug output sensor data(uuid1): %s", bytesToHex(emulatorServiceUuid));
 
+                        if(emulatorServiceUuid.length < 4 ||
+                                byteArrayToIntWithBigEndian(subArray(emulatorServiceUuid, 0, 4)) != kPackageID)
+                        {
+                            CommonMethods.Log("Third party package was received.");
+                            if (listener != null)
+                                listener.didFindThirdPackage(ScanManager.this);
+                        }
+                        else
+                        {
+                            offset = 0;
+                            EmulatorReadingParser parser = new EmulatorReadingParser();
+                            sensorData = parser.parseData(emulatorServiceUuid, offset);
 
-                        SensorReadingParser *parser = [[SensorReadingParser alloc] init];
-                        sensorData = [parser parseData:dataToParse  withOffset:offset];
-
+                            if (listener != null)
+                                listener.didFindSensor(ScanManager.this, sensorData);
+                        }
                     }
                     else
                     {
-                        ///note, that uuid1 is 128-bit uuid that contain first 16 bytes according to the specification: 3-bytes flag, length byte and so on.
-                        ///uuid2(which is 16-bit uuid) contains last byte of S2T field and battery level byte. This is where specification order is violated.
-                        ///Last 3 uuids contains full Serial number order.
-                        NSArray* uuidsArray = advertisementData[CBAdvertisementDataServiceUUIDsKey];
-
-                        CBUUID* uuid1 = [uuidsArray firstObject];
-
-                        NSString *outputString = @"";
-                        for (int ix = 0 ; ix < [uuid1 data].length; ix++)
-                        {
-                            unsigned char c;
-                            [[uuid1 data] getBytes:&c range:NSMakeRange(ix, 1)];
-                            outputString = [outputString stringByAppendingFormat:@"%02X ",c];
-                        }
-                        NSLog(@"Debug output sensor data(uuid1): %@",outputString);
-
-
-
-                        UInt32 packageID = kPackageID;
-                        ///uuid comes right after flag, length and dataType bytes.
-                        if([[uuid1 data] length] < 4 || ![[[uuid1 data] subdataWithRange:NSMakeRange(0, 4)] isEqualToData:
-                        [NSData dataWithBytes:&packageID length:4]])
-                        {
-                            NSLog(@"Third party package was received.");
-                            [[self delegate] scanManager:self didFindThirdPackage:[uuid1 data]];
-                            return;
-                        }
-
-                        NSData* firstPackage = [uuid1 data];
-                        dataToParse = [NSMutableData dataWithData:firstPackage];
-                        offset = 0;
-
-                        EmulatorReadingParser *parser = [[EmulatorReadingParser alloc] init];
-                        sensorData = [parser parseData:dataToParse  withOffset:offset];
+                        CommonMethods.Log("Third party package was received.");
+                        if (listener != null)
+                            listener.didFindThirdPackage(ScanManager.this);
                     }
 
-
-                    [[self delegate] scanManager:self
-                    didFindSensor:sensorData];
-                    */
+                    if (mScanning)
+                    {
+                        mScanning = false;
+                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                    }
                 }
             };
 
@@ -128,41 +154,44 @@ public class ScanManager {
      */
     public static ScanManager managerWithListner(Context ctx, ScanManagerListener listener)
     {
-        ScanManager manager = new ScanManager();
+        if (_sharedInstance == null)
+        {
+            ScanManager manager = new ScanManager();
 
-        manager.listener = listener;
+            manager.listener = listener;
 
-        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
-        // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) ctx.getSystemService(Context.BLUETOOTH_SERVICE);
-        manager.mBluetoothAdapter = bluetoothManager.getAdapter();
+            // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
+            // BluetoothAdapter through BluetoothManager.
+            final BluetoothManager bluetoothManager =
+                    (BluetoothManager) ctx.getSystemService(Context.BLUETOOTH_SERVICE);
+            manager.mBluetoothAdapter = bluetoothManager.getAdapter();
 
-        // Checks if Bluetooth is supported on the device.
-        if (manager.mBluetoothAdapter == null) {
-            return null;
+            // Checks if Bluetooth is supported on the device.
+            if (manager.mBluetoothAdapter == null) {
+                _sharedInstance = null;
+            }
+            else
+                _sharedInstance = manager;
         }
-        return manager;
+        return _sharedInstance;
     }
 
-    /**
-     * start scanning
-     * 1 - start scanning
-     * 2 - stop scanning after SCAN_PERIOD seconds
-     * 3 - repeat 1 and 2 until calling stopScan().
-     */
     public void startScan()
     {
         // Stops scanning after a pre-defined scan period.
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mScanning = false;
-                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                if (mScanning)
+                {
+                    mScanning = false;
+                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                }
 
                 if (mStopped == false)
                 {
                     mHandler.postDelayed(this, SCAN_PERIOD);
+                    mCalled = false;
                     mBluetoothAdapter.startLeScan(mLeScanCallback);
                 }
                 else
@@ -173,6 +202,7 @@ public class ScanManager {
         }, SCAN_PERIOD);
 
         mStopped = false;
+        mCalled = false;
         if (mBluetoothAdapter.startLeScan(mLeScanCallback))
         {
             mScanning = true;
@@ -190,6 +220,7 @@ public class ScanManager {
     public void stopScan()
     {
         mStopped = true;
+        mBluetoothAdapter.stopLeScan(mLeScanCallback);
     }
 
     private static String bytesToHex(byte[] bytes) {
@@ -202,5 +233,37 @@ public class ScanManager {
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
         return new String(hexChars);
+    }
+
+    public static int byteArrayToIntWithBigEndian(byte[] b) {
+        if (b.length == 4)
+            return b[0] << 24 | (b[1] & 0xff) << 16 | (b[2] & 0xff) << 8
+                    | (b[3] & 0xff);
+        else if (b.length == 2)
+            return 0x00 << 24 | 0x00 << 16 | (b[0] & 0xff) << 8 | (b[1] & 0xff);
+
+        return 0;
+    }
+
+    public static int byteArrayToIntWithLittleEndian(byte[] b) {
+        if (b.length == 4)
+            return b[3] << 24 | (b[2] & 0xff) << 16 | (b[1] & 0xff) << 8
+                    | (b[0] & 0xff);
+        else if (b.length == 2)
+            return 0x00 << 24 | 0x00 << 16 | (b[1] & 0xff) << 8 | (b[0] & 0xff);
+
+        return 0;
+    }
+
+    public static byte[] subArray(byte[] b, int offset, int length) {
+        byte[] sub = new byte[length];
+        for (int i = offset; i < offset + length; i++) {
+            try {
+                sub[i - offset] = b[i];
+            } catch (Exception e) {
+
+            }
+        }
+        return sub;
     }
 }
