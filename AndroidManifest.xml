@@ -11,11 +11,74 @@
 
 	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
 		<activity android:name="SplashScreen"
-				  android:label="@string/app_name">
+				  android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
+
+        <activity android:name=".JobsActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
+        <activity android:name=".JobOverviewActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
+        <activity android:name=".JobsArchiveActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan">
+        </activity>
+
+        <activity android:name=".RecordActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
+        <activity android:name=".ReadingActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
+        <activity android:name=".LocationsActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
+        <activity android:name=".LocProductsActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
+        <activity android:name=".ProductsActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
+        <activity android:name=".ReportsActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
+        <activity android:name=".SettingsActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
 	</application>
 </manifest>

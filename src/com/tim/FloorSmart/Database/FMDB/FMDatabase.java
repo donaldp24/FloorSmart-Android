@@ -90,6 +90,11 @@ public class FMDatabase {
         return db.rawQuery(sql, null);
     }
 
+    public Cursor executeCommand(String formattedSql)
+    {
+        return db.rawQuery(formattedSql, null);
+    }
+
     public boolean executeUpdate(String formatSql, Object ...arguments) {
         String sql = String.format(formatSql, arguments);
         db.execSQL(sql);

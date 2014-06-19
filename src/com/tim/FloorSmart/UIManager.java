@@ -7,7 +7,7 @@ import android.graphics.Rect;
  * User: Donald Pae
  * Date: 1/17/14
  * Time: 9:57 PM
- * To change this template use File | Settings | File Templates.
+ * To change this template use File | SettingsActivity | File Templates.
  */
 public class UIManager {
 

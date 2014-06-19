@@ -5,7 +5,7 @@ package com.tim.FloorSmart;
  * User: Donald Pae
  * Date: 1/18/14
  * Time: 5:01 PM
- * To change this template use File | Settings | File Templates.
+ * To change this template use File | SettingsActivity | File Templates.
  */
 public class TransformManager {
     // for activity animation ----------------------------------------

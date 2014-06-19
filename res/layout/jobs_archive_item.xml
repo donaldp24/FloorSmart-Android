@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="vertical"
+			  android:layout_width="440px"
+			  android:layout_height="50px"
+              android:id="@+id/RLJobsItemRoot">
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="50px"
+            android:id="@+id/imageView" android:src="@drawable/bg_product_list_bar" android:scaleType="fitXY"/>
+    <TextView
+            android:layout_width="320px"
+            android:layout_height="50px"
+            android:text="Mercy Hospital"
+            android:id="@+id/lblJobName" android:gravity="center_vertical" android:layout_marginLeft="20px"
+            android:textColor="#FFFFFF" android:textSize="22px"/>
+    <RelativeLayout android:layout_width="45px" android:layout_height="50px" android:id="@+id/RLJobDelete"
+                    android:layout_toRightOf="@+id/RLJobResend"
+                    android:layout_marginLeft="5px" android:layout_alignParentTop="true">
+        <Button android:layout_width="30px" android:layout_height="30px" android:id="@+id/btnJobDelete"
+                android:background="@drawable/ic_delete" android:layout_centerInParent="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="45px"
+            android:layout_height="50px" android:id="@+id/RLJobResend"
+            android:layout_toRightOf="@+id/lblJobName" android:layout_alignParentTop="true">
+        <Button
+                android:layout_width="30px"
+                android:layout_height="30px"
+                android:id="@+id/btnJobResend"
+                android:background="@drawable/ic_refresh" android:layout_centerInParent="true"/>
+    </RelativeLayout>
+</RelativeLayout>
+

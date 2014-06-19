@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="vertical"
+			  android:layout_width="fill_parent"
+			  android:layout_height="fill_parent"
+              android:background="@drawable/bg_all" android:id="@+id/RLSettingsRoot">
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="70px" android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" android:background="@drawable/bg_title_bar" android:id="@+id/RLTopBar">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="60px"
+                android:text="@string/setting_main_title"
+                android:id="@+id/lblTitle"
+                android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="26px" android:gravity="center"
+                />
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="70px"
+                    android:layout_alignParentLeft="true" android:layout_alignParentTop="false"
+                    android:background="@drawable/bg_main_banner" android:id="@+id/RLBottomBar"
+                    android:layout_alignParentBottom="true">
+        <ImageView
+                android:layout_width="96px"
+                android:layout_height="fill_parent"
+                android:id="@+id/imgRecord" android:src="@drawable/bt_record_nl"
+                android:scaleType="fitXY"/>
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgJobs"
+                   android:src="@drawable/bt_jobs_nl" android:layout_toRightOf="@+id/imgRecord"
+                   android:scaleType="fitXY"
+                />
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgProducts"
+                   android:src="@drawable/bt_products_nl" android:layout_toRightOf="@+id/imgJobs"
+                   android:scaleType="fitXY"
+                />
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgReports"
+                   android:src="@drawable/bt_report_nl" android:layout_toRightOf="@+id/imgProducts"
+                   android:scaleType="fitXY"/>
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgSettings"
+                   android:src="@drawable/bt_setting_sl" android:layout_toRightOf="@+id/imgReports"
+                   android:scaleType="fitXY" android:paddingLeft="2px" android:paddingTop="3px"
+                   android:paddingRight="2px" android:paddingBottom="3px"/>
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50px"
+            android:layout_below="@+id/RLTopBar" android:layout_marginLeft="50px" android:layout_marginRight="50px"
+            android:layout_marginTop="50px" android:background="@drawable/bg_data_bar" android:id="@+id/RLTemperature">
+        <TextView
+                android:layout_width="160px"
+                android:layout_height="fill_parent"
+                android:text="@string/setting_temperature"
+                android:id="@+id/lblTemperature" android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
+                android:layout_marginLeft="20px" android:gravity="center_vertical" android:textColor="#FFFFFF"
+                android:textSize="18px"/>
+        <Button
+                android:layout_width="80px"
+                android:layout_height="30px"
+                android:id="@+id/btnTempF" android:layout_toRightOf="@+id/lblTemperature"
+                android:layout_alignTop="@+id/lblTemperature" android:layout_marginTop="10px"
+                android:background="@drawable/bg_f_sl"/>
+        <Button android:layout_width="80px" android:layout_height="30px" android:id="@+id/btnTempC"
+                android:background="@drawable/bg_c_nl" android:layout_toRightOf="@+id/btnTempF"
+                android:layout_alignTop="@+id/btnTempF"/>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="50px"
+                    android:background="@drawable/bg_data_bar" android:id="@+id/RLArea"
+                    android:layout_alignLeft="@+id/RLTemperature" android:layout_below="@+id/RLTemperature"
+                    android:layout_alignRight="@+id/RLTemperature" android:layout_marginTop="20px">
+        <TextView android:layout_width="160px" android:layout_height="fill_parent"
+                  android:text="@string/setting_area" android:id="@+id/lblArea"
+                  android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
+                  android:layout_marginLeft="20px" android:gravity="center_vertical" android:textColor="#FFFFFF"
+                  android:textSize="18px"/>
+        <Button android:layout_width="80px" android:layout_height="30px" android:id="@+id/btnAreaFT"
+                android:layout_toRightOf="@+id/lblArea" android:layout_alignTop="@+id/lblArea"
+                android:layout_marginTop="10px" android:background="@drawable/bg_ft_sl"/>
+        <Button android:layout_width="80px" android:layout_height="30px" android:id="@+id/btnAreaM"
+                android:background="@drawable/bg_m_nl" android:layout_toRightOf="@+id/btnAreaFT"
+                android:layout_alignTop="@+id/btnAreaFT"/>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="150px"
+                    android:background="@drawable/bg_dateformat" android:id="@+id/RLDateFormat"
+                    android:layout_alignLeft="@+id/RLArea" android:layout_below="@+id/RLArea"
+                    android:layout_alignRight="@+id/RLArea" android:layout_marginTop="80px">
+        <TextView android:layout_width="340px" android:layout_height="40px" android:text="@string/setting_dateformat"
+                  android:id="@+id/lblDateFormat" android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
+                  android:layout_marginLeft="20px" android:textColor="#FFFFFF"
+                  android:textSize="18px" android:gravity="center"/>
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="35px" android:layout_marginLeft="20px" android:layout_marginRight="20px"
+                android:layout_marginTop="55px" android:background="@drawable/bt_ustime" android:id="@+id/RLUSStandard">
+            <TextView
+                    android:layout_width="140px"
+                    android:layout_height="fill_parent"
+                    android:text="12/19/2013"
+                    android:id="@+id/txtUSDateTime" android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true" android:gravity="center" android:textColor="#331111"
+                    android:textSize="18px" android:layout_marginTop="3px" android:typeface="serif"
+                    android:textStyle="italic"/>
+        </RelativeLayout>
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="35px" android:layout_marginLeft="20px"
+                        android:layout_marginRight="20px" android:layout_marginTop="10px"
+                        android:background="@drawable/bt_eurotime" android:id="@+id/RLEuropean"
+                        android:layout_below="@+id/RLUSStandard">
+            <TextView android:layout_width="140px" android:layout_height="fill_parent" android:text="12/19/2013"
+                      android:id="@+id/txtEuDateTime" android:layout_alignParentLeft="true"
+                      android:layout_alignParentTop="true" android:gravity="center" android:textColor="#331111"
+                      android:textSize="18px" android:layout_marginTop="3px" android:typeface="serif"
+                      android:textStyle="italic"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>
+

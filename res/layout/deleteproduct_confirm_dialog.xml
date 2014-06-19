@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="vertical"
+			  android:layout_width="350px"
+			  android:layout_height="180px"
+              android:id="@+id/RLConfirmRoot">
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageView" android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" android:background="@drawable/bg_product_delete"/>
+    <Button
+            android:layout_width="100px"
+            android:layout_height="30px"
+            android:id="@+id/btnOK" android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="false" android:layout_alignParentBottom="true"
+            android:layout_marginLeft="50px" android:layout_marginBottom="10px" android:background="@drawable/bt_ok"/>
+    <Button android:layout_width="100px" android:layout_height="30px" android:id="@+id/btnCancel"
+            android:background="@drawable/bt_alertcancel" android:layout_alignRight="@+id/imageView"
+            android:layout_alignBottom="@+id/btnOK" android:layout_marginRight="50px"/>
+</RelativeLayout>
+

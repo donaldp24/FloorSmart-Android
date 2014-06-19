@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="vertical"
+			  android:layout_width="440px"
+			  android:layout_height="80px"
+              android:id="@+id/RLProductsItemRoot" android:visibility="visible">
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="80px" android:id="@+id/RLEditBar" android:layout_centerVertical="true"
+            android:layout_alignParentTop="true" android:background="@drawable/bg_product_list_bar"
+            android:visibility="gone">
+        <EditText android:layout_width="320px" android:layout_height="40px" android:text="Mercy Hospital"
+                  android:id="@+id/txtItemProductName" android:gravity="center_vertical" android:layout_marginLeft="20px"
+                  android:textColor="#FFFFFF" android:textSize="22px"
+                  android:background="@android:color/transparent" android:singleLine="true">
+                </EditText>
+        <RelativeLayout android:layout_width="45px" android:layout_height="45px" android:id="@+id/RLCancel"
+                        android:layout_toRightOf="@+id/RLEditDone" android:layout_marginLeft="5px">
+            <Button android:layout_width="30px" android:layout_height="30px" android:id="@+id/btnCancel"
+                    android:background="@drawable/bt_cancel" android:layout_centerInParent="true"/>
+        </RelativeLayout>
+        <RelativeLayout android:layout_width="45px" android:layout_height="45px" android:id="@+id/RLEditDone"
+                        android:layout_toRightOf="@+id/txtItemProductName">
+            <Button android:layout_width="30px" android:layout_height="30px" android:id="@+id/btnEditDone"
+                    android:background="@drawable/bt_check" android:layout_centerInParent="true"/>
+        </RelativeLayout>
+        <RelativeLayout android:layout_width="165px" android:layout_height="35px" android:id="@+id/RLSelectType"
+                        android:layout_marginLeft="10px"
+                        android:background="@drawable/bg_select_type_bar"
+                        android:layout_marginTop="40px">
+            <Spinner
+                    android:layout_width="300px"
+                    android:layout_height="40px"
+                    android:id="@+id/spinner" android:background="@drawable/bg_select_type_bar"
+                    android:popupBackground="#DDFFFFFF"/>
+            <ImageView android:layout_width="15px" android:layout_height="15px" android:id="@+id/imgDropButton"
+                       android:layout_alignParentRight="true" android:layout_centerVertical="true"
+                       android:layout_marginRight="15px" android:src="@drawable/bt_arrow_down"
+                    />
+            <TextView android:layout_width="100px" android:layout_height="30px" android:text="Select Type"
+                      android:id="@+id/txtItemCurrentType" android:layout_alignParentLeft="true"
+                      android:layout_centerVertical="true" android:layout_marginLeft="15px" android:textColor="#000000"
+                      android:gravity="center_vertical" android:textSize="14px" android:visibility="invisible"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="80px" android:id="@+id/RLShowBar"
+                    android:layout_centerVertical="true" android:layout_alignParentTop="true"
+                    android:background="@drawable/bg_product_list_bar" android:visibility="visible">
+        <TextView
+                android:layout_width="320px"
+                android:layout_height="40px"
+                android:text="Mercy Hospital"
+                android:id="@+id/lblProductName" android:gravity="center_vertical" android:layout_marginLeft="20px"
+                android:textColor="#FFFFFF" android:textSize="22px" android:singleLine="true" android:ellipsize="end"/>
+        <TextView
+                android:layout_width="300px"
+                android:layout_height="30px"
+                android:text="finished"
+                android:id="@+id/lblType"
+                android:layout_below="@+id/lblProductName" android:gravity="center_vertical"
+                android:textColor="#FFFFFF" android:textSize="16px" android:layout_marginLeft="25px"/>
+        <RelativeLayout
+                android:layout_width="45px"
+                android:layout_height="45px" android:id="@+id/RLProductEdit"
+                android:layout_toRightOf="@+id/lblProductName" android:layout_alignParentTop="true">
+            <Button
+                    android:layout_width="30px"
+                    android:layout_height="30px"
+                    android:id="@+id/btnProductEdit"
+                    android:background="@drawable/bt_job_edit" android:layout_centerInParent="true"/>
+        </RelativeLayout>
+        <RelativeLayout android:layout_width="45px" android:layout_height="45px" android:id="@+id/RLProductArchive"
+                        android:layout_toRightOf="@+id/RLProductEdit"
+                        android:layout_marginLeft="5px" android:layout_alignParentTop="true">
+            <Button android:layout_width="30px" android:layout_height="30px" android:id="@+id/btnProductDelete"
+                    android:background="@drawable/bt_job_delete" android:layout_centerInParent="true"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>
+

@@ -31,11 +31,15 @@ public class GlobalData {
 
     private static final String APP_SHARED_PREFS = "Floorsmart";
 
+    public static int MODE_SELECT_JOB = 0;
+    public static int MODE_SELECT_LOCATION = 1;
+    public static int MODE_SELECT_PRODUCT = 2;
+
     // singleton
     private static GlobalData _sharedData;
 
     // properties (setting)
-    public int settingTemp; // temperature unit
+    public int  settingTemp; // temperature unit
     public int settingArea; // area unit
     public String settingDateFormat; // date format
 
@@ -71,7 +75,7 @@ public class GlobalData {
     private void loadInitData() {
         settingTemp = shared_preferences.getInt(KEY_TEMPERATURE, TEMP_FAHRENHEIT);
         settingArea = shared_preferences.getInt(KEY_AREA, AREA_FEET);
-        settingDateFormat = shared_preferences.getString(KEY_DATEFORMAT, KEY_DATEFORMAT);
+        settingDateFormat = shared_preferences.getString(KEY_DATEFORMAT, DATEFORMAT_US);
         isSaved = shared_preferences.getBoolean(KEY_ISSAVED, false);
         selectedJobID = shared_preferences.getLong(KEY_JOBID, 0);
         selectedLocID = shared_preferences.getLong(KEY_LOCID, 0);
@@ -147,5 +151,25 @@ public class GlobalData {
         this.isSaved = true;
         shared_preferences_editor.putBoolean(KEY_ISSAVED, this.isSaved);
         shared_preferences_editor.commit();
+    }
+
+    private String getTempUnit()
+    {
+        if (this.settingTemp == TEMP_FAHRENHEIT)
+            return "F";
+        else
+            return "C";
+    }
+
+    public float sqft2sqm(float sqft)
+    {
+        float sqm = 0.09290304f * sqft;
+        return sqm;
+    }
+
+    public float sqm2sqft(float sqm)
+    {
+        float sqft = sqm / 0.09290304f;
+        return sqft;
     }
 }

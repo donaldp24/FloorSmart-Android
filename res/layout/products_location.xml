@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="vertical"
+			  android:layout_width="fill_parent"
+			  android:layout_height="fill_parent"
+              android:background="@drawable/bg_all" android:id="@+id/RLProductsRoot">
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="70px" android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" android:background="@drawable/bg_title_bar" android:id="@+id/RLTopBar">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="60px"
+                android:text="@string/product_main_title"
+                android:id="@+id/lblTitle"
+                android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="26px" android:gravity="center"
+                />
+        <RelativeLayout android:layout_width="50px" android:layout_height="50px" android:id="@+id/RLBack"
+                        android:layout_marginLeft="5px" android:layout_marginTop="5px">
+            <ImageView android:layout_width="30px" android:layout_height="20px" android:id="@+id/imgBack"
+                       android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
+                       android:src="@drawable/bt_back" android:scaleType="fitCenter"
+                       android:layout_centerVertical="true" android:layout_marginLeft="10px"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="265px"
+            android:layout_height="50px" android:id="@+id/RLAddBar" android:layout_below="@+id/imgSwitch"
+            android:layout_marginLeft="20px" android:layout_marginTop="10px"
+            android:background="@drawable/bg_add_job_bar">
+        <EditText
+                android:layout_width="170px"
+                android:layout_height="40px"
+                android:id="@+id/txtProductName" android:layout_alignParentLeft="true" android:layout_centerVertical="true"
+                android:layout_marginLeft="10px" android:background="@android:color/transparent" android:padding="5px"
+                android:textSize="18px" android:singleLine="true" android:hint="@string/product_add_hint"/>
+        <Button
+                android:layout_width="30px"
+                android:layout_height="30px"
+                android:id="@+id/btnAddProduct" android:layout_toRightOf="@+id/txtProductName"
+                android:layout_alignTop="@+id/txtProductName" android:layout_marginLeft="8px"
+                android:background="@drawable/bt_job_add" android:layout_marginTop="5px"/>
+        <Button android:layout_width="30px" android:layout_height="30px"
+                android:id="@+id/btnDelProduct" android:layout_toRightOf="@+id/btnAddProduct"
+                android:layout_alignTop="@+id/txtProductName" android:layout_marginLeft="8px"
+                android:background="@drawable/bt_job_delete" android:layout_marginTop="5px"/>
+    </RelativeLayout>
+    <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/listView" android:layout_alignLeft="@+id/RLAddBar"
+            android:layout_above="@+id/RLBottomBar" android:layout_marginTop="10px"
+            android:layout_below="@+id/RLAddBar"
+            android:layout_alignRight="@+id/RLSelectType"/>
+    <RelativeLayout android:layout_width="165px" android:layout_height="50px" android:id="@+id/RLSelectType"
+                    android:layout_marginLeft="10px"
+                    android:background="@drawable/bg_select_type_bar"
+                    android:layout_toRightOf="@+id/RLAddBar" android:layout_alignTop="@+id/RLAddBar">
+        <ImageView android:layout_width="20px" android:layout_height="20px" android:id="@+id/imgDropButton"
+                   android:layout_alignParentRight="true" android:layout_centerVertical="true"
+                   android:layout_marginRight="15px" android:src="@drawable/bt_arrow_down"/>
+        <TextView android:layout_width="100px" android:layout_height="30px" android:text="Select Type"
+                  android:id="@+id/txtCurrentType" android:layout_alignParentLeft="true"
+                  android:layout_centerVertical="true" android:layout_marginLeft="15px" android:textColor="#000000"
+                  android:gravity="center_vertical" android:textSize="16px"/>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="148px" android:layout_height="70px"
+                    android:layout_alignLeft="@+id/RLSelectType" android:id="@+id/RLDropList"
+                    android:layout_marginLeft="8px" android:background="#88FFFFFF" android:layout_marginTop="210px"
+                    android:visibility="invisible">
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="34px"
+                        android:id="@+id/RLItemFinished">
+            <TextView android:layout_width="fill_parent" android:layout_height="34px" android:text="finished"
+                      android:id="@+id/lblItemFinished" android:layout_alignParentLeft="true"
+                      android:layout_alignParentTop="true" android:gravity="center_vertical"
+                      android:layout_marginLeft="7px" android:textColor="#000000" android:textSize="16px"/>
+        </RelativeLayout>
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="2px" android:id="@+id/RLSeperator"
+                        android:background="#888888" android:layout_below="@+id/RLItemFinished"/>
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="34px" android:id="@+id/RLItemSubFloor"
+                        android:layout_below="@+id/RLSeperator">
+            <TextView android:layout_width="fill_parent" android:layout_height="34px" android:text="subfloor"
+                      android:id="@+id/lblItemSubFloor" android:layout_alignParentLeft="true"
+                      android:layout_alignParentTop="false" android:layout_marginLeft="7px" android:textColor="#000000"
+                      android:textSize="16px" android:gravity="center_vertical"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="70px"
+                    android:layout_alignParentLeft="true" android:layout_alignParentTop="false"
+                    android:background="@drawable/bg_main_banner" android:id="@+id/RLBottomBar"
+                    android:layout_alignParentBottom="true">
+        <ImageView
+                android:layout_width="96px"
+                android:layout_height="fill_parent"
+                android:id="@+id/imgRecord" android:src="@drawable/bt_record_nl"
+                android:scaleType="fitXY"/>
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgJobs"
+                   android:src="@drawable/bt_jobs_nl" android:layout_toRightOf="@+id/imgRecord"
+                   android:scaleType="fitXY"
+                />
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgProducts"
+                   android:src="@drawable/bt_products_sl" android:layout_toRightOf="@+id/imgJobs"
+                   android:scaleType="fitXY" android:paddingLeft="2px" android:paddingTop="3px"
+                   android:paddingRight="2px" android:paddingBottom="3px"/>
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgReports"
+                   android:src="@drawable/bt_report_nl" android:layout_toRightOf="@+id/imgProducts"
+                   android:scaleType="fitXY"/>
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgSettings"
+                   android:src="@drawable/bt_setting_nl" android:layout_toRightOf="@+id/imgReports"
+                   android:scaleType="fitXY"/>
+    </RelativeLayout>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="40px"
+            android:text="@string/product_loc_location"
+            android:id="@+id/lblLocation" android:layout_alignParentTop="false"
+            android:textColor="#FFFFFF" android:textSize="24px"
+            android:layout_below="@+id/RLTopBar" android:layout_marginLeft="20px" android:layout_marginTop="10px"/>
+    <ImageView
+            android:layout_width="120px"
+            android:layout_height="30px"
+            android:id="@+id/imgSwitch" android:layout_alignParentTop="false"
+            android:layout_below="@+id/lblLocation" android:layout_marginTop="10px"
+            android:layout_alignLeft="@+id/lblLocation" android:src="@drawable/setting_option"/>
+    <TextView android:layout_width="fill_parent" android:layout_height="30px"
+              android:text="@string/product_loc_show" android:id="@+id/lblShowProducts"
+              android:layout_alignParentTop="false" android:textColor="#FFFFFF" android:textSize="20px"
+              android:layout_marginLeft="30px"
+              android:layout_alignTop="@+id/imgSwitch" android:layout_toRightOf="@+id/imgSwitch"
+              android:layout_marginRight="20px"/>
+    <TextView
+            android:layout_width="60px"
+            android:layout_height="30px"
+            android:text="ON"
+            android:id="@+id/txtSwitchOn" android:layout_alignLeft="@+id/RLAddBar"
+            android:layout_alignTop="@+id/imgSwitch" android:gravity="center" android:textColor="#FFFFFF"
+            android:textSize="18px"/>
+    <TextView android:layout_width="60px" android:layout_height="30px" android:text="OFF" android:id="@+id/txtSwitchOff"
+              android:gravity="center"
+              android:textColor="#FFFFFF" android:textSize="18px" android:layout_toRightOf="@+id/txtSwitchOn"
+              android:layout_alignTop="@+id/imgSwitch"/>
+</RelativeLayout>
+

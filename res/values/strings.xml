@@ -1,4 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">FloorSmart</string>
+
+    <string name="job_main_title">Jobs</string>
+    <string name="job_add_hint">Add job</string>
+
+    <string name="job_archive_title">Archived Jobs</string>
+    <string name="job_search_hint">Search job</string>
+    <string name="job_cancel">Cancel</string>
+
+    <string name="product_main_title">Products</string>
+    <string name="product_add_hint">Add a product</string>
+
+    <string name="product_select_type">Select Type</string>
+    <string name="product_type_finished">finished</string>
+    <string name="product_type_subfloor">subfloor</string>
+
+    <string name="product_loc_location">Location : </string>
+    <string name="product_loc_show">Show Main Products</string>
+
+    <string name="location_main_title">Locations</string>
+    <string name="location_job_title">Job: </string>
+    <string name="location_add_hint">Add Location</string>
+
+    <string name="report_joblabel">Job: </string>
+    <string name="report_main_title">Job Overview</string>
+
+    <string name="setting_main_title">Settings</string>
+    <string name="setting_temperature">Temperature</string>
+    <string name="setting_area">Area</string>
+    <string name="setting_dateformat">Date Format</string>
+
+    <string name="record_reading_title">Record Readings</string>
+    <string name="record_reading_job">Job</string>
+    <string name="record_reading_location">Location</string>
+    <string name="record_reading_product">Product</string>
+    <string name="record_reading_coverage">Coverage</string>
+    <string name="record_reading_notselected">Not selected...</string>
+    <string name="record_reading_job_hint">Tap here to select a job...</string>
+    <string name="record_reading_location_hint">Tap here to select a location...</string>
+    <string name="record_reading_product_hint">Tap here to select a product...</string>
+
+    <string name="record_curreading_title">Today\'s Readings</string>
+    <string name="record_curreading_lastreading">Last Reading : </string>
+    <string name="record_curreading_mc">MC : </string>
+    <string name="record_curreading_emc">EMC : </string>
+    <string name="record_curreading_rh">RH : </string>
+    <string name="record_curreading_temp">Temp : </string>
+    <string name="record_curreading_material">Material : </string>
+    <string name="record_curreading_sg">s.g. : </string>
+    <string name="record_curreading_depth">Depth : </string>
+    <string name="record_curreading_battery">Battery : </string>
+    <string name="record_curreading_mcavg">MC AVG: </string>
+    <string name="record_curreading_mclow">MC Low : </string>
+    <string name="record_curreading_mchigh">MC High: </string>
+    <string name="record_curreading_emcavg">EMC AVG: </string>
+    <string name="record_curreading_rhavg">RH AVG: </string>
+    <string name="record_curreading_tempavg">Temp AVG: </string>
+    <string name="record_curreading_time">Time</string>
+    <string name="record_curreading_mcpercent">MC%</string>
+    <string name="record_curreading_emcpercent">EMC%</string>
+    <string name="record_curreading_rhpercent">RH%</string>
+    <string name="record_curreading_t">T</string>
+
+    <string name="record_curreading_location">Location: </string>
+    <string name="record_curreading_product">Product: </string>
+
+    <string name="selectview_title">Select a Job</string>
+
+    <string name="product_finished">finished</string>
+    <string name="product_subfloor">subfloor</string>
+
+    <string-array
+            name="product_array">
+        <item>finished</item>
+        <item>subfloor</item>
+    </string-array>
 </resources>

@@ -1,6 +1,7 @@
 package com.tim.FloorSmart.Database;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import com.tim.FloorSmart.Database.FMDB.FMDatabase;
 import com.tim.FloorSmart.Global.CommonDefs;
@@ -26,13 +27,15 @@ public class DataManager {
     public static final String FMD_DEFAULT_PRODUCTNAME = "Default";
 
 
-    private DataManager() {
+    private DataManager(Context ctx) {
         //
+        _database = new FMDatabase(ctx);
+        _database.open();
     }
 
-    public static DataManager sharedInstance() {
+    public static DataManager sharedInstance(Context ctx) {
         if (_sharedInstance == null) {
-            _sharedInstance = new DataManager();
+            _sharedInstance = new DataManager(ctx);
         }
         return _sharedInstance;
     }
@@ -40,7 +43,7 @@ public class DataManager {
     // job
     public ArrayList<FSJob> getAllJobs() {
         ArrayList<FSJob> arrJobList = new ArrayList<FSJob>();
-        Cursor results = _database.executeQuery("SELECT * FROM tbl_job WHERE deleted = 0");
+        Cursor results = _database.executeCommand("SELECT * FROM tbl_job WHERE deleted = 0");
         if (results.moveToFirst()) {
             do {
                 int i = 0;
@@ -59,8 +62,8 @@ public class DataManager {
         ArrayList<FSJob> arrJobList = new ArrayList<FSJob>();
         if (searchField == null)
             searchField = "";
-        String sql = String.format("SELECT * FROM tbl_job WHERE deleted = 0 and job_archived = %ld AND job_name like '%s%s%s'", (long)archiveFlag, "%", searchField, "%");
-        Cursor results = _database.executeQuery(sql);
+        String sql = String.format("SELECT * FROM tbl_job WHERE deleted = 0 and job_archived = %d AND job_name like '%s%s%s'", (int)archiveFlag, "%", searchField, "%");
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -79,7 +82,7 @@ public class DataManager {
 
     public boolean isExistSameJob(String jobName) {
         String sql = String.format("SELECT COUNT(*) AS samecount  FROM tbl_job WHERE deleted = 0 and job_name = '%s'", jobName);
-        Cursor results = _database.executeQuery(sql);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do  {
@@ -94,7 +97,7 @@ public class DataManager {
 
     public FSJob getJobFromID(long jobID) {
 
-        Cursor results = _database.executeQuery("SELECT * FROM tbl_job WHERE deleted = 0 and job_id = %ld", jobID);
+        Cursor results = _database.executeQuery("SELECT * FROM tbl_job WHERE deleted = 0 and job_id = %d", jobID);
         if (results.moveToFirst())
         {
             do {
@@ -123,22 +126,22 @@ public class DataManager {
     }
 
     public void updateJobToDatabase(FSJob job) {
-        String sql = String.format("UPDATE tbl_job SET job_archived = %ld , job_name = '%s' WHERE job_id = %ld", (long)job.jobArchived, job.jobName, job.jobID);
+        String sql = String.format("UPDATE tbl_job SET job_archived = %d , job_name = '%s' WHERE job_id = %d", (int)job.jobArchived, job.jobName, job.jobID);
         _database.executeUpdate(sql);
     }
 
     public void deleteJobFromDatabase(FSJob job) {
         String sql;
-        //sql = [NSString stringWithFormat:@"DELETE FROM tbl_job WHERE job_id = %ld", job.jobID];
-        sql = String.format("UPDATE tbl_job SET deleted = 1 WHERE job_id = %ld", job.jobID);
+        //sql = [NSString stringWithFormat:@"DELETE FROM tbl_job WHERE job_id = %d", job.jobID];
+        sql = String.format("UPDATE tbl_job SET deleted = 1 WHERE job_id = %d", job.jobID);
         _database.executeUpdate(sql);
     }
 
 // location
     public ArrayList<FSLocation> getLocations(long jobID) {
         ArrayList<FSLocation> arrLocList = new ArrayList<FSLocation>();
-        String sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_jobid  = %ld and location_name != '%s' ", jobID, FMD_DEFAULT_LOCATIONNAME);
-        Cursor results = _database.executeQuery(sql);
+        String sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_jobid  = %d and location_name != '%s' ", jobID, FMD_DEFAULT_LOCATIONNAME);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -158,10 +161,10 @@ public class DataManager {
         ArrayList<FSLocation> arrLocList = new ArrayList<FSLocation>();
         String sql = "";
         if (isContainDefault)
-            sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_jobid  = %ld", jobID);
+            sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_jobid  = %d", jobID);
         else
-            sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_jobid  = %ld and location_name != '%s' ", jobID, FMD_DEFAULT_LOCATIONNAME);
-        Cursor results = _database.executeQuery(sql);
+            sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_jobid  = %d and location_name != '%s' ", jobID, FMD_DEFAULT_LOCATIONNAME);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -179,8 +182,8 @@ public class DataManager {
 
     public boolean isExistSameLocation(long jobID, String locName) {
         String sql = "";
-        sql = String.format("SELECT COUNT(*) AS samecount FROM tbl_location WHERE deleted = 0 and location_jobid  = %ld and location_name = '%s'", jobID, locName);
-        Cursor results = _database.executeQuery(sql);
+        sql = String.format("SELECT COUNT(*) AS samecount FROM tbl_location WHERE deleted = 0 and location_jobid  = %d and location_name = '%s'", jobID, locName);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -195,8 +198,8 @@ public class DataManager {
 
     public FSLocation getLocation(long jobID, String locName) {
         String sql = "";
-        sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_jobid  = %ld and location_name = '%s'", jobID, locName);
-        Cursor results = _database.executeQuery(sql);
+        sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_jobid  = %d and location_name = '%s'", jobID, locName);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -213,8 +216,8 @@ public class DataManager {
 
     public FSLocation getLocationFromID(long locID) {
         FSLocation loc = new FSLocation();
-        String sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_id = %ld", locID);
-        Cursor results = _database.executeQuery(sql);
+        String sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_id = %d", locID);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -242,21 +245,21 @@ public class DataManager {
 
     public void updateLocToDatabase(FSLocation loc) {
         String sql;
-        sql = String.format("UPDATE tbl_location SET location_name = '%s' WHERE location_id = %ld", loc.locName, loc.locID);
-        _database.executeQuery(sql);
+        sql = String.format("UPDATE tbl_location SET location_name = '%s' WHERE location_id = %d", loc.locName, loc.locID);
+        _database.executeUpdate(sql);
     }
 
     public void deleteLocFromDatabase(FSLocation loc) {
         String sql;
         //sql = [NSString stringWithFormat:@"DELETE FROM tbl_location WHERE location_id = '%@'", loc.locID];
-        sql = String.format("UPDATE tbl_location SET deleted = 1 WHERE location_id = %ld", loc.locID);
+        sql = String.format("UPDATE tbl_location SET deleted = 1 WHERE location_id = %d", loc.locID);
         _database.executeUpdate(sql);
     }
 
     public FSLocation getDefaultLocationOfJob(long jobID) {
         FSLocation loc = new FSLocation();
-        String sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_jobid  = %ld and location_name = '%s'", jobID, FMD_DEFAULT_LOCATIONNAME);
-        Cursor results = _database.executeQuery(sql);
+        String sql = String.format("SELECT * FROM tbl_location WHERE deleted = 0 and location_jobid  = %d and location_name = '%s'", jobID, FMD_DEFAULT_LOCATIONNAME);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -273,8 +276,8 @@ public class DataManager {
 
     public ArrayList<FSLocation> getAllDistinctLocations() {
         ArrayList<FSLocation> arrLocList = new ArrayList<FSLocation>();
-        String sql = String.format("SELECT DISTINCT(location_name) AS location_name FROM tbl_location WHERE deleted = 0");
-        Cursor results = _database.executeQuery(sql);
+        String sql = String.format("SELECT DISTINCT(location_name) AS location_name FROM tbl_location WHERE deleted = 0 and location_name != '%s'", DataManager.FMD_DEFAULT_LOCATIONNAME);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -293,7 +296,7 @@ public class DataManager {
 // product
     public ArrayList<FSProduct> getAllProducts() {
         ArrayList<FSProduct> arrProductList = new ArrayList<FSProduct>();
-        Cursor results = _database.executeQuery("SELECT * FROM tbl_product WHERE deleted = 0");
+        Cursor results = _database.executeCommand("SELECT * FROM tbl_product WHERE deleted = 0");
         if (results.moveToFirst())
         {
             do  {
@@ -337,8 +340,8 @@ public class DataManager {
 
     public boolean isExistSameProduct(String productName, long productType) {
         String sql = "";
-        sql = String.format("SELECT COUNT(*) AS samecount FROM tbl_product WHERE deleted = 0 and product_type = %ld and product_name = '%s'", productType, productName);
-        Cursor results = _database.executeQuery(sql);
+        sql = String.format("SELECT COUNT(*) AS samecount FROM tbl_product WHERE deleted = 0 and product_type = %d and product_name = '%s'", productType, productName);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -353,7 +356,7 @@ public class DataManager {
 
     public FSProduct getProductFromID(long procID) {
         FSProduct product = new FSProduct();
-        Cursor results = _database.executeQuery("SELECT * FROM tbl_product WHERE deleted = 0 AND product_id = %ld", procID);
+        Cursor results = _database.executeQuery("SELECT * FROM tbl_product WHERE deleted = 0 AND product_id = %d", procID);
         if (results.moveToFirst())
         {
             do {
@@ -384,20 +387,20 @@ public class DataManager {
 
     public void updateProductToDatabase(FSProduct product) {
         String sql;
-        sql = String.format("UPDATE tbl_product SET product_name = '%s', product_type = %ld WHERE product_id = %ld", product.productName, product.productType, product.productID);
+        sql = String.format("UPDATE tbl_product SET product_name = '%s', product_type = %d WHERE product_id = %d", product.productName, product.productType, product.productID);
         _database.executeUpdate(sql);
     }
 
     public void deleteProductFromDatabase(FSProduct product) {
         String sql;
         //sql = [NSString stringWithFormat:@"DELETE FROM tbl_product WHERE product_id = '%@'", product.productID];
-        sql = String.format("UPDATE tbl_product SET deleted = 1 WHERE product_id = %ld", product.productID);
+        sql = String.format("UPDATE tbl_product SET deleted = 1 WHERE product_id = %d", product.productID);
         _database.executeUpdate(sql);
     }
 
     public FSProduct getProductWithLocProduct(FSLocProduct locProduct) {
         FSProduct product = new FSProduct();
-        Cursor results = _database.executeQuery("SELECT * FROM tbl_product WHERE deleted = 0 AND product_name = '%s' and product_type = %ld", locProduct.locProductName, locProduct.locProductType);
+        Cursor results = _database.executeQuery("SELECT * FROM tbl_product WHERE deleted = 0 AND product_name = '%s' and product_type = %d", locProduct.locProductName, locProduct.locProductType);
         if (results.moveToFirst())
         {
             do {
@@ -418,7 +421,7 @@ public class DataManager {
         ArrayList<FSLocProduct> arrLocProductList = new ArrayList<FSLocProduct>();
         if (searchField == null)
             searchField = "";
-        Cursor results = _database.executeQuery("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_locid = %ld AND locproduct_productname like %s%s%s and locproduct_productname != '%s'", loc.locID, "'%", searchField, "%'", FMD_DEFAULT_PRODUCTNAME);
+        Cursor results = _database.executeQuery("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_locid = %d AND locproduct_productname like %s%s%s and locproduct_productname != '%s'", loc.locID, "'%", searchField, "%'", FMD_DEFAULT_PRODUCTNAME);
         if (results.moveToFirst())
         {
             do {
@@ -445,11 +448,11 @@ public class DataManager {
 
         String sql = "";
         if (isContainDefault)
-            sql = String.format("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_locid = %ld AND locproduct_productname like %s%s%s", loc.locID, "'%", searchField, "%'");
+            sql = String.format("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_locid = %d AND locproduct_productname like %s%s%s", loc.locID, "'%", searchField, "%'");
         else
-        sql = String.format("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_locid = %ld AND locproduct_productname like %s%s%s and locproduct_productname != '%@'", loc.locID, "'%", searchField, "%'", FMD_DEFAULT_PRODUCTNAME);
+        sql = String.format("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_locid = %d AND locproduct_productname like %s%s%s and locproduct_productname != '%@'", loc.locID, "'%", searchField, "%'", FMD_DEFAULT_PRODUCTNAME);
 
-        Cursor results = _database.executeQuery(sql);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -471,8 +474,8 @@ public class DataManager {
 
     public boolean isExistSameLocProduct(long locID, String locProductName, long locProductType) {
         String sql = "";
-        sql = String.format("SELECT COUNT(*) AS samecount FROM tbl_locproduct WHERE deleted = 0 and locproduct_locid = %ld and locproduct_producttype = %ld and locproduct_productname = '%s'", locID, locProductType, locProductName);
-        Cursor results = _database.executeQuery(sql);
+        sql = String.format("SELECT COUNT(*) AS samecount FROM tbl_locproduct WHERE deleted = 0 and locproduct_locid = %d and locproduct_producttype = %d and locproduct_productname = '%s'", locID, locProductType, locProductName);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -486,7 +489,7 @@ public class DataManager {
     }
 
     public FSLocProduct getLocProductWithID(long locProductID) {
-        Cursor results = _database.executeQuery("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_id = %ld", locProductID);
+        Cursor results = _database.executeQuery("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_id = %d", locProductID);
         if (results.moveToFirst())
         {
             do {
@@ -507,7 +510,7 @@ public class DataManager {
     }
 
     public FSLocProduct getDefaultLocProductOfLocation(FSLocation loc) {
-        Cursor results = _database.executeQuery("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_locid = %ld AND locproduct_productname = '%s'", loc.locID, FMD_DEFAULT_PRODUCTNAME);
+        Cursor results = _database.executeQuery("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_locid = %d AND locproduct_productname = '%s'", loc.locID, FMD_DEFAULT_PRODUCTNAME);
         if (results.moveToFirst())
         {
             do {
@@ -528,7 +531,7 @@ public class DataManager {
     }
 
     public FSLocProduct getLocProductWithProduct(FSProduct product, long locID) {
-        Cursor results = _database.executeQuery("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_locid = %ld AND locproduct_productname = '%s' AND locproduct_producttype = %ld", locID, product.productName, product.productType);
+        Cursor results = _database.executeQuery("SELECT * FROM tbl_locproduct WHERE deleted = 0 AND locproduct_locid = %d AND locproduct_productname = '%s' AND locproduct_producttype = %d", locID, product.productName, product.productType);
         if (results.moveToFirst())
         {
             do {
@@ -549,7 +552,7 @@ public class DataManager {
     }
 
     public long addLocProductToDatabaseWithProduct(FSProduct product, long locID, double coverage) {
-        ContentValues values = new ContentValues();
+        /*ContentValues values = new ContentValues();
         values.put("locproduct_locid", locID);
         values.put("locproduct_productname", product.productName);
         values.put("locproduct_producttype", product.productType);
@@ -558,11 +561,17 @@ public class DataManager {
         long ret = _database.insert("tbl_locproduct", null, values);
         if (ret < 0)
             return 0;
-        return ret;
+        return ret;*/
+        String sql;
+        sql = String.format("insert into tbl_locproduct (locproduct_locid, locproduct_productname, locproduct_producttype, locproduct_coverage, deleted) values (%d, '%s', %d, %f, 0)", locID, product.productName, product.productType, coverage);
+        boolean bSuccess = _database.executeUpdate(sql);
+        if (bSuccess == false)
+            return 0;
+        return 1;
     }
 
     public long addLocProductToDatabase(FSLocProduct locProduct) {
-        ContentValues values = new ContentValues();
+        /*ContentValues values = new ContentValues();
         values.put("locproduct_locid", locProduct.locProductID);
         values.put("locproduct_productname", locProduct.locProductName);
         values.put("locproduct_producttype", locProduct.locProductType);
@@ -571,18 +580,24 @@ public class DataManager {
         long ret = _database.insert("tbl_locproduct", null, values);
         if (ret < 0)
             return 0;
-        return ret;
+        return ret;*/
+        String sql;
+        sql = String.format("insert into tbl_locproduct (locproduct_locid, locproduct_productname, locproduct_producttype, locproduct_coverage, deleted) values (%d, '%s', %d, %f, 0)", locProduct.locProductLocID, locProduct.locProductName, locProduct.locProductType, locProduct.locProductCoverage);
+        boolean bSuccess = _database.executeUpdate(sql);
+        if (bSuccess == false)
+            return 0;
+        return 1;
     }
 
     public boolean updateLocProductToDatabase(FSLocProduct locProduct) {
         String sql;
-        sql = String.format("UPDATE tbl_locproduct SET locproduct_locid = %ld, locproduct_productname = '%s', locproduct_producttype = %ld, locproduct_coverage = %f WHERE locproduct_id = %ld", locProduct.locProductLocID, locProduct.locProductName, locProduct.locProductType, locProduct.locProductCoverage, locProduct.locProductID);
+        sql = String.format("UPDATE tbl_locproduct SET locproduct_locid = %d, locproduct_productname = '%s', locproduct_producttype = %d, locproduct_coverage = %f WHERE locproduct_id = %d", locProduct.locProductLocID, locProduct.locProductName, locProduct.locProductType, locProduct.locProductCoverage, locProduct.locProductID);
         return _database.executeUpdate(sql);
     }
 
     public boolean deleteLocProductFromDatabase(FSLocProduct locProduct) {
         String sql;
-        sql = String.format("UPDATE tbl_locproduct SET deleted = 1 WHERE locproduct_id = %ld", locProduct.locProductID);
+        sql = String.format("UPDATE tbl_locproduct SET deleted = 1 WHERE locproduct_id = %d", locProduct.locProductID);
         return _database.executeUpdate(sql);
     }
 
@@ -610,8 +625,8 @@ public class DataManager {
 
     public ArrayList<Date> getAllReadingDates(long locProductID) {
         ArrayList<Date> arrDates = new ArrayList<Date>();
-        String sql = String.format("SELECT DISTINCT(SUBSTR(read_date, 1, 10)) as read_date FROM tbl_reading WHERE read_locproductid = %ld ORDER BY read_date ASC", locProductID);
-        Cursor results = _database.executeQuery(sql);
+        String sql = String.format("SELECT DISTINCT(SUBSTR(read_date, 1, 10)) as read_date FROM tbl_reading WHERE read_locproductid = %d ORDER BY read_date ASC", locProductID);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -626,8 +641,8 @@ public class DataManager {
     public ArrayList<FSReading> getReadings(long locProductID, Date date) {
         ArrayList<FSReading> arrReadingsList = new ArrayList<FSReading>();
         String strDate = CommonMethods.date2str(date, CommonDefs.DATE_FORMAT);
-        String sql = String.format("SELECT * FROM tbl_reading WHERE deleted = 0 AND  read_locproductid = %ld AND SUBSTR(read_date, 1, 10) = '%s'", locProductID, strDate);
-        Cursor results = _database.executeQuery(sql);
+        String sql = String.format("SELECT * FROM tbl_reading WHERE deleted = 0 AND  read_locproductid = %d AND SUBSTR(read_date, 1, 10) = '%s'", locProductID, strDate);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -653,8 +668,8 @@ public class DataManager {
 
     public int getReadingsCount(long locProductID, Date date) {
         String strDate = CommonMethods.date2str(date, CommonDefs.DATE_FORMAT);
-        String sql = String.format("SELECT count(*) AS allcount FROM tbl_reading WHERE deleted = 0 AND read_locproductid = %ld AND SUBSTR(read_date, 1, 10) = '%s'", locProductID, strDate);
-        Cursor results = _database.executeQuery(sql);
+        String sql = String.format("SELECT count(*) AS allcount FROM tbl_reading WHERE deleted = 0 AND read_locproductid = %d AND SUBSTR(read_date, 1, 10) = '%s'", locProductID, strDate);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -665,8 +680,8 @@ public class DataManager {
     }
 
     public int getReadingsCount(long locProductID) {
-        String sql = String.format("SELECT count(*) AS allcount FROM tbl_reading WHERE deleted = 0 AND read_locproductid = %ld", locProductID);
-        Cursor results = _database.executeQuery(sql);
+        String sql = String.format("SELECT count(*) AS allcount FROM tbl_reading WHERE deleted = 0 AND read_locproductid = %d", locProductID);
+        Cursor results = _database.executeCommand(sql);
         if (results.moveToFirst())
         {
             do {
@@ -715,7 +730,7 @@ public class DataManager {
 
     public boolean updateReadingToDatabase(FSReading reading) {
         String sql;
-        sql = String.format("UPDATE tbl_reading set read_locproductid = %ld, read_date = '%s', read_uuid = '%s', read_rh = %ld, read_convrh = %f, read_temp = %ld, read_convtemp = %f, read_battery = %ld, read_depth = %ld, read_gravity = %ld, read_material = %ld, read_mc = %ld",
+        sql = String.format("UPDATE tbl_reading set read_locproductid = %d, read_date = '%s', read_uuid = '%s', read_rh = %d, read_convrh = %f, read_temp = %d, read_convtemp = %f, read_battery = %d, read_depth = %d, read_gravity = %d, read_material = %d, read_mc = %d",
                 reading.readLocProductID,
                 CommonMethods.date2str(reading.readTimestamp, CommonDefs.DATETIME_FORMAT),
                 reading.readUuid,
@@ -733,7 +748,7 @@ public class DataManager {
 
     public boolean deleteReadingFromDatabase(FSReading reading) {
         String sql;
-        sql = String.format("UPDATE tbl_reading SET deleted = 1 WHERE read_id = %ld", reading.readID);
+        sql = String.format("UPDATE tbl_reading SET deleted = 1 WHERE read_id = %d", reading.readID);
         return _database.executeUpdate(sql);
     }
 }

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="vertical"
+			  android:layout_width="fill_parent"
+			  android:layout_height="fill_parent"
+              android:background="@drawable/bg_all" android:id="@+id/RLReadingRoot">
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="70px" android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" android:background="@drawable/bg_title_bar" android:id="@+id/RLTopBar">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="60px"
+                android:text="@string/record_curreading_title"
+                android:id="@+id/lblTitle"
+                android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="26px" android:gravity="center"
+                />
+        <RelativeLayout
+                android:layout_width="50px"
+                android:layout_height="50px" android:id="@+id/RLBack" android:layout_marginLeft="5px"
+                android:layout_marginTop="5px">
+            <ImageView
+                    android:layout_width="30px"
+                    android:layout_height="20px"
+                    android:id="@+id/imgBack" android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
+                    android:src="@drawable/bt_back"
+                    android:scaleType="fitCenter" android:layout_centerVertical="true"
+                    android:layout_marginLeft="10px"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="85px" android:id="@+id/RLDataBar" android:layout_below="@+id/RLTopBar"
+            android:background="@drawable/bg_data_bar">
+        <TextView
+                android:layout_width="220px"
+                android:layout_height="fill_parent"
+                android:text="Mercy Hospital"
+                android:id="@+id/txtName" android:layout_alignParentLeft="true" android:layout_centerVertical="true"
+                android:layout_marginLeft="20px" android:gravity="center_vertical" android:textColor="#FFFFFF"
+                android:textSize="20px"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="25px" android:text="Location: First floor, South Wing"
+                  android:id="@+id/txtLocation"
+                  android:gravity="center_vertical" android:textColor="#FFFFFF"
+                  android:textSize="12px" android:layout_toRightOf="@+id/txtName"
+                  android:layout_alignTop="@+id/txtName" android:layout_marginTop="5px"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="25px"
+                  android:text="Product: 514 Weye OSB" android:id="@+id/txtProduct"
+                  android:gravity="center_vertical" android:textColor="#FFFFFF" android:textSize="12px"
+                  android:layout_toRightOf="@+id/txtName" android:layout_below="@+id/txtLocation"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="25px"
+                  android:text="Coverage:" android:id="@+id/txtCoverLabel"
+                  android:gravity="center_vertical" android:textColor="#FFFFFF" android:textSize="12px"
+                  android:layout_toRightOf="@+id/txtName" android:layout_below="@+id/txtProduct"
+                />
+        <TextView android:layout_width="wrap_content" android:layout_height="25px"
+                  android:id="@+id/txtCoverage" android:gravity="center_vertical" android:textColor="#FFFFFF"
+                  android:textSize="12px"
+                  android:layout_toRightOf="@+id/txtCoverLabel" android:layout_below="@+id/txtProduct"
+                  android:layout_marginLeft="5px" android:text="         "/>
+        <TextView android:layout_width="wrap_content" android:layout_height="25px" android:id="@+id/txtUnitFT"
+                  android:gravity="center_vertical" android:textColor="#FFFFFF" android:textSize="12px"
+                  android:layout_toRightOf="@+id/txtCoverage" android:layout_below="@+id/txtProduct"
+                  android:layout_marginLeft="5px" android:text="ft"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="25px" android:id="@+id/txtUnitM"
+                  android:gravity="center_vertical" android:textColor="#FFFFFF" android:textSize="12px"
+                  android:layout_toRightOf="@+id/txtCoverage" android:layout_below="@+id/txtProduct"
+                  android:layout_marginLeft="5px" android:text="m"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="15px" android:id="@+id/txtUnit2"
+                  android:gravity="center_vertical" android:textColor="#FFFFFF" android:textSize="8px"
+                  android:layout_toRightOf="@+id/txtUnitFT" android:layout_below="@+id/txtProduct"
+                  android:layout_marginLeft="5px" android:text="2"/>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="70px"
+                    android:layout_alignParentLeft="true" android:layout_alignParentTop="false"
+                    android:background="@drawable/bg_main_banner" android:id="@+id/RLBottomBar"
+                    android:layout_alignParentBottom="true">
+        <ImageView
+                android:layout_width="96px"
+                android:layout_height="fill_parent"
+                android:id="@+id/imgRecord" android:src="@drawable/bt_record_sl"
+                android:scaleType="fitXY" android:paddingLeft="2px" android:paddingTop="3px"
+                android:paddingRight="2px" android:paddingBottom="3px"/>
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgJobs"
+                   android:src="@drawable/bt_jobs_nl" android:layout_toRightOf="@+id/imgRecord"
+                   android:scaleType="fitXY"
+                />
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgProducts"
+                   android:src="@drawable/bt_products_nl" android:layout_toRightOf="@+id/imgJobs"
+                   android:scaleType="fitXY"/>
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgReports"
+                   android:src="@drawable/bt_report_nl" android:layout_toRightOf="@+id/imgProducts"
+                   android:scaleType="fitXY"/>
+        <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgSettings"
+                   android:src="@drawable/bt_setting_nl" android:layout_toRightOf="@+id/imgReports"
+                   android:scaleType="fitXY"/>
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="40px" android:layout_alignLeft="@+id/RLTopBar"
+            android:layout_below="@+id/RLDataBar" android:layout_marginTop="20px" android:layout_marginRight="20px"
+            android:layout_marginLeft="20px" android:background="@drawable/bg_data_bar"
+            android:id="@+id/RLMainBar">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/record_curreading_lastreading"
+                android:id="@+id/txtlastReading" android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+                android:gravity="center" android:textSize="18px" android:textColor="#CCCCCC"/>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="160px"
+                    android:background="@drawable/bg_job_overview_detail_bar" android:id="@+id/RLMainBottomBar"
+                    android:layout_alignLeft="@+id/RLMainBar" android:layout_below="@+id/RLMainBar"
+                    android:layout_alignRight="@+id/RLMainBar">
+        <TextView android:layout_width="200px" android:layout_height="40px"
+                  android:text="@string/record_curreading_mc" android:id="@+id/txtMainMC"
+                  android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+                  android:textSize="16px" android:layout_marginLeft="10px" android:gravity="center_vertical"
+                  android:textColor="#FFFFFF"/>
+        <TextView android:layout_width="200px" android:layout_height="40px"
+                  android:text="@string/record_curreading_material" android:id="@+id/txtMainMaterial"
+                  android:textSize="16px" android:layout_toRightOf="@+id/txtMainMC"
+                  android:layout_alignTop="@+id/txtMainMC" android:layout_marginLeft="20px"
+                  android:gravity="center_vertical" android:textColor="#FFFFFF"/>
+        <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_emc"
+                  android:id="@+id/txtmainEMC"
+                  android:textSize="16px" android:gravity="center_vertical"
+                  android:textColor="#FFFFFF" android:layout_alignLeft="@+id/txtMainMC"
+                  android:layout_below="@+id/txtMainMC"/>
+        <TextView android:layout_width="200px" android:layout_height="40px"
+                  android:text="@string/record_curreading_sg" android:id="@+id/txtMainSG"
+                  android:textSize="16px"
+                  android:gravity="center_vertical" android:textColor="#FFFFFF"
+                  android:layout_alignLeft="@+id/txtMainMaterial" android:layout_alignTop="@+id/txtmainEMC"/>
+        <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_rh"
+                  android:id="@+id/txtMainRH" android:textSize="16px" android:gravity="center_vertical"
+                  android:textColor="#FFFFFF"
+                  android:layout_alignLeft="@+id/txtMainMC" android:layout_below="@+id/txtmainEMC"/>
+        <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_depth"
+                  android:id="@+id/txtMainDepth" android:textSize="16px" android:gravity="center_vertical"
+                  android:textColor="#FFFFFF"
+                  android:layout_alignLeft="@+id/txtMainMaterial" android:layout_below="@+id/txtmainEMC"/>
+        <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_temp"
+                  android:id="@+id/txtMainTemp" android:textSize="16px" android:gravity="center_vertical"
+                  android:textColor="#FFFFFF"
+                  android:layout_alignLeft="@+id/txtMainMC" android:layout_below="@+id/txtMainRH"/>
+        <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_battery"
+                  android:id="@+id/txtMainBattery" android:textSize="16px" android:gravity="center_vertical"
+                  android:textColor="#FFFFFF"
+                  android:layout_alignLeft="@+id/txtMainMaterial" android:layout_below="@+id/txtMainRH"/>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="120px"
+                    android:background="@drawable/bg_job_overview_detail_bar" android:id="@+id/RLMainDetail"
+                    android:layout_alignLeft="@+id/RLMainBar" android:layout_below="@+id/RLMainBottomBar"
+                    android:layout_marginTop="10px" android:layout_alignRight="@+id/RLMainBar">
+        <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_mcavg"
+                  android:id="@+id/txtMCAVG"
+                  android:textSize="16px" android:gravity="center_vertical"
+                  android:textColor="#FFFFFF" android:layout_alignParentLeft="true"
+                  android:layout_alignParentTop="true" android:layout_marginLeft="10px"/>
+        <TextView android:layout_width="200px" android:layout_height="40px"
+                  android:text="@string/record_curreading_emcavg" android:id="@+id/txtEMCAVG"
+                  android:textSize="16px"
+                  android:gravity="center_vertical" android:textColor="#FFFFFF"
+                  android:layout_toRightOf="@+id/txtMCAVG" android:layout_alignTop="@+id/txtMCAVG"
+                  android:layout_marginLeft="20px"/>
+        <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_mclow"
+                  android:id="@+id/txtMCLow" android:textSize="16px" android:gravity="center_vertical"
+                  android:textColor="#FFFFFF"
+                  android:layout_alignLeft="@+id/txtMCAVG" android:layout_below="@+id/txtMCAVG"/>
+        <TextView android:layout_width="200px" android:layout_height="40px"
+                  android:text="@string/record_curreading_rhavg" android:id="@+id/txtRHAVG" android:textSize="16px"
+                  android:gravity="center_vertical" android:textColor="#FFFFFF"
+                  android:layout_alignLeft="@+id/txtEMCAVG" android:layout_below="@+id/txtMCAVG"/>
+        <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_mchigh"
+                  android:id="@+id/txtMCHigh" android:textSize="16px" android:gravity="center_vertical"
+                  android:textColor="#FFFFFF"
+                  android:layout_alignLeft="@+id/txtMCAVG" android:layout_below="@+id/txtMCLow"/>
+        <TextView android:layout_width="200px" android:layout_height="40px"
+                  android:text="@string/record_curreading_tempavg" android:id="@+id/txtTempAVG" android:textSize="16px"
+                  android:gravity="center_vertical" android:textColor="#FFFFFF"
+                  android:layout_alignLeft="@+id/txtEMCAVG" android:layout_below="@+id/txtMCLow"/>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="170px"
+                    android:background="@drawable/bg_job_overview_detail_bar" android:id="@+id/RLListMain"
+                    android:layout_alignLeft="@+id/RLMainBar" android:layout_below="@+id/RLListHeader"
+                    android:layout_alignRight="@+id/RLMainBar">
+        <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="170px"
+                android:id="@+id/listView" android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+                android:layout_marginLeft="10px" android:layout_marginTop="10px" android:layout_marginRight="10px"/>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="40px"
+                    android:background="@drawable/bg_data_bar" android:id="@+id/RLListHeader"
+                    android:layout_alignLeft="@+id/RLMainBar" android:layout_below="@+id/RLMainDetail"
+                    android:layout_marginTop="10px" android:layout_alignRight="@+id/RLMainBar">
+        <TextView android:layout_width="70px" android:layout_height="40px"
+                  android:text="@string/record_curreading_time" android:id="@+id/lblTime" android:textSize="16px"
+                  android:textColor="#FFFFFF"
+                  android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+                  android:layout_marginLeft="20px" android:gravity="center"/>
+        <TextView android:layout_width="70px" android:layout_height="40px"
+                  android:text="@string/record_curreading_mcpercent" android:id="@+id/lblMCPercent" android:textSize="16px"
+                  android:textColor="#FFFFFF"
+                  android:layout_toRightOf="@+id/lblTime" android:layout_alignTop="@+id/lblTime"
+                  android:gravity="center"/>
+        <TextView android:layout_width="70px" android:layout_height="40px"
+                  android:text="@string/record_curreading_emcpercent" android:id="@+id/lblEMCPercent" android:textSize="16px"
+                  android:textColor="#FFFFFF"
+                  android:layout_toRightOf="@+id/lblMCPercent" android:layout_alignTop="@+id/lblTime"
+                  android:gravity="center"/>
+        <TextView android:layout_width="70px" android:layout_height="40px"
+                  android:text="@string/record_curreading_rhpercent" android:id="@+id/lblRHPercent" android:textSize="16px"
+                  android:textColor="#FFFFFF"
+                  android:layout_toRightOf="@+id/lblEMCPercent" android:layout_alignTop="@+id/lblTime"
+                  android:gravity="center"/>
+        <TextView android:layout_width="70px" android:layout_height="40px"
+                  android:text="@string/record_curreading_t" android:id="@+id/lblT" android:textSize="16px"
+                  android:textColor="#FFFFFF"
+                  android:layout_toRightOf="@+id/lblRHPercent" android:layout_alignTop="@+id/lblTime"
+                  android:gravity="center"/>
+        <ImageView
+                android:layout_width="12px"
+                android:layout_height="fill_parent"
+                android:id="@+id/imgDelete" android:layout_toRightOf="@+id/lblT"
+                android:layout_alignTop="@+id/lblTime" android:src="@drawable/ic_delete"
+                android:layout_marginLeft="10px"/>
+    </RelativeLayout>
+</RelativeLayout>
+
