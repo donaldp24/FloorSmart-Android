@@ -78,10 +78,6 @@ public class CommonMethods {
         return sqft;
     }
 
-    public static void Log(String tag, String formatMsg, Object ...values) {
-        Log.v(tag, String.format(formatMsg, values));
-    }
-
     public static void Log(String formatMsg, Object ...values) {
         Log.v(CommonDefs.TAG, String.format(formatMsg, values));
     }

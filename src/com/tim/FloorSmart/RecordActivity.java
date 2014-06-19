@@ -793,6 +793,7 @@ public class RecordActivity extends Activity{
 
     private void pauseRecording()
     {
-
+        ScanManager manager = ScanManager.managerWithListner(this, ScanManagerListenerInstance.sharedInstance());
+        manager.stopScan();
     }
 }

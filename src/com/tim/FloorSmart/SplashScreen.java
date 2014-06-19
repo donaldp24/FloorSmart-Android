@@ -13,7 +13,7 @@ import com.tim.FloorSmart.Global.GlobalData;
 import com.tim.FloorSmart.Scan.ScanManager;
 import com.tim.FloorSmart.Scan.ScanManagerListener;
 
-public class SplashScreen extends Activity implements ScanManagerListener {
+public class SplashScreen extends Activity {
 
     private ScanManager manager;
 
@@ -31,6 +31,9 @@ public class SplashScreen extends Activity implements ScanManagerListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
+        // Initialize Global
+        GlobalData.initialize(this);
+
         mainLayout = (RelativeLayout)findViewById(R.id.RLSplashRoot);
         mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -47,8 +50,9 @@ public class SplashScreen extends Activity implements ScanManagerListener {
                 }
         );
 
-        manager = ScanManager.managerWithListner(this, this);
-        manager.startScan();
+        manager = ScanManager.managerWithListner(this, ScanManagerListenerInstance.sharedInstance());
+        // have to be commented
+        // manager.startScan();
 
         handler = new Handler()
         {
@@ -71,20 +75,5 @@ public class SplashScreen extends Activity implements ScanManagerListener {
     protected void onResume()
     {
         super.onResume();
-
-        // Initialize Global
-        GlobalData.initialize(this);
-    }
-
-    public void didFindSensor(ScanManager scanManager, byte []sensorData) {
-        //
-    }
-
-    public void didFindThirdPackage(ScanManager scanManager, byte []thirdData) {
-        //
-    }
-
-    public void scanManagerDidStartScanning(ScanManager scanManager) {
-        //
     }
 }
