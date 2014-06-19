@@ -11,6 +11,7 @@ import android.view.*;
 import android.widget.*;
 import com.tim.FloorSmart.Database.*;
 import com.tim.FloorSmart.Global.CommonDefs;
+import com.tim.FloorSmart.Global.CommonMethods;
 import com.tim.FloorSmart.Global.GlobalData;
 import com.tim.FloorSmart.Scan.ScanManager;
 
@@ -35,6 +36,9 @@ public class RecordActivity extends Activity{
     FSProduct defaultProduct = null;
 
     boolean isPrevSquareFoot = false;
+
+    RelativeLayout rlPause;
+    RelativeLayout rlRecording;
 
     ListView listSelectView;
     SelectViewItemAdapter adapter;
@@ -158,8 +162,27 @@ public class RecordActivity extends Activity{
         btnSummary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RecordActivity.this, ReadingActivity.class));
+                Intent readingIntent = new Intent(RecordActivity.this, ReadingActivity.class);
+                readingIntent.putExtra(CommonDefs.ACTIVITY_TAG_LOC_PRODUCT_ID, selectedLocProduct.locProductID);
+                startActivity(readingIntent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            }
+        });
+
+        rlRecording = (RelativeLayout)findViewById(R.id.RLRecord);
+        rlPause = (RelativeLayout)findViewById(R.id.RLPause);
+
+        rlRecording.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSaveClicked();
+            }
+        });
+
+        rlPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCancelClicked();
             }
         });
 
@@ -750,49 +773,149 @@ public class RecordActivity extends Activity{
 
         if (requestCode == ACTIVITY_RESULT_JOBS)
         {
-            long jobId = data.getLongExtra(CommonDefs.ACTIVITY_TAG_JOBID, 0);
-            if (jobId != 0)
+            if (data != null)
             {
-                FSJob selectedJob = DataManager.sharedInstance(RecordActivity.this).getJobFromID(jobId);
-                jobSelected(selectedJob);
+                long jobId = data.getLongExtra(CommonDefs.ACTIVITY_TAG_JOBID, 0);
+                if (jobId != 0)
+                {
+                    FSJob selectedJob = DataManager.sharedInstance(RecordActivity.this).getJobFromID(jobId);
+                    jobSelected(selectedJob);
+                }
             }
         }
         else if (requestCode == ACTIVITY_RESULT_LOCATION)
         {
-            long locId = data.getLongExtra(CommonDefs.ACTIVITY_TAG_LOC_ID, 0);
-            if (locId != 0)
+            if (data != null)
             {
-                FSLocation selectedLoc = DataManager.sharedInstance(RecordActivity.this).getLocationFromID(locId);
-                locationSelected(selectedLoc);
+                long locId = data.getLongExtra(CommonDefs.ACTIVITY_TAG_LOC_ID, 0);
+                if (locId != 0)
+                {
+                    FSLocation selectedLoc = DataManager.sharedInstance(RecordActivity.this).getLocationFromID(locId);
+                    locationSelected(selectedLoc);
+                }
             }
         }
         else if (requestCode == ACTIVITY_RESULT_PRODUCT)
         {
-            long locId = data.getLongExtra(CommonDefs.ACTIVITY_TAG_LOC_ID, 0);
-            if (locId != 0)
+            if (data != null)
             {
-                FSLocation selectedLoc = DataManager.sharedInstance(RecordActivity.this).getLocationFromID(locId);
-                locationSelected(selectedLoc);
-            }
+                long locId = data.getLongExtra(CommonDefs.ACTIVITY_TAG_LOC_ID, 0);
+                if (locId != 0)
+                {
+                    FSLocation selectedLoc = DataManager.sharedInstance(RecordActivity.this).getLocationFromID(locId);
+                    locationSelected(selectedLoc);
+                }
 
-            long locProductId = data.getLongExtra(CommonDefs.ACTIVITY_TAG_LOC_PRODUCT_ID, 0);
-            if (locProductId != 0)
-            {
-                FSLocProduct selectedLocProduct = DataManager.sharedInstance(RecordActivity.this).getLocProductWithID(locProductId);
-                locProductSelected(selectedLocProduct);
-            }
+                long locProductId = data.getLongExtra(CommonDefs.ACTIVITY_TAG_LOC_PRODUCT_ID, 0);
+                if (locProductId != 0)
+                {
+                    FSLocProduct selectedLocProduct = DataManager.sharedInstance(RecordActivity.this).getLocProductWithID(locProductId);
+                    locProductSelected(selectedLocProduct);
+                }
 
-            long productId = data.getLongExtra(CommonDefs.ACTIVITY_TAG_PRODUCT_ID, 0);
-            if (productId != 0)
-            {
-                FSProduct selectedProduct = DataManager.sharedInstance(RecordActivity.this).getProductFromID(productId);
-                productSelected(selectedProduct);
+                long productId = data.getLongExtra(CommonDefs.ACTIVITY_TAG_PRODUCT_ID, 0);
+                if (productId != 0)
+                {
+                    FSProduct selectedProduct = DataManager.sharedInstance(RecordActivity.this).getProductFromID(productId);
+                    productSelected(selectedProduct);
+                }
             }
         }
     }
 
+    private void onSaveClicked()
+    {
+        if (selectedJob == null)
+        {
+            Toast.makeText(RecordActivity.this, "Please select a job", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        GlobalData globalData = GlobalData.sharedData();
+        float coverage = 0;
+        String strCoverage = ((EditText)findViewById(R.id.txtCoverage)).getText().toString();
+        coverage = Float.parseFloat(strCoverage);
+
+        if (globalData.settingArea == GlobalData.AREA_FEET)
+            coverage = coverage;
+        else
+            coverage = globalData.sqm2sqft(coverage);
+
+        if (selectedLocation == null)
+        {
+            defaultLocation.locJobID = selectedJob.jobID;
+            defaultLocation.locName = DataManager.FMD_DEFAULT_LOCATIONNAME;
+            long loc_id = DataManager.sharedInstance(RecordActivity.this).addLocationToDatabase(defaultLocation);
+            selectedLocation = DataManager.sharedInstance(RecordActivity.this).getLocationFromID(loc_id);
+        }
+
+        if (selectedLocation == null)
+        {
+            Toast.makeText(RecordActivity.this, "Please select a location", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (selectedLocProduct != null)
+        {
+            selectedLocProduct.locProductCoverage = coverage;
+            DataManager.sharedInstance(RecordActivity.this).updateLocProductToDatabase(selectedLocProduct);
+        }
+        else if (selectedProduct != null)
+        {
+            FSLocProduct locProduct = DataManager.sharedInstance(RecordActivity.this).getLocProductWithProduct(selectedProduct, selectedLocation.locID);
+            if (locProduct != null)
+            {
+                selectedLocProduct = locProduct;
+                selectedLocProduct.locProductCoverage = coverage;
+                DataManager.sharedInstance(RecordActivity.this).updateLocProductToDatabase(selectedLocProduct);
+            }
+            else
+            {
+                long locproduct_id = DataManager.sharedInstance(RecordActivity.this).addLocProductToDatabaseWithProduct(selectedProduct, (long)selectedLocation.locID, coverage);
+                selectedLocProduct = DataManager.sharedInstance(RecordActivity.this).getLocProductWithID(locproduct_id);
+            }
+        }
+        else
+        {
+            FSLocProduct locProduct = new FSLocProduct();
+            locProduct.locProductLocID = selectedLocation.locID;
+            locProduct.locProductName = DataManager.FMD_DEFAULT_PRODUCTNAME;
+            locProduct.locProductType = FSProduct.FSPRODUCTTYPE_FINISHED;
+            locProduct.locProductCoverage = coverage;
+            locProduct.locProductID = DataManager.sharedInstance(RecordActivity.this).addLocProductToDatabase(locProduct);
+
+            selectedLocProduct = DataManager.sharedInstance(RecordActivity.this).getLocProductWithID(locProduct.locProductID);
+        }
+
+        if (selectedLocProduct == null)
+        {
+            Toast.makeText(RecordActivity.this, "Please select a product", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        GlobalData.sharedData().saveSelection(selectedJob.jobID, selectedLocation.locID, selectedLocProduct.locProductID);
+        GlobalData.sharedData().startRecording();
+
+        rlPause.setBackgroundResource(R.drawable.bt_title_bar_cancel);
+        rlRecording.setBackgroundResource(R.drawable.bt_title_bar_save_disabled);
+
+        ScanManager manager = ScanManager.managerWithListner(this, ScanManagerListenerInstance.sharedInstance());
+        manager.stopScan();
+        manager.startScan();
+    }
+
+    private void onCancelClicked()
+    {
+        pauseRecording();
+    }
+
     private void pauseRecording()
     {
+        GlobalData.sharedData().pauseRecording();
+
+        rlPause.setBackgroundResource(R.drawable.bt_title_bar_cancel_disabled);
+        rlRecording.setBackgroundResource(R.drawable.bt_title_bar_save);
+
         ScanManager manager = ScanManager.managerWithListner(this, ScanManagerListenerInstance.sharedInstance());
         manager.stopScan();
     }

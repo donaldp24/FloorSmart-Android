@@ -123,7 +123,7 @@
                   android:layout_alignTop="@+id/txtMainMC" android:layout_marginLeft="20px"
                   android:gravity="center_vertical" android:textColor="#FFFFFF"/>
         <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_emc"
-                  android:id="@+id/txtmainEMC"
+                  android:id="@+id/txtMainEMC"
                   android:textSize="16px" android:gravity="center_vertical"
                   android:textColor="#FFFFFF" android:layout_alignLeft="@+id/txtMainMC"
                   android:layout_below="@+id/txtMainMC"/>
@@ -131,15 +131,15 @@
                   android:text="@string/record_curreading_sg" android:id="@+id/txtMainSG"
                   android:textSize="16px"
                   android:gravity="center_vertical" android:textColor="#FFFFFF"
-                  android:layout_alignLeft="@+id/txtMainMaterial" android:layout_alignTop="@+id/txtmainEMC"/>
+                  android:layout_alignLeft="@+id/txtMainMaterial" android:layout_alignTop="@+id/txtMainEMC"/>
         <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_rh"
                   android:id="@+id/txtMainRH" android:textSize="16px" android:gravity="center_vertical"
                   android:textColor="#FFFFFF"
-                  android:layout_alignLeft="@+id/txtMainMC" android:layout_below="@+id/txtmainEMC"/>
+                  android:layout_alignLeft="@+id/txtMainMC" android:layout_below="@+id/txtMainEMC"/>
         <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_depth"
                   android:id="@+id/txtMainDepth" android:textSize="16px" android:gravity="center_vertical"
                   android:textColor="#FFFFFF"
-                  android:layout_alignLeft="@+id/txtMainMaterial" android:layout_below="@+id/txtmainEMC"/>
+                  android:layout_alignLeft="@+id/txtMainMaterial" android:layout_below="@+id/txtMainEMC"/>
         <TextView android:layout_width="200px" android:layout_height="40px" android:text="@string/record_curreading_temp"
                   android:id="@+id/txtMainTemp" android:textSize="16px" android:gravity="center_vertical"
                   android:textColor="#FFFFFF"

@@ -25,6 +25,8 @@ public class CommonDefs {
     public static final String ACTIVITY_TAG_PRODUCT_ID = "act_product_id";
     public static final String ACTIVITY_TAG_LOC_PRODUCT_ID = "act_loc_product_id";
 
+    public static final String ACTIVITY_TAG_DATE = "act_date";
+
     public static final int ACTIVITY_FROM_SPLASH = 0;
     public static final int ACTIVITY_FROM_RECORD = 1;
 

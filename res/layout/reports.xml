@@ -27,10 +27,10 @@
                     android:scaleType="fitCenter" android:layout_centerVertical="true"
                     android:layout_marginLeft="10px"/>
         </RelativeLayout>
-        <RelativeLayout android:layout_width="50px" android:layout_height="50px" android:id="@+id/RLGoArchive"
+        <RelativeLayout android:layout_width="50px" android:layout_height="50px" android:id="@+id/RLPrint"
                         android:layout_marginTop="5px"
                         android:layout_alignParentRight="true" android:layout_marginRight="5px">
-            <ImageView android:layout_width="30px" android:layout_height="30px" android:id="@+id/imgArchive"
+            <ImageView android:layout_width="30px" android:layout_height="30px" android:id="@+id/imgPrint"
                        android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
                        android:src="@drawable/bt_fly" android:scaleType="fitCenter"
                        android:layout_centerVertical="true" android:layout_marginLeft="10px"/>
@@ -44,7 +44,7 @@
               android:id="@+id/lblJobName" android:textColor="#FFFFFF" android:textSize="20px"
               android:layout_alignTop="@+id/lblJob" android:layout_toRightOf="@+id/lblJob"
               android:layout_marginRight="20px"/>
-    <ListView
+    <ExpandableListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/listView"
@@ -61,15 +61,16 @@
                 android:id="@+id/imgRecord" android:src="@drawable/bt_record_nl"
                 android:scaleType="fitXY"/>
         <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgJobs"
-                   android:src="@drawable/bt_jobs_sl" android:layout_toRightOf="@+id/imgRecord"
-                   android:scaleType="fitXY" android:paddingLeft="2px" android:paddingRight="2px"
-                   android:paddingTop="3px" android:paddingBottom="3px"/>
+                   android:src="@drawable/bt_jobs_nl" android:layout_toRightOf="@+id/imgRecord"
+                   android:scaleType="fitXY"
+                />
         <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgProducts"
                    android:src="@drawable/bt_products_nl" android:layout_toRightOf="@+id/imgJobs"
                    android:scaleType="fitXY"/>
         <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgReports"
-                   android:src="@drawable/bt_report_nl" android:layout_toRightOf="@+id/imgProducts"
-                   android:scaleType="fitXY"/>
+                   android:src="@drawable/bt_report_sl" android:layout_toRightOf="@+id/imgProducts"
+                   android:scaleType="fitXY" android:paddingLeft="2px" android:paddingTop="3px"
+                   android:paddingRight="2px" android:paddingBottom="3px"/>
         <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgSettings"
                    android:src="@drawable/bt_setting_nl" android:layout_toRightOf="@+id/imgReports"
                    android:scaleType="fitXY"/>

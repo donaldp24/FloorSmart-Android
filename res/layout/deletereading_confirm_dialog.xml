@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="vertical"
+			  android:layout_width="350px"
+			  android:layout_height="180px"
+              android:id="@+id/RLConfirmRoot">
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageView" android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" android:background="@drawable/bg_delete_readings"/>
+    <Button
+            android:layout_width="100px"
+            android:layout_height="30px"
+            android:id="@+id/btnOK" android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="false" android:layout_alignParentBottom="true"
+            android:layout_marginLeft="50px" android:layout_marginBottom="5px" android:background="@drawable/bt_ok"/>
+    <Button android:layout_width="100px" android:layout_height="30px" android:id="@+id/btnCancel"
+            android:background="@drawable/bt_alertcancel" android:layout_alignRight="@+id/imageView"
+            android:layout_alignBottom="@+id/btnOK" android:layout_marginRight="50px"/>
+    <TextView
+            android:layout_width="180px"
+            android:layout_height="30px"
+            android:id="@+id/lblCurReading" android:layout_alignParentLeft="true" android:layout_marginLeft="160px"
+            android:layout_alignParentTop="true" android:layout_marginTop="108px" android:textColor="#000000"
+            android:textSize="16px" android:gravity="center_vertical"/>
+</RelativeLayout>
+

@@ -154,7 +154,7 @@ public class GlobalData {
         shared_preferences_editor.commit();
     }
 
-    private String getTempUnit()
+    public String getTempUnit()
     {
         if (this.settingTemp == TEMP_FAHRENHEIT)
             return "F";

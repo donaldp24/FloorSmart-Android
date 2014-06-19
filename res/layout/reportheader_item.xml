@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="vertical"
+			  android:layout_width="440px"
+			  android:layout_height="160px"
+              android:id="@+id/RLReportHeaderItemRoot" android:background="#C2B4A2">
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/imgBack" android:src="@drawable/bg_archive_job_tab" android:scaleType="fitXY"/>
+    <TextView
+            android:layout_width="120px"
+            android:layout_height="40px"
+            android:id="@+id/lblLocation" android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:textColor="#FFFFFF" android:textSize="18px" android:gravity="center"
+            android:layout_marginLeft="10px" android:text="Location :" android:layout_marginTop="5px"/>
+    <TextView android:layout_width="260px" android:layout_height="40px" android:id="@+id/txtLocation"
+              android:layout_alignParentLeft="false" android:layout_alignParentTop="false" android:textColor="#FFFFFF"
+              android:textSize="18px" android:layout_marginLeft="10px"
+              android:text="Location" android:layout_toRightOf="@+id/lblLocation" android:gravity="center_vertical"
+              android:layout_alignTop="@+id/lblLocation"/>
+    <TextView android:layout_width="120px" android:layout_height="40px" android:id="@+id/lblProduct"
+              android:layout_alignParentLeft="false" android:layout_alignParentTop="false" android:textColor="#FFFFFF"
+              android:textSize="18px" android:gravity="center" android:layout_marginLeft="10px"
+              android:text="Product :" android:layout_below="@+id/lblLocation"/>
+    <TextView android:layout_width="260px" android:layout_height="40px" android:id="@+id/txtProduct"
+              android:layout_alignParentLeft="false" android:layout_alignParentTop="false" android:textColor="#FFFFFF"
+              android:textSize="18px" android:layout_marginLeft="10px" android:text="Location"
+              android:layout_toRightOf="@+id/lblLocation" android:layout_alignTop="@+id/lblProduct"
+              android:gravity="center_vertical"/>
+    <TextView android:layout_width="260px" android:layout_height="30px" android:id="@+id/txtProductType"
+              android:textColor="#FFFFFF"
+              android:textSize="16px" android:text="Finished"
+              android:layout_alignLeft="@+id/txtLocation"
+              android:layout_below="@+id/lblProduct"/>
+    <TextView android:layout_width="120px" android:layout_height="40px" android:id="@+id/lblCoverage"
+              android:textColor="#FFFFFF"
+              android:textSize="18px" android:gravity="center" android:text="Coverage :"
+              android:layout_alignLeft="@+id/lblLocation" android:layout_below="@+id/txtProductType"/>
+    <TextView android:layout_width="100px" android:layout_height="40px" android:id="@+id/txtCoverage"
+              android:textColor="#FFFFFF"
+              android:textSize="18px" android:text="39"
+              android:gravity="center_vertical" android:layout_toRightOf="@+id/lblLocation"
+              android:layout_below="@+id/txtProductType" android:layout_marginLeft="10px"/>
+    <TextView android:layout_width="25px" android:layout_height="25px" android:id="@+id/txtUnitFT"
+              android:gravity="center_vertical|right" android:textColor="#FFFFFF" android:textSize="14px"
+              android:text="ft" android:layout_toRightOf="@+id/txtCoverage" android:layout_below="@+id/txtProductType"
+              android:layout_marginTop="5px"/>
+    <TextView android:layout_width="25px" android:layout_height="25px" android:id="@+id/txtUnitM"
+              android:gravity="center_vertical|right" android:textColor="#FFFFFF" android:textSize="14px"
+              android:text="m" android:layout_toRightOf="@+id/txtCoverage" android:layout_below="@+id/txtProductType"
+              android:layout_marginTop="5px"/>
+    <TextView android:layout_width="25px" android:layout_height="15px" android:id="@+id/txtUnit2"
+              android:gravity="center_vertical" android:textColor="#FFFFFF" android:textSize="10px"
+              android:text="2" android:layout_toRightOf="@+id/txtUnitFT" android:layout_below="@+id/txtProductType"
+              android:layout_marginLeft="2px" android:layout_marginTop="5px"/>
+</RelativeLayout>
+
