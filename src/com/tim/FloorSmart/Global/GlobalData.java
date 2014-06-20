@@ -41,6 +41,7 @@ public class GlobalData {
     public static Context _mainContext;
     public static ReadingActivity _readingActivity;
     public static Activity _currentActivity;
+    public static String pdfCacheDir = "";
 
     // properties (setting)
     public int  settingTemp; // temperature unit

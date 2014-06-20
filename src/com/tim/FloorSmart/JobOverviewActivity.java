@@ -3,6 +3,7 @@ package com.tim.FloorSmart;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -10,6 +11,8 @@ import android.widget.*;
 import com.tim.FloorSmart.Database.*;
 import com.tim.FloorSmart.Global.CommonDefs;
 import com.tim.FloorSmart.Global.GlobalData;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +20,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
+import com.tim.FloorSmart.Helper.FSReportHelper;
 
 public class JobOverviewActivity extends BaseActivity{
 
@@ -116,6 +120,14 @@ public class JobOverviewActivity extends BaseActivity{
             @Override
             public void onClick(View v) {
                 // Do Print
+                GlobalData.pdfCacheDir = SetPDFCacheDir(getApplicationContext().getCacheDir());
+                FSReportHelper helper = new FSReportHelper();
+                String pdfName = helper.generateReportForJob(curJob);
+                File file = new File(pdfName);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
             }
         });
     }
@@ -194,6 +206,21 @@ public class JobOverviewActivity extends BaseActivity{
 
         for (int i = 0; i < adapter.getGroupCount(); i++)
             listView.expandGroup(i);
+    }
+
+    public String SetPDFCacheDir(File contextCacheDir)
+    {
+        File cacheDir;
+
+        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+            cacheDir = new File(android.os.Environment.getExternalStorageDirectory(),"floorsmart_cache");
+        else
+            cacheDir = contextCacheDir;
+
+        if(!cacheDir.exists())
+            cacheDir.mkdirs();
+
+        return cacheDir.getAbsolutePath();
     }
 
     public class FSReportListNodeObject

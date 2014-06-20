@@ -69,7 +69,7 @@ public class FSReading {
         if (this.readMaterial == FSMaterialModeWood)
             return String.format("%.1f", this.getRealMCValue());
         else
-        return String.format("%ld", (long)this.getRealMCValue());
+        return String.format("%d", (int)this.getRealMCValue());
     }
 
     public static String getDisplayDepth(long depth) {

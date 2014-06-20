@@ -1,11 +1,19 @@
 package com.tim.FloorSmart.Helper;
 
+import android.content.res.AssetManager;
 import android.graphics.*;
 
+import android.graphics.Color;
+import android.graphics.Point;
+import android.os.Environment;
+import android.util.Log;
+import com.pdfjet.*;
 import com.tim.FloorSmart.Database.*;
 import com.tim.FloorSmart.Global.CommonMethods;
 import com.tim.FloorSmart.Global.GlobalData;
+import com.tim.FloorSmart.R;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -38,12 +46,23 @@ public class FSReportHelper {
     static float kLastReadingTableHeight = 100.f;
     static float kGap = 10.f;
 
+    static float kBorderInset = 20.0f;
+    static float kBorderWidth = 1.0f;
+    static float kMarginInset = 10.0f;
+    static float kLineWidth = 1.0f;
+
+    static float A4PAPER_WIDTH_IN_PORTRATE = 1240.0f;
+    static float A4PAPER_HEIGHT_IN_PORTRATE = 1753.0f;
+
+    static String FS_REPORT_VALUE_SEPARATOR = ";+;";
+
     int kPadding = 25;
     static int countData;
 
     static String kEmptyPlaceholder = "EMPTY";
 
-    Canvas currentCanvas;
+    PDF pdf;
+    Page curPage;
 
     class DateReading
     {
@@ -87,11 +106,6 @@ public class FSReportHelper {
 
     public FSReportHelper()
     {
-        init();
-    }
-
-    private void init() {
-
     }
 
     private String getStringFromDate(Date date) {
@@ -152,649 +166,701 @@ public class FSReportHelper {
 
     private Rect drawLabel(String label, String details, Point origin, float fontSize, boolean newLineSeparator)
     {
-        currentCanvas.save();
-        Paint _paintLabel = new Paint();
-        _paintLabel.setTypeface(Typeface.DEFAULT_BOLD);
-        _paintLabel.setTextSize(fontSize);
+        Rect totalFrame = new Rect();
 
-        Rect labelFrame = getRectWithOriginSize(origin, _paintLabel, label, 700, 300);
+        try
+        {
+            Font labelFont = new Font(pdf, CoreFont.HELVETICA_BOLD);
+            labelFont.setSize(fontSize);
 
-        Paint _paintDetail = new Paint();
-        _paintDetail.setTypeface(Typeface.DEFAULT);
-        _paintDetail.setTextSize(fontSize);
-        Rect detailsFrame = getRectWithOriginSize(new Point(0, 0), _paintDetail, details, 300, 100);
-        Rect totalFrame = new Rect(origin.x, origin.y, origin.x, origin.y);
+            Font detailFont = new Font(pdf, CoreFont.HELVETICA);
+            detailFont.setSize(fontSize);
 
-        if (newLineSeparator) {
-            detailsFrame.left = origin.x;
-            detailsFrame.top = origin.y + labelFrame.height() + 10;
+            TextLine labelText = new TextLine(labelFont, label);
+            TextLine detailText = new TextLine(detailFont, details);
 
-            totalFrame.right = totalFrame.left + Math.max(labelFrame.width(), detailsFrame.width());
-            totalFrame.bottom = totalFrame.top + labelFrame.height() + detailsFrame.height() + 10;
+            Rect labelFrame = getRectWithOriginSize(origin, labelText, 700, 300);
+
+            Rect detailsFrame = getRectWithOriginSize(new Point(0, 0), detailText, 300, 100);
+            totalFrame = new Rect(origin.x, origin.y, origin.x, origin.y);
+
+            if (newLineSeparator) {
+                detailsFrame.left = origin.x;
+                detailsFrame.top = origin.y + labelFrame.height() + 10;
+
+                totalFrame.right = totalFrame.left + Math.max(labelFrame.width(), detailsFrame.width());
+                totalFrame.bottom = totalFrame.top + labelFrame.height() + detailsFrame.height() + 10;
+            }
+            else {
+                detailsFrame.left = origin.x + labelFrame.width() + 10;
+                detailsFrame.top = origin.y;
+
+                totalFrame.right = totalFrame.left + labelFrame.width() + detailsFrame.width() + 10;
+                totalFrame.bottom = totalFrame.top + Math.max(labelFrame.height(), detailsFrame.height());
+            }
+
+            drawText(label, labelFrame, labelFont);
+            drawText(details, detailsFrame, detailFont);
         }
-        else {
-            detailsFrame.left = origin.x + labelFrame.width() + 10;
-            detailsFrame.top = origin.y;
+        catch (Exception e)
+        {
 
-            totalFrame.right = totalFrame.left + labelFrame.width() + detailsFrame.width() + 10;
-            totalFrame.bottom = totalFrame.top + Math.max(labelFrame.height(), detailsFrame.height());
         }
-
-        //drawText(label, labelFrame, _paintLabel);
-        //drawText(details, detailsFrame, _paintDetail);
 
         return totalFrame;
     }
-               /*
+
+    class LabelInfo
+    {
+        public String label;
+        public String description;
+        public int fontsize;
+
+        public LabelInfo(String label, String description, int fontsize)
+        {
+            this.label = label;
+            this.description = description;
+            this.fontsize = fontsize;
+        }
+    }
+
     private void renderFirstPage(FSJob aJob, String dateStr) {
-
-        UIGraphicsBeginPDFPageWithInfo(CGRectMake(0, 0, pageSize.width, pageSize.height), nil);
-        [self drawImage];
-
-        CGRect previousRect = {{kBorderInset + kMarginInset+50, kBorderInset + kMarginInset + 150.0}, {0, 0}};
-
-        NSArray *strings = @[
-        @{kLabelKey: "Job Name:",                   kDescriptionKey: STR(self.job.jobName),                               kFontSizeKey: @24.f},
-        @{kLabelKey: "Date:",              kDescriptionKey: STR(dateStr),                                 kFontSizeKey: @24.f}
-        ];
-
-        for (NSDictionary *row in strings) {
-            previousRect =[self drawLabel:row[kLabelKey]
-            details:row[kDescriptionKey]
-            origin:CGPointMake(previousRect.origin.x, previousRect.size.height + previousRect.origin.y + 10)
-            fontSize:[row[kFontSizeKey] floatValue]
-            newLineSeparator:[row[kNewLineKey] boolValue]];
-        }
-
-        if (YES) {
-            [self drawLogoImage];
-        }
-    }
-
-    - (void)renderHeader:(FSJob *)job loc:(FSLocation *)loc {
-
-        UIGraphicsBeginPDFPageWithInfo(CGRectMake(0, 0, pageSize.width, pageSize.height), nil);
-
-        UIFont *font = [UIFont systemFontOfSize:12.0f];
-        String strHeader = [NSString stringWithFormat:"Job: %@ \t\t Location: %", job.jobName, loc.locName];
-        float width = [CommonMethods widthOfString:strHeader withFont:font] + 20;
-
-        [self drawText:strHeader
-        withFrame:CGRectMake(50, 60, width, 20)
-        withFont:font];
-
-
-
-        CGPoint from = CGPointMake(40, 90);
-        CGPoint to = CGPointMake(pageSize.width - 80, 90);
-
-        [self drawLineFromPoint:from toPoint:to];
-    }
-
-    - (void) renderFooter:(NSInteger) currentPage {
-        [self drawPageNumber:currentPage];
-    }
-
-    - (void) renderSubtitle:(float)ypos loc:(FSLocation *)loc locProduct:(FSLocProduct *)locProduct {
-
-
-        ypos += 30;
-
-        UIFont *font = [UIFont systemFontOfSize:22.0f];
-        String strHeader = [NSString stringWithFormat:"Location: %", loc.locName];
-        float width = [CommonMethods widthOfString:strHeader withFont:font] + 20;
-
-        [self drawText:strHeader
-        withFrame:CGRectMake(60, ypos, width, 20)
-        withFont:font];
-
-        ypos += 30;
-
-        strHeader = [NSString stringWithFormat:"Product: %", locProduct.locProductName];
-        width = [CommonMethods widthOfString:strHeader withFont:font] + 20;
-        [self drawText:strHeader
-        withFrame:CGRectMake(60, ypos, width, 30)
-        withFont:font];
-        if ([locProduct.locProductName isEqualToString:FMD_DEFAULT_PRODUCTNAME])
+        try
         {
-            int xpos = 60 + width;
-            strHeader = [NSString stringWithFormat:"(%@)", [FSProduct getDisplayProductType:locProduct.locProductType]];
-            font = [UIFont systemFontOfSize:22.0f];
-            width = [CommonMethods widthOfString:strHeader withFont:font] + 20;
-            [self drawText:strHeader
-            withFrame:CGRectMake(xpos, ypos, width, 30)
-            withFont:font];
+            Page page = new Page(pdf, A4.PORTRAIT);
+            curPage = page;
+            drawImage();
+
+            Rect previousRect = new Rect();
+            previousRect.set((int)(kBorderInset + kMarginInset+50), (int)(kBorderInset + kMarginInset + 150.0), (int)(kBorderInset + kMarginInset+50), (int)(kBorderInset + kMarginInset + 150.0));
+
+            ArrayList<LabelInfo> strings = new ArrayList<LabelInfo>();
+            LabelInfo jobname = new LabelInfo("Job Name:", job.jobName, 24);
+            LabelInfo date = new LabelInfo("Date:", dateStr, 24);
+
+            strings.add(jobname);
+            strings.add(date);
+
+            for (int i = 0; i < strings.size(); i++)
+            {
+                LabelInfo _info = strings.get(i);
+
+                previousRect = drawLabel(_info.label, _info.description, new Point(previousRect.left, previousRect.height() + previousRect.top + 10), _info.fontsize, false);
+            }
+
+            if (true) {
+                drawLogoImage();
+            }
         }
-
-        ypos += 30;
-
-        font = [UIFont italicSystemFontOfSize:22.0f];
-        GlobalData *globalData = [GlobalData sharedData];
-        if (globalData.settingArea == YES) //feet
-            strHeader = [NSString stringWithFormat:"Coverage: %.1f square feet", locProduct.locProductCoverage];
-        else
+        catch (Exception e)
         {
-            strHeader = [NSString stringWithFormat:"Coverage: %.1f square meter", [GlobalData sqft2sqm:locProduct.locProductCoverage]];
+
         }
-        width = [CommonMethods widthOfString:strHeader withFont:font] + 20;
-        [self drawText:strHeader
-        withFrame:CGRectMake(60, ypos, width, 30)
-        withFont:font];
+    }
+
+    private void renderHeader(FSJob job, FSLocation loc) {
+        try
+        {
+            Page headerPage = new Page(pdf, A4.PORTRAIT);
+            curPage = headerPage;
+
+            Font font = new Font(pdf, CoreFont.HELVETICA);
+            font.setSize(12);
+
+            String strHeader = String.format("Job: %s \t\t Location: %s", job.jobName, loc.locName);
+
+            TextLine txtHeader = new TextLine(font, strHeader);
+            float width = txtHeader.getWidth() + 20;
+
+            drawText(strHeader, new Rect(50, 60, (int)width, 20), font);
+
+            Point from = new Point(40, 90);
+            Point to = new Point(pageSize.cy - 80, 90);
+
+            drawLineFromPoint(from, to);
+        }
+        catch (Exception e)
+        {
+
+        }
 
     }
 
-    - (void) renderDate:(float)ypos date:(NSDate *)date {
-
-        GlobalData *globalData = [GlobalData sharedData];
-
-        UIFont *font = [UIFont systemFontOfSize:18.0f];
-        String strDate = [NSString stringWithFormat:"Date: %", [CommonMethods date2str:date withFormat:globalData.settingDateFormat]];
-
-        float width = [CommonMethods widthOfString:strDate withFont:font] + 20;
-
-        [self drawText:strDate
-        withFrame:CGRectMake(80, ypos + 10, width, 30)
-        withFont:font];
-
-        ypos += 25;
+    private void renderFooter(int currentPage) {
+        drawPageNumber(currentPage);
     }
 
-    - (BOOL) isInPage:(float)ypos {
+    private void renderSubtitle(float ypos, FSLocation loc, FSLocProduct locProduct) {
+        try
+        {
+            ypos += 30;
+
+            Font font = new Font(pdf, CoreFont.HELVETICA);
+            font.setSize(22);
+            String strHeader = String.format("Location: %s", loc.locName);
+
+            TextLine txtLine = new TextLine(font, strHeader);
+
+            float width = txtLine.getWidth() + 20;
+
+            drawText(strHeader, new Rect(60, (int)ypos, (int)width, 20), font);
+
+            ypos += 30;
+
+            strHeader = String.format("Product: %s", locProduct.locProductName);
+            txtLine.setText(strHeader);
+
+            width = txtLine.getWidth() + 20;
+
+            drawText(strHeader, new Rect(60, (int)ypos, (int)width, 30), font);
+
+            if (locProduct.locProductName.equals(DataManager.FMD_DEFAULT_PRODUCTNAME))
+            {
+                int xpos = 60 + (int)width;
+                strHeader = String.format("(%s)", FSProduct.getDisplayProductType((int) locProduct.locProductType));
+                font.setSize(22);
+
+                txtLine.setFont(font);
+                txtLine.setText(strHeader);
+                width = txtLine.getWidth() + 20;
+
+                drawText(strHeader, new Rect((int)xpos, (int)ypos, (int)width, 30), font);
+            }
+
+            ypos += 30;
+
+            font.setSize(22);
+            GlobalData globalData = GlobalData.sharedData();
+
+            if (globalData.settingArea == GlobalData.AREA_FEET) //feet
+                strHeader = String.format("Coverage: %.1f square feet", locProduct.locProductCoverage);
+            else
+            {
+                strHeader = String.format("Coverage: %.1f square meter", globalData.sqft2sqm((float)locProduct.locProductCoverage));
+            }
+
+            font.setItalic(true);
+            txtLine.setFont(font);
+            txtLine.setText(strHeader);
+            width = txtLine.getWidth() + 20;
+
+            drawText(strHeader, new Rect(60, (int)ypos, (int)width, 30), font);
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    private void renderDate(float ypos, Date date) {
+        try
+        {
+            GlobalData globalData = GlobalData.sharedData();
+
+            Font font = new Font(pdf, CoreFont.HELVETICA);
+            font.setSize(18);
+            String strDate = String.format("Date: %s", CommonMethods.date2str(date, globalData.settingDateFormat));
+
+            TextLine txtline = new TextLine(font, strDate);
+
+            float width = txtline.getWidth() + 20;
+
+            drawText(strDate, new Rect(80, (int)ypos + 10, (int)width, 30), font);
+
+            ypos += 25;
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    private boolean isInPage(float ypos) {
         if (ypos >= A4PAPER_HEIGHT_IN_PORTRATE-120)
-            return NO;
-        return YES;
+            return false;
+        return true;
     }
 
-    - (float) heightRemains:(float)ypos {
+    private float heightRemains(float ypos) {
         return A4PAPER_HEIGHT_IN_PORTRATE-120-ypos;
     }
 
-    - (void) renderStatistics:(float)ypos arrayReadings:(NSMutableArray *)arrayReadings {
+    private void renderStatistics(float ypos, ArrayList<FSReading> arrayReadings) {
 
         float xOrigin = 100;
         float yOrigin = ypos;
         // draw statistics
 
-        UIFont *font = [UIFont systemFontOfSize:18.0f];
-        float mcavg = [FSReading getMCAvg:arrayReadings];
-        float rhavg = [FSReading getRHAvg:arrayReadings];
-        float tempavg = [FSReading getTempAvg:arrayReadings];
-        float emcavg = [FSReading getEmcAvg:arrayReadings];
+        try
+        {
+            Font font = new Font(pdf, CoreFont.HELVETICA);
+            font.setSize(18);
 
-        GlobalData *globalData = [GlobalData sharedData];
-        if (globalData.settingTemp == YES)
-            tempavg = [FSReading getFTemperature:tempavg];
+            float mcavg = FSReading.getMCAvg(arrayReadings);
+            float rhavg = FSReading.getRHAvg(arrayReadings);
+            float tempavg = FSReading.getTempAvg(arrayReadings);
+            float emcavg = FSReading.getEmcAvg(arrayReadings);
 
-        String strStatistic = [NSString stringWithFormat:"MC Avg: %.1f%%;\t\tRH Avg: %d%%;\t\tTemp Avg: %d%@;\t\tEMC Avg:%.1f%%;", mcavg, ROUND(rhavg), ROUND(tempavg), [globalData getTempUnit], emcavg];
+            GlobalData globalData = GlobalData.sharedData();
+            if (globalData.settingTemp == GlobalData.TEMP_FAHRENHEIT)
+                tempavg = FSReading.getFTemperature(tempavg);
 
-        //\t\ts.g.:%ld%%;\t\t;Material:%@;
-        //[FSReading getDisplayDepth:lastReading.readDepth], [FSReading getDisplayMaterial:lastReading.readMaterial]
+            String strStatistic = String.format("MC Avg: %.1f%%;\t\tRH Avg: %d%%;\t\tTemp Avg: %d%s;\t\tEMC Avg:%.1f%%;", mcavg, Math.round(rhavg), Math.round(tempavg), globalData.getTempUnit(), emcavg);
 
-        float width = [CommonMethods widthOfString:strStatistic withFont:font] + 20;
+            //\t\ts.g.:%ld%%;\t\t;Material:%@;
+            //[FSReading getDisplayDepth:lastReading.readDepth], [FSReading getDisplayMaterial:lastReading.readMaterial]
 
-        [self drawText:strStatistic
-        withFrame:CGRectMake(xOrigin, yOrigin, width, 30)
-        withFont:font];
+            TextLine txtline = new TextLine(font, strStatistic);
+            float width = txtline.getWidth() + 20;
 
-        ypos += 25;
+            drawText(strStatistic, new Rect((int)xOrigin, (int)yOrigin, (int)width, 30), font);
+
+            ypos += 25;
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
-    - (void) renderStatisticsTable:(float)ypos arrayReadings:(NSMutableArray *)arrayReadings {
+    private void renderStatisticsTable(float ypos, ArrayList<FSReading> arrayReadings) {
         float xOrigin = 100;
         float yOrigin = ypos;
         float columnWidth = 160;
         int numberOfColumns = 6;
 
-        GlobalData *globalData = [GlobalData sharedData];
+        GlobalData globalData = GlobalData.sharedData();
 
         // table header
 
-        NSArray *labels = @["MC Avg (%)",
-        "MC High (%)",
-        "MC Low (%)",
-        "EMC Avg (%)",
-        "RH Avg (%)",
-        [NSString stringWithFormat:"Temp Avg (%@)", [globalData getTempUnit]]
-        ];
+        try
+        {
+            ArrayList<String> labels = new ArrayList<String>();
+            labels.add("MC Avg (%)");
+            labels.add("MC High (%)");
+            labels.add("EMC Avg (%)");
+            labels.add("RH Avg (%)");
+            labels.add(String.format("Temp Avg (%s)", globalData.getTempUnit()));
 
-        for (int i = 0; i < [labels count]; i++) {
-            [self drawText:labels[i]
-            withFrame:CGRectMake(xOrigin + 20 + columnWidth * i,
-                    yOrigin + 10,
-                    columnWidth - 40,
-                    80)
-            withFont:[UIFont boldSystemFontOfSize:18.0f]];
+            Font font = new Font(pdf, CoreFont.HELVETICA_BOLD);
+            font.setSize(18);
+
+            for (int i = 0; i < labels.size(); i++) {
+                drawText(labels.get(i), new Rect((int)(xOrigin + 20 + columnWidth * i), (int)yOrigin + 10, (int)columnWidth - 40, 80), font);
+            }
+
+            yOrigin += kRowHeight;
+
+            float mcavg = FSReading.getMCAvg(arrayReadings);
+            float mchigh = FSReading.getMCMax(arrayReadings);
+            float mclow = FSReading.getMCMin(arrayReadings);
+            float rhavg = FSReading.getRHAvg(arrayReadings);
+            float tempavg = FSReading.getTempAvg(arrayReadings);
+            float emcavg = FSReading.getEmcAvg(arrayReadings);
+
+            // temperature
+            String tempUnit = globalData.getTempUnit();
+            if (globalData.settingTemp == GlobalData.TEMP_FAHRENHEIT) //f
+                tempavg = FSReading.getFTemperature(tempavg);
+
+            Font textFont = new Font(pdf, CoreFont.HELVETICA);
+            textFont.setSize(14);
+
+            int startIndex = 0;
+            int i = 0;
+
+            // MC Avg.
+            int column = 0;
+            drawText(String.format("%.1f", mcavg), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                    (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                    (int)columnWidth - 20,
+                    30), textFont, kEmptyPlaceholder);
+
+            // MC High(%)
+            column++;
+            drawText(String.format("%.1f", mchigh), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                    (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                    (int)columnWidth - 20,
+                    30), textFont, kEmptyPlaceholder);
+
+            // MC Low(%)
+            column++;
+            drawText(String.format("%.1f", mclow), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                    (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                    (int)columnWidth - 20,
+                    30), textFont, kEmptyPlaceholder);
+
+            // EMC Avg(%)
+            column++;
+            drawText(String.format("%.1f", emcavg), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                    (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                    (int)columnWidth - 20,
+                    30), textFont, kEmptyPlaceholder);
+
+            // RH Avg(%)
+            column++;
+            drawText(String.format("%d", Math.round(rhavg)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                    (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                    (int)columnWidth - 20,
+                    30), textFont, kEmptyPlaceholder);
+
+            // Temp Avg
+            column++;
+            drawText(String.format("%d", Math.round(tempavg)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                    (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                    (int)columnWidth - 20,
+                    30), textFont, kEmptyPlaceholder);
         }
+        catch (Exception e)
+        {
 
-        yOrigin += kRowHeight;
-
-        float mcavg = [FSReading getMCAvg:arrayReadings];
-        float mchigh = [FSReading getMCMax:arrayReadings];
-        float mclow = [FSReading getMCMin:arrayReadings];
-        float rhavg = [FSReading getRHAvg:arrayReadings];
-        float tempavg = [FSReading getTempAvg:arrayReadings];
-        float emcavg = [FSReading getEmcAvg:arrayReadings];
-
-        // temperature
-        String tempUnit = [globalData getTempUnit];
-        if (globalData.settingTemp == YES) //f
-            tempavg = [FSReading getFTemperature:tempavg];
-
-
-
-        UIFont *textFont = [UIFont systemFontOfSize:14.0f];
-
-        int startIndex = 0;
-        int i = 0;
-
-        // MC Avg.
-        int column = 0;
-        [self drawText:[NSString stringWithFormat:"%.1f", mcavg]
-        withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                columnWidth - 20,
-                30)
-        withFont:textFont
-        placeholder:kEmptyPlaceholder];
-
-        // MC High(%)
-        column++;
-        [self drawText:[NSString stringWithFormat:"%.1f", mchigh]
-        withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                columnWidth - 20,
-                30)
-        withFont:textFont
-        placeholder:kEmptyPlaceholder];
-
-        // MC Low(%)
-        column++;
-        [self drawText:[NSString stringWithFormat:"%.1f", mclow]
-        withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                columnWidth - 20,
-                30)
-        withFont:textFont
-        placeholder:kEmptyPlaceholder];
-
-        // EMC Avg(%)
-        column++;
-        [self drawText:[NSString stringWithFormat:"%.1f", emcavg]
-        withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                columnWidth - 20,
-                30)
-        withFont:textFont
-        placeholder:kEmptyPlaceholder];
-
-        // RH Avg(%)
-        column++;
-        [self drawText:[NSString stringWithFormat:"%d", ROUND(rhavg)]
-        withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                columnWidth - 20,
-                30)
-        withFont:textFont
-        placeholder:kEmptyPlaceholder];
-
-        // Temp Avg
-        column++;
-        [self drawText:[NSString stringWithFormat:"%d", ROUND(tempavg)]
-        withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                columnWidth - 20,
-                30)
-        withFont:textFont
-        placeholder:kEmptyPlaceholder];
-
+        }
     }
 
-    - (void) renderLastReadingTable:(float)ypos lastReading:(FSReading *)lastReading {
+    private void renderLastReadingTable(float ypos, FSReading lastReading) {
         float xOrigin = 100;
         float yOrigin = ypos;
         float columnWidth = 240;
         int numberOfColumns = 4;
 
-        GlobalData *globalData = [GlobalData sharedData];
+        GlobalData globalData = GlobalData.sharedData();
 
         // table header
+        try
+        {
+            ArrayList<String> labels = new ArrayList<String>();
+            labels.add("Material");
+            labels.add("s.g.");
+            labels.add("Depth");
+            labels.add("Battery (%)");
 
-        NSArray *labels = @["Material",
-        "s.g.",
-        "Depth",
-        "Battery (%)"
-        ];
+            Font font = new Font(pdf, CoreFont.HELVETICA);
+            font.setSize(18);
 
-        for (int i = 0; i < [labels count]; i++) {
-            [self drawText:labels[i]
-            withFrame:CGRectMake(xOrigin + 20 + columnWidth * i,
-                    yOrigin + 10,
-                    columnWidth - 40,
-                    80)
-            withFont:[UIFont boldSystemFontOfSize:18.0f]];
+            for (int i = 0; i < labels.size(); i++) {
+                drawText(labels.get(i), new Rect((int)(xOrigin + 20 + columnWidth * i),
+                        (int)yOrigin + 10,
+                        (int)columnWidth - 40,
+                        80), font);
+            }
+
+            yOrigin += kRowHeight;
+
+            Font textFont = new Font(pdf, CoreFont.HELVETICA);
+            textFont.setSize(14);
+
+            int startIndex = 0;
+            int i = 0;
+
+            // Material
+            int column = 0;
+            drawText(String.format("%s", FSReading.getDisplayMaterial(lastReading.readMaterial)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                    (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                    (int)columnWidth - 20,
+                    30), textFont, kEmptyPlaceholder);
+
+            // s.g.
+            column++;
+            drawText(String.format("%d", lastReading.readGravity), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                    (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                    (int)columnWidth - 20,
+                    30), textFont, kEmptyPlaceholder);
+
+            // Depth
+            column++;
+            drawText(String.format("%s", FSReading.getDisplayDepth(lastReading.readDepth)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                    (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                    (int)columnWidth - 20,
+                    30), textFont, kEmptyPlaceholder);
+
+            // Battery(%)
+            column++;
+            drawText(String.format("%d", lastReading.readBattery), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                    (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                    (int)columnWidth - 20,
+                    30), textFont, kEmptyPlaceholder);
         }
+        catch (Exception e)
+        {
 
-        yOrigin += kRowHeight;
-
-
-        UIFont *textFont = [UIFont systemFontOfSize:14.0f];
-
-        int startIndex = 0;
-        int i = 0;
-
-        // Material
-        int column = 0;
-        [self drawText:[NSString stringWithFormat:"%", [FSReading getDisplayMaterial:lastReading.readMaterial]]
-        withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                columnWidth - 20,
-                30)
-        withFont:textFont
-        placeholder:kEmptyPlaceholder];
-
-        // s.g.
-        column++;
-        [self drawText:[NSString stringWithFormat:"%ld", lastReading.readGravity]
-        withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                columnWidth - 20,
-                30)
-        withFont:textFont
-        placeholder:kEmptyPlaceholder];
-
-        // Depth
-        column++;
-        [self drawText:[NSString stringWithFormat:"%", [FSReading getDisplayDepth:lastReading.readDepth]]
-        withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                columnWidth - 20,
-                30)
-        withFont:textFont
-        placeholder:kEmptyPlaceholder];
-
-        // Battery(%)
-        column++;
-        [self drawText:[NSString stringWithFormat:"%ld", lastReading.readBattery]
-        withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                columnWidth - 20,
-                30)
-        withFont:textFont
-        placeholder:kEmptyPlaceholder];
+        }
     }
 
-    - (void) renderRows:(float)ypos data:(NSMutableArray *)data startIndex:(long)startIndex count:(long)count {
+    private void renderRows(float ypos, ArrayList<FSReading> data, long startIndex, long count) {
 
         float xOrigin = 100;
         float yOrigin = ypos;
         float columnWidth = 160;
         int numberOfColumns = 6;
 
-        GlobalData *globalData = [GlobalData sharedData];
+        GlobalData globalData = GlobalData.sharedData();
 
-        // table header
-        [self drawTableAt:CGPointMake(xOrigin, yOrigin)
-        withRowHeight:kRowHeight
-        andColumnWidth:columnWidth
-        andRowCount:1
-        andColumnCount:numberOfColumns];
+        try
+        {
+            // table header
+            drawTableAt(new Point((int)xOrigin, (int)yOrigin), (int)kRowHeight, (int)columnWidth, 1, numberOfColumns);
 
-        NSArray *labels = @["No",
-        "MC (%)",
-        "RH (%)",
-        [NSString stringWithFormat:"Temp (%@)", [globalData getTempUnit]],
-        "EMC (%)",
-        "Time"
-        ];
+            ArrayList<String> labels = new ArrayList<String>();
+            labels.add("No");
+            labels.add("MC (%)");
+            labels.add("RH (%)");
+            labels.add(String.format("Temp (%s)", globalData.getTempUnit()));
+            labels.add("EMC (%)");
+            labels.add("Time");
 
-        for (int i = 0; i < [labels count]; i++) {
-            [self drawText:labels[i]
-            withFrame:CGRectMake(xOrigin + 20 + columnWidth * i,
-                    yOrigin + 10,
-                    columnWidth - 40,
-                    80)
-            withFont:[UIFont boldSystemFontOfSize:18.0f]];
+            Font font = new Font(pdf, CoreFont.HELVETICA_BOLD);
+            font.setSize(18);
+            for (int i = 0; i < labels.size(); i++) {
+                drawText(labels.get(i), new Rect((int)(xOrigin + 20 + columnWidth * i),
+                        (int)yOrigin + 10, (int)columnWidth - 40, 80), font);
+            }
+
+            yOrigin += kRowHeight;
+
+            drawTableAt(new Point((int)xOrigin, (int)yOrigin), (int)kRowHeight, (int)columnWidth, (int)count, numberOfColumns);
+
+            for (int i = (int)startIndex; i < (int)startIndex + count; i++) {
+                Font textFont = new Font(pdf, CoreFont.HELVETICA);
+                textFont.setSize(14);
+
+                FSReading reading = data.get(i);
+
+                // No.
+                int column = 0;
+                drawText(String.format("%d", (int)i + 1), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                        (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                        (int)columnWidth - 20,
+                        30), textFont, kEmptyPlaceholder);
+
+                // MC(%)
+                column++;
+                drawText(String.format("%s", reading.getDisplayRealMCValue()), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                        (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                        (int)columnWidth - 20,
+                        30), textFont, kEmptyPlaceholder);
+
+                // RH(%)
+                column++;
+                drawText(String.format("%d", Math.round(reading.readConvRH)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                        (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                        (int)columnWidth - 20,
+                        30), textFont, kEmptyPlaceholder);
+
+                // Temp
+                column++;
+                float temp = (float)reading.readConvTemp;
+                if (globalData.settingTemp == GlobalData.TEMP_FAHRENHEIT) //f
+                    temp = FSReading.getFTemperature(temp);
+                drawText(String.format("%d", Math.round(temp)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                        (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                        (int)columnWidth - 20,
+                        30), textFont, kEmptyPlaceholder);
+
+                // Emc
+                column++;
+                drawText(String.format("%.1f", reading.getEmcValue()), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                        (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                        (int)columnWidth - 20,
+                        30), textFont, kEmptyPlaceholder);
+
+                // Time
+                column++;
+                drawText(CommonMethods.date2str(reading.readTimestamp, "HH:mm"), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                        (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
+                        (int)columnWidth - 20,
+                        30), textFont, kEmptyPlaceholder);
+            }
         }
+        catch (Exception e)
+        {
 
-        yOrigin += kRowHeight;
-
-
-        [self drawTableAt:CGPointMake(xOrigin, yOrigin)
-        withRowHeight:kRowHeight
-        andColumnWidth:columnWidth
-        andRowCount:(int)count
-        andColumnCount:numberOfColumns];
-
-        for (int i = (int)startIndex; i < (int)startIndex + count; i++) {
-            UIFont *textFont = [UIFont systemFontOfSize:14.0f];
-
-            FSReading *reading = [data objectAtIndex:i];
-
-            // No.
-            int column = 0;
-            [self drawText:[NSString stringWithFormat:"%d", (int)i + 1]
-            withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                    yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                    columnWidth - 20,
-                    30)
-            withFont:textFont
-            placeholder:kEmptyPlaceholder];
-
-            // MC(%)
-            column++;
-            [self drawText:[NSString stringWithFormat:"%", [reading getDisplayRealMCValue]]
-            withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                    yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                    columnWidth - 20,
-                    30)
-            withFont:textFont
-            placeholder:kEmptyPlaceholder];
-
-            // RH(%)
-            column++;
-            [self drawText:[NSString stringWithFormat:"%d", ROUND(reading.readConvRH)]
-            withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                    yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                    columnWidth - 20,
-                    30)
-            withFont:textFont
-            placeholder:kEmptyPlaceholder];
-
-            // Temp
-            column++;
-            float temp = reading.readConvTemp;
-            if (globalData.settingTemp == YES) //f
-                temp = [FSReading getFTemperature:temp];
-            [self drawText:[NSString stringWithFormat:"%d", ROUND(temp)]
-            withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                    yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                    columnWidth - 20,
-                    30)
-            withFont:textFont
-            placeholder:kEmptyPlaceholder];
-
-            // Emc
-            column++;
-            [self drawText:[NSString stringWithFormat:"%.1f", [reading getEmcValue]]
-            withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                    yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                    columnWidth - 20,
-                    30)
-            withFont:textFont
-            placeholder:kEmptyPlaceholder];
-
-            // Time
-            column++;
-            [self drawText:[CommonMethods date2str:reading.readTimestamp withFormat:"HH:mm"]
-            withFrame:CGRectMake(xOrigin + 10 + (columnWidth * column),
-                    yOrigin + 10 + (kRowHeight * (i - startIndex)),
-                    columnWidth - 20,
-                    30)
-            withFont:textFont
-            placeholder:kEmptyPlaceholder];
         }
     }
 
-    - (String )createReportForJob:(FSJob *)aJob {
+    private String createReportForJob(FSJob aJob) {
+        Date aDate = new Date();
 
-        NSDate * aDate = [NSDate date];
-        String fileName = [NSString stringWithFormat:"%@_%@.pdf", aJob.jobName, [CommonMethods date2str:aDate withFormat:"MM_dd_HH_mm"]];
-        String  fullPDFPath = [[CommonMethods getDocumentDirectory] stringByAppendingPathComponent:fileName];
+        String fileName = String.format("%s_%s.pdf", aJob.jobName, CommonMethods.date2str(aDate, "MM_dd_HH_mm"));
+        String  fullPDFPath = GlobalData.pdfCacheDir + "/" + fileName;
 
-        String dateStr = [NSString stringWithFormat:"%",[self getStringFromDate:[NSDate date]]];
+        try // Delete file if exists
+        {
+            File myFile = new File(fullPDFPath);
+            if(myFile.exists())
+                myFile.delete();
+        }
+        catch (Exception e)
+        {
+
+        }
+
+        String dateStr = String.format("%s", getStringFromDate(new Date()));
 
         // fill report data
-        [self fillReportData:aJob];
+        fillReportData(aJob);
 
-        if ([self.fsReportArray count] == 0) {
-            return nil;
+        if (fsReportArray.size() == 0) {
+            return "";
         }
 
         // Opent the PDF context
-        pageSize = CGSizeMake(A4PAPER_WIDTH_IN_PORTRATE, A4PAPER_HEIGHT_IN_PORTRATE);
-        UIGraphicsBeginPDFContextToFile(fullPDFPath, CGRectZero, nil);
+        pageSize = new Size((int)A4PAPER_WIDTH_IN_PORTRATE, (int)A4PAPER_HEIGHT_IN_PORTRATE);
 
-        NSInteger currentPage = 0;
+        try
+        {
+            FileOutputStream fos = new FileOutputStream(fullPDFPath);
+            PDF pdf = new PDF(fos);
+            this.pdf = pdf;
 
-        float yPos = 0.0;
+            int currentPage = 0;
+            float yPos = 0.0f;
 
-        // render first page
-        [self renderFirstPage:aJob dateStr:dateStr];
-        [self drawPageNumber:currentPage++ + 1];
+            // render first page
+            renderFirstPage(aJob, dateStr);
+            currentPage++;
+            drawPageNumber(currentPage + 1);
 
-        // render contents page
-        BOOL isStart = YES;
+            // render contents page
+            boolean isStart = true;
 
-        for (int i = 0; i < [self.fsReportArray count]; i++) {
+            for (int i = 0; i < fsReportArray.size(); i++) {
+                LocLocProduct dic = fsReportArray.get(i);
+                FSLocation loc = dic.location;
+                ArrayList<LocDateReading> arrayLocProducts = dic.loclocProduct;
 
-            NSDictionary *dic = [self.fsReportArray objectAtIndex:i];
-            FSLocation *loc = [dic objectForKey:kLocationKey];
-            NSMutableArray *arrayLocProducts = [dic objectForKey:kLocLocProductKey];
-
-            if (isStart == YES) {
-
-                // draw header.
-                [self renderHeader:aJob loc:loc];
-                isStart = NO;
-                yPos = kHeaderHeight;
-            }
-
-            for (int j = 0; j < [arrayLocProducts count]; j++) {
-                NSDictionary *dic1 = [arrayLocProducts objectAtIndex:j];
-                FSLocProduct *locProduct = (FSLocProduct *)[dic1 objectForKey:kLocProductKey];
-                NSMutableArray *arrayLocProductsDates = [dic1 objectForKey:kDateReadingsKey];
-
-                // page break and render header
-                if ([self isInPage:yPos + kSubtitleHeight] == NO) {
-                    [self drawPageNumber:currentPage++ + 1];
-
-                    [self renderHeader:aJob loc:loc];
+                if (isStart == true) {
+                    // draw header.
+                    renderHeader(aJob, loc);
+                    isStart = false;
                     yPos = kHeaderHeight;
                 }
 
-                // draw subtitle
-                [self renderSubtitle:yPos loc:loc locProduct:locProduct];
-                yPos += kSubtitleHeight;
-
-                // draw parameters of product
-                //
-
-
-                for (int k = 0; k < [arrayLocProductsDates count]; k++) {
-                    NSDictionary *dic2 = [arrayLocProductsDates objectAtIndex:k];
-                    NSDate *date = (NSDate *)[dic2 objectForKey:kDateKey];
-                    NSMutableArray *arrayReadings = [dic2 objectForKey:kReadingsKey];
-
-                    yPos += kGap;
+                for (int j = 0; j < arrayLocProducts.size(); j++) {
+                    LocDateReading dic1 = arrayLocProducts.get(j);
+                    FSLocProduct locProduct = dic1.locProduct;
+                    ArrayList<DateReading> arrayLocProductsDates = dic1.datereadings;
 
                     // page break and render header
-                    if ([self isInPage:yPos + kDateHeight + kStatisticTableHeight + kLastReadingTableHeight] == NO) {
-                        [self drawPageNumber:currentPage++ + 1];
+                    if (isInPage(yPos + kSubtitleHeight) == false) {
+                        currentPage++;
+                        drawPageNumber(currentPage + 1);
 
-                        [self renderHeader:aJob loc:loc];
+                        renderHeader(aJob, loc);
                         yPos = kHeaderHeight;
                     }
 
-                    // draw date
-                    [self renderDate:yPos date:date];
-                    yPos += kDateHeight;
+                    // draw subtitle
+                    renderSubtitle(yPos ,loc ,locProduct);
+                    yPos += kSubtitleHeight;
 
-                    // draw statistics
-                    //[self renderStatistics:yPos arrayReadings:arrayReadings];
-                    //yPos += kStatisticHeight;
-                    [self renderStatisticsTable:yPos arrayReadings:arrayReadings];
-                    yPos += kStatisticTableHeight;
-
-                    [self renderLastReadingTable:yPos lastReading:[arrayReadings lastObject]];
-                    yPos += kLastReadingTableHeight;
+                    // draw parameters of product
+                    //
 
 
-                    int m = 0;
-                    int count = (int)[arrayReadings count];
-                    isStart = NO;
-                    while (m < count) {
+                    for (int k = 0; k < arrayLocProductsDates.size(); k++) {
+                        DateReading dic2 = arrayLocProductsDates.get(k);
+                        Date date = dic2.date;
+                        ArrayList<FSReading> arrayReadings = dic2.readings;
 
-                        if (isStart == YES)
-                        {
-                            [self drawPageNumber:currentPage++ + 1];
+                        yPos += kGap;
 
-                            [self renderHeader:aJob loc:loc];
+                        // page break and render header
+                        if (isInPage(yPos + kDateHeight + kStatisticTableHeight + kLastReadingTableHeight) == false) {
+                            currentPage++;
+                            drawPageNumber(currentPage + 1);
+
+                            renderHeader(aJob, loc);
                             yPos = kHeaderHeight;
-
-                            isStart = NO;
                         }
 
-                        float remains = [self heightRemains:yPos];
-                        int remainRows = remains / kRowHeight - 1;
+                        // draw date
+                        renderDate(yPos, date);
+                        yPos += kDateHeight;
+
+                        // draw statistics
+                        //[self renderStatistics:yPos arrayReadings:arrayReadings];
+                        //yPos += kStatisticHeight;
+                        renderStatisticsTable(yPos, arrayReadings);
+                        yPos += kStatisticTableHeight;
+
+                        if (arrayReadings.size() > 0)
+                            renderLastReadingTable(yPos, arrayReadings.get(arrayReadings.size() - 1));
+                        yPos += kLastReadingTableHeight;
+
+                        int m = 0;
+                        int count = (int)arrayReadings.size();
+                        isStart = false;
+                        while (m < count) {
+
+                            if (isStart == false)
+                            {
+                                currentPage++;
+                                drawPageNumber(currentPage + 1);
+
+                                renderHeader(aJob, loc);
+                                yPos = kHeaderHeight;
+
+                                isStart = false;
+                            }
+
+                            float remains = heightRemains(yPos);
+                            int remainRows = (int)(remains / kRowHeight - 1);
 
 
-                        if (remainRows <= count - m) {
-                            isStart = YES;
+                            if (remainRows <= count - m) {
+                                isStart = true;
+                            }
+
+                            if (remainRows <= 0)
+                                continue;
+
+                            if (remainRows > count - m)
+                                remainRows = count - m;
+
+                            renderRows(yPos, arrayReadings, m, remainRows);
+                            yPos += (remainRows + 1) * kRowHeight;
+                            m += remainRows;
                         }
-
-                        if (remainRows <= 0)
-                            continue;
-
-                        if (remainRows > count - m)
-                            remainRows = count - m;
-
-                        [self renderRows:yPos data:arrayReadings startIndex:m count:remainRows];
-                        yPos += (remainRows + 1) * kRowHeight;
-                        m += remainRows;
                     }
                 }
             }
+
+            if (yPos > kHeaderHeight)
+            {
+                currentPage++;
+                drawPageNumber(currentPage + 1);
+            }
+
+            // Close the PDF context and write the contents out.
+            pdf.flush();
+            fos.close();
+        }
+        catch (Exception e)
+        {
+
         }
 
-        if (yPos > kHeaderHeight)
-        [self drawPageNumber:currentPage++ + 1];
-
-        // Close the PDF context and write the contents out.
-        UIGraphicsEndPDFContext();
-
-        NSNumber *fileSize = [self getFileSizeWithFilePath:fullPDFPath];
-
-
-        [[self delegate] didFinishGeneratingReport];
 
         return fullPDFPath;
     }
 
-    -(String ) generateReportForJob:(FSJob *) aJob {
+    public String generateReportForJob(FSJob aJob) {
 
-        if (aJob == nil)
-            return nil;
+        if (aJob == null)
+            return "";
 
-        if (self.fsReportArray) {
-            [self.fsReportArray removeAllObjects];
+        if (fsReportArray != null) {
+            fsReportArray.clear();
             countData = 0;
         }
-        self.job = aJob;
 
-        return [self createReportForJob:self.job];
+        this.job = aJob;
+
+        return createReportForJob(job);
     }
 
-    -(NSNumber*)getFileSizeWithFilePath:(NSString*)filePath {
+/*
+    private int getFileSizeWithFilePath(String filePath) {
 
         NSNumber *fileSizeNumber = nil;
         NSError *attributesError = nil;
@@ -802,171 +868,178 @@ public class FSReportHelper {
         fileSizeNumber = [fileAttributes objectForKey:NSFileSize];
         return fileSizeNumber;
     }
+*/
+/*
+    private void drawBorder() {
+        try
+        {
+            curPage.setPenColor(Color.BROWN);
+            CGContextRef    currentContext = UIGraphicsGetCurrentContext();
+            UIColor *borderColor = [UIColor brownColor];
 
-    - (void) drawBorder {
+            CGRect rectFrame = CGRectMake(kBorderInset, kBorderInset, pageSize.width-kBorderInset*2, pageSize.height-kBorderInset*2);
 
-        CGContextRef    currentContext = UIGraphicsGetCurrentContext();
-        UIColor *borderColor = [UIColor brownColor];
-
-        CGRect rectFrame = CGRectMake(kBorderInset, kBorderInset, pageSize.width-kBorderInset*2, pageSize.height-kBorderInset*2);
-
-        CGContextSetStrokeColorWithColor(currentContext, borderColor.CGColor);
-        CGContextSetLineWidth(currentContext, kBorderWidth);
-        CGContextStrokeRect(currentContext, rectFrame);
-    }
-
-    - (void)drawPageNumber:(NSInteger)pageNumber {
-
-        NSString* pageNumberString = [NSString stringWithFormat:"Page %d", pageNumber];
-        UIFont* theFont = [UIFont systemFontOfSize:16];
-
-        CGSize pageNumberStringSize = [pageNumberString sizeWithFont:theFont
-        constrainedToSize:pageSize
-        lineBreakMode:NSLineBreakByWordWrapping];
-
-        CGRect stringRenderingRect = CGRectMake(kBorderInset,
-                pageSize.height - 80.0,
-                pageSize.width - 2*kBorderInset,
-                pageNumberStringSize.height);
-
-        [pageNumberString drawInRect:stringRenderingRect withFont:theFont lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentCenter];
-    }
-
-    - (void) drawText:(NSString*)textToDraw
-    withFrame:(CGRect)renderingRect
-    withFont:(UIFont*)font
-    {
-
-        [self drawText:textToDraw
-        withFrame:renderingRect
-        withFont:font
-        placeholder:""];
-    }
-
-    - (void) drawText:(NSString*)textToDraw
-    withFrame:(CGRect)renderingRect
-    withFont:(UIFont*)font
-    placeholder:(NSString*)placeholder
-    {
-
-        if (textToDraw == nil) {
-            textToDraw = placeholder;
+            CGContextSetStrokeColorWithColor(currentContext, borderColor.CGColor);
+            CGContextSetLineWidth(currentContext, kBorderWidth);
+            CGContextStrokeRect(currentContext, rectFrame);
         }
-        CGContextRef    currentContext = UIGraphicsGetCurrentContext();
-        CGContextSetRGBFillColor(currentContext, 0.0, 0.0, 0.0, 1.0);
+        catch (Exception e)
+        {
 
-        [textToDraw drawInRect:renderingRect
-        withFont:font
-        lineBreakMode:NSLineBreakByWordWrapping
-        alignment:NSTextAlignmentCenter];
-
-    }
-
-    - (void) drawTextWithLeftAllignment:(NSString*)textToDraw withFrame:(CGRect)renderingRect withFont:(UIFont*)font {
-
-        if (textToDraw == nil) {
-            textToDraw = "";
         }
-        CGContextRef    currentContext = UIGraphicsGetCurrentContext();
-        CGContextSetRGBFillColor(currentContext, 0.0, 0.0, 0.0, 1.0);
+    }
+*/
 
-        [textToDraw drawInRect:renderingRect
-        withFont:font
-        lineBreakMode:NSLineBreakByWordWrapping
-        alignment:NSTextAlignmentLeft];
+    private void drawPageNumber(int pageNumber) {
+        try
+        {
+            String pageNumberString = String.format("Page %d", pageNumber);
+            Font theFont = new Font(pdf, CoreFont.HELVETICA);
+            theFont.setSize(16);
 
+            TextLine txtLine = new TextLine(theFont, pageNumberString);
+            txtLine.setPosition(kBorderInset - txtLine.getWidth() / 2, pageSize.cy - 80.0 - txtLine.getHeight() / 2);
+            txtLine.drawOn(curPage);
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
-    - (void) drawLine {
-
-        CGContextRef    currentContext = UIGraphicsGetCurrentContext();
-        CGContextSetLineWidth(currentContext, kLineWidth);
-
-        CGContextSetStrokeColorWithColor(currentContext, [UIColor blueColor].CGColor);
-
-        CGPoint startPoint = CGPointMake(kMarginInset + kBorderInset, kMarginInset + kBorderInset + 40.0);
-        CGPoint endPoint = CGPointMake(pageSize.width - 2*kMarginInset -2*kBorderInset, kMarginInset + kBorderInset + 40.0);
-
-        CGContextBeginPath(currentContext);
-        CGContextMoveToPoint(currentContext, startPoint.x, startPoint.y);
-        CGContextAddLineToPoint(currentContext, endPoint.x, endPoint.y);
-
-        CGContextClosePath(currentContext);
-        CGContextDrawPath(currentContext, kCGPathFillStroke);
+    private void drawText(String textToDraw, Rect renderingRect, Font font)
+    {
+        drawText(textToDraw, renderingRect, font, "");
     }
 
-    - (void) drawImage {
+    private void drawText(String textToDraw, Rect renderingRect, Font font, String placeholder)
+    {
+        try
+        {
+            String strDisplay = textToDraw;
+            if (textToDraw == null || textToDraw.equals("") == true)
+                strDisplay = placeholder;
 
-        //UIImage * demoImage = [UIImage imageNamed:"wagner_pdf_image.png"];
-        UIImage * demoImage = [UIImage imageNamed:"ReportLogo"];
-        [demoImage drawInRect:CGRectMake( (pageSize.width - demoImage.size.width - 50), 40, demoImage.size.width, demoImage.size.height)];
+            curPage.setPenColor(0, 0, 0);
+            TextLine txtLine = new TextLine(font, strDisplay);
+
+            txtLine.setPosition(renderingRect.left - txtLine.getWidth() / 2, renderingRect.top - txtLine.getHeight() / 2);
+            txtLine.drawOn(curPage);
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
-    - (void) drawLogoImage {
+    private void drawTextWithLeftAllignment(String textToDraw, Rect renderingRect, Font font) {
+        try
+        {
+            curPage.setPenColor(0, 0, 0);
 
-        //UIImage * demoImage = [UIImage imageNamed:"wagner_pdf_logo.png"];
-        UIImage * demoImage = [UIImage imageNamed:"ReportLogoBottomCenter"];
-        float scale = 4.0;
-        float imageWidth = demoImage.size.width / scale;
-        float imageHeight = demoImage.size.height / scale;
+            TextLine txtLine = new TextLine(font, textToDraw);
+            txtLine.setPosition(renderingRect.left, renderingRect.top);
+            txtLine.drawOn(curPage);
+        }
+        catch (Exception e)
+        {
 
-        [demoImage drawInRect:CGRectMake(pageSize.width / 2.0 - imageWidth / 2.0 , pageSize.height - imageHeight - kBorderInset - kMarginInset - 200, demoImage.size.width / 5.0, demoImage.size.height / 5.0)];
+        }
     }
 
-    -(void)drawLineFromPoint:(CGPoint)from toPoint:(CGPoint)to {
+    private void drawLine() {
+        try
+        {
+            curPage.setPenWidth(kLineWidth);
+            curPage.setPenColor(Color.BLUE);
 
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSetLineWidth(context, 2.0);
+            Point startPoint = new Point((int)(kMarginInset + kBorderInset), (int)(kMarginInset + kBorderInset + 40.0));
+            Point endPoint = new Point((int)(pageSize.cx - 2*kMarginInset -2*kBorderInset), (int)(kMarginInset + kBorderInset + 40.0));
 
-        CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
-        float components[] = {0.2, 0.2, 0.2, 0.3};
-        CGColorRef color = CGColorCreate(colorspace, components);
+            curPage.drawLine(startPoint.x, startPoint.y, endPoint.x, endPoint.y);
+        }
+        catch (Exception e)
+        {
 
-        CGContextSetStrokeColorWithColor(context, color);
-
-        CGContextMoveToPoint(context, from.x, from.y);
-        CGContextAddLineToPoint(context, to.x, to.y);
-
-        CGContextStrokePath(context);
-        CGColorSpaceRelease(colorspace);
-        CGColorRelease(color);
-
+        }
     }
 
-    -(void)drawTableAt:(CGPoint)origin
-    withRowHeight:(int)rowHeight
-    andColumnWidth:(int)columnWidth
-    andRowCount:(int)numberOfRows
-    andColumnCount:(int)numberOfColumns
+    private void drawImage() {
+        try
+        {
+            BufferedInputStream in = new BufferedInputStream(GlobalData._mainContext.getAssets().open("pdfimgs/ReportLogo.png"));
 
+            Image demoImage = new Image(pdf, in, ImageType.PNG);
+            demoImage.setPosition(pageSize.cx - demoImage.getWidth() - 50.f, 40.f);
+            demoImage.drawOn(curPage);
+        }
+        catch (Exception e)
+        {
+            Log.e("error", e.toString());
+        }
+    }
+
+    private void drawLogoImage() {
+        try
+        {
+            AssetManager assetManager = GlobalData._mainContext.getAssets();
+            InputStream in = assetManager.open("pdfimgs/ReportLogoBottomCenter.jpg");
+
+            Image demoImage = new Image(pdf, in, ImageType.JPG);
+
+            float scale = 5.0f;
+            float imageWidth = demoImage.getWidth() / scale;
+            float imageHeight = demoImage.getHeight() / scale;
+            demoImage.setPosition(pageSize.cx / 2.0 - imageWidth / 2.0 , pageSize.cy - imageHeight - kBorderInset - kMarginInset - 200);
+            demoImage.drawOn(curPage);
+        }
+        catch (Exception e)
+        {
+            Log.e("error", e.toString());
+        }
+    }
+
+    private void drawLineFromPoint(Point from, Point to) {
+        try
+        {
+            curPage.setPenWidth(2.0);
+            curPage.setPenColor(0.2, 0.2, 0.3);
+
+            curPage.drawLine(from.x, from.y, to.x, to.y);
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    private void drawTableAt(Point origin, int rowHeight, int columnWidth, int numberOfRows, int numberOfColumns)
     {
         for (int i = 0; i <= numberOfRows; i++) {
 
             int newOrigin = origin.y + (rowHeight*i);
 
-            CGPoint from = CGPointMake(origin.x, newOrigin);
-            CGPoint to = CGPointMake(origin.x + (numberOfColumns*columnWidth), newOrigin);
+            Point from = new Point(origin.x, newOrigin);
+            Point to = new Point(origin.x + (numberOfColumns*columnWidth), newOrigin);
 
-            [self drawLineFromPoint:from toPoint:to];
+            drawLineFromPoint(from, to);
         }
 
         for (int i = 0; i <= numberOfColumns; i++) {
 
             int newOrigin = origin.x + (columnWidth*i);
 
-            CGPoint from = CGPointMake(newOrigin, origin.y);
-            CGPoint to = CGPointMake(newOrigin, origin.y +(numberOfRows*rowHeight));
+            Point from = new Point(newOrigin, origin.y);
+            Point to = new Point(newOrigin, origin.y +(numberOfRows*rowHeight));
 
-            [self drawLineFromPoint:from toPoint:to];
+            drawLineFromPoint(from, to);
         }
     }
-*/
-    private Rect getRectWithOriginSize(Point pt, Paint paint, String label, int widthMax, int heightMax)
+
+    private Rect getRectWithOriginSize(Point pt, TextLine txtLabel, int widthMax, int heightMax)
     {
-        Rect rcLabel = new Rect();
-        paint.getTextBounds(label, 0, label.length(), rcLabel);
-        Size labelSize = new Size(rcLabel.width(), rcLabel.height());
-        if (widthMax != 0 && labelSize.cx > widthMax)
+        Size labelSize = new Size((int)txtLabel.getWidth(), (int)txtLabel.getHeight());
+        if (widthMax != 0 && txtLabel.getWidth() > widthMax)
             labelSize.cx = widthMax;
         if (heightMax  != 0 && labelSize.cy > heightMax)
             labelSize.cy = heightMax;
