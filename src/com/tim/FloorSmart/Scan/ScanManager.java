@@ -1,12 +1,19 @@
 package com.tim.FloorSmart.Scan;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 import com.tim.FloorSmart.Global.CommonMethods;
+import com.tim.FloorSmart.Global.GlobalData;
+import com.tim.FloorSmart.R;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -128,10 +135,13 @@ public class ScanManager {
                             listener.didFindThirdPackage(ScanManager.this);
                     }
 
-                    if (mScanning)
-                    {
-                        mScanning = false;
-                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                    synchronized (mBluetoothAdapter) {
+                        if (mScanning)
+                        {
+                            mScanning = false;
+                            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                            CommonMethods.Log("Stopped scan");
+                        }
                     }
                 }
             };
@@ -176,51 +186,100 @@ public class ScanManager {
         return _sharedInstance;
     }
 
+    public boolean testBleFeature(Activity activity)
+    {
+        if (!activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(activity, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Ensures Bluetooth is available on the device and it is enabled. If not,
+        // displays a dialog requesting user permission to enable Bluetooth.
+        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            activity.startActivity(enableBtIntent);
+
+            return false;
+        }
+
+        return true;
+    }
+
     public void startScan()
     {
         // Stops scanning after a pre-defined scan period.
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (mScanning)
+                synchronized (mBluetoothAdapter)
                 {
-                    mScanning = false;
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                }
+                    if (mScanning)
+                    {
+                        mScanning = false;
+                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                        CommonMethods.Log("Stopped scan");
+                    }
 
-                if (mStopped == false)
-                {
-                    mHandler.postDelayed(this, SCAN_PERIOD);
-                    mCalled = false;
-                    mBluetoothAdapter.startLeScan(mLeScanCallback);
-                }
-                else
-                {
-                    CommonMethods.Log("Stopped scan");
+                    if (mStopped == false)
+                    {
+                        mHandler.postDelayed(this, SCAN_PERIOD);
+                        mCalled = false;
+                        if (mBluetoothAdapter.startLeScan(mLeScanCallback))
+                        {
+                            mScanning = true;
+                            if (ScanManager.this.listener != null)
+                                ScanManager.this.listener.scanManagerDidStartScanning(ScanManager.this);
+                            CommonMethods.Log("Started scan");
+                        }
+                        else
+                        {
+                            mScanning = false;
+                            CommonMethods.Log("failed to start scan");
+                        }
+                    }
+                    else
+                    {
+                        mScanning = false;
+                        CommonMethods.Log("Stopped scan");
+                    }
                 }
             }
         }, SCAN_PERIOD);
 
-        mStopped = false;
-        mCalled = false;
-        if (mBluetoothAdapter.startLeScan(mLeScanCallback))
+        synchronized (mBluetoothAdapter)
         {
-            mScanning = true;
-            if (this.listener != null)
-                this.listener.scanManagerDidStartScanning(this);
-            CommonMethods.Log("Started scan");
-        }
-        else
-        {
-            mScanning = false;
-            CommonMethods.Log("failed to start scan");
+            mStopped = false;
+            if (mScanning == false)
+            {
+                mCalled = false;
+                if (mBluetoothAdapter.startLeScan(mLeScanCallback))
+                {
+                    mScanning = true;
+                    if (this.listener != null)
+                        this.listener.scanManagerDidStartScanning(this);
+                    CommonMethods.Log("Started scan");
+                }
+                else
+                {
+                    mScanning = false;
+                    CommonMethods.Log("failed to start scan");
+                }
+            }
         }
     }
 
     public void stopScan()
     {
-        mStopped = true;
-        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+        synchronized (mBluetoothAdapter)
+        {
+            mStopped = true;
+            if (mScanning)
+            {
+                mScanning = false;
+                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                CommonMethods.Log("Stopped scan");
+            }
+        }
     }
 
     private static String bytesToHex(byte[] bytes) {

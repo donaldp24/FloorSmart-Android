@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">FloorSmart</string>
+	<string name="ble_not_supported">Bluetooth Smart not supported!</string>
 
     <string name="job_main_title">Jobs</string>
     <string name="job_add_hint">Add job</string>

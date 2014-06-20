@@ -261,10 +261,13 @@ public class RecordActivity extends Activity{
                 (selectedJob != null && selectedLocation != null && selectedLocProduct != null))
         {
             // Change Record State
+            btnSaveEnabled(false);
+            btnCancelEnabled(true);
         }
         else
         {
-
+            btnSaveEnabled(true);
+            btnCancelEnabled(false);
         }
 
         if (_instance.settingArea == GlobalData.AREA_FEET)
@@ -367,6 +370,8 @@ public class RecordActivity extends Activity{
             //if (globalData.isSaved)
             //{
             globalData.resetSavedData();
+            btnCancelEnabled(false);
+            btnSaveEnabled(true);
             //self.btnSummary.enabled = NO;
             //}
 
@@ -825,6 +830,16 @@ public class RecordActivity extends Activity{
 
     private void onSaveClicked()
     {
+        ScanManager manager = ScanManager.managerWithListner(this, ScanManagerListenerInstance.sharedInstance());
+        if (manager == null)
+        {
+            Toast.makeText(RecordActivity.this, "Please turn on bluetooth", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (manager.testBleFeature(this) == false)
+            return;
+
         if (selectedJob == null)
         {
             Toast.makeText(RecordActivity.this, "Please select a job", Toast.LENGTH_SHORT).show();
@@ -896,11 +911,11 @@ public class RecordActivity extends Activity{
         GlobalData.sharedData().saveSelection(selectedJob.jobID, selectedLocation.locID, selectedLocProduct.locProductID);
         GlobalData.sharedData().startRecording();
 
-        rlPause.setBackgroundResource(R.drawable.bt_title_bar_cancel);
-        rlRecording.setBackgroundResource(R.drawable.bt_title_bar_save_disabled);
+        btnCancelEnabled(true);
+        btnSaveEnabled(false);
 
-        ScanManager manager = ScanManager.managerWithListner(this, ScanManagerListenerInstance.sharedInstance());
-        manager.stopScan();
+
+        //manager.stopScan();
         manager.startScan();
     }
 
@@ -913,10 +928,28 @@ public class RecordActivity extends Activity{
     {
         GlobalData.sharedData().pauseRecording();
 
-        rlPause.setBackgroundResource(R.drawable.bt_title_bar_cancel_disabled);
-        rlRecording.setBackgroundResource(R.drawable.bt_title_bar_save);
+        btnCancelEnabled(false);
+        btnSaveEnabled(true);
 
         ScanManager manager = ScanManager.managerWithListner(this, ScanManagerListenerInstance.sharedInstance());
         manager.stopScan();
+    }
+
+    private void btnSaveEnabled(boolean bEnable)
+    {
+        rlRecording.setEnabled(bEnable);
+        if (bEnable)
+            rlRecording.setBackgroundResource(R.drawable.bt_title_bar_save_disabled);
+        else
+            rlRecording.setBackgroundResource(R.drawable.bt_title_bar_save);
+    }
+
+    private void btnCancelEnabled(boolean bEnable)
+    {
+        rlPause.setEnabled(bEnable);
+        if (bEnable)
+            rlPause.setBackgroundResource(R.drawable.bt_title_bar_cancel_disabled);
+        else
+            rlPause.setBackgroundResource(R.drawable.bt_title_bar_cancel);
     }
 }

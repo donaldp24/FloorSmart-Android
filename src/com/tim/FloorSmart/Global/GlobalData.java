@@ -77,10 +77,13 @@ public class GlobalData {
         settingTemp = shared_preferences.getInt(KEY_TEMPERATURE, TEMP_FAHRENHEIT);
         settingArea = shared_preferences.getInt(KEY_AREA, AREA_FEET);
         settingDateFormat = shared_preferences.getString(KEY_DATEFORMAT, DATEFORMAT_US);
+        /*
         isSaved = shared_preferences.getBoolean(KEY_ISSAVED, false);
         selectedJobID = shared_preferences.getLong(KEY_JOBID, 0);
         selectedLocID = shared_preferences.getLong(KEY_LOCID, 0);
         selectedLocProductID = shared_preferences.getLong(KEY_LOCPRODUCTID, 0);
+        */
+        this.resetSavedData();
     }
 
     public void setSettingTemp(int settingTemp)
