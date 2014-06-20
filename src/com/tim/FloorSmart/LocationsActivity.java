@@ -21,7 +21,7 @@ import com.tim.FloorSmart.Global.GlobalData;
 
 import java.util.ArrayList;
 
-public class LocationsActivity extends Activity{
+public class LocationsActivity extends BaseActivity{
     RelativeLayout mainLayout;
     boolean bInitialized = false;
 

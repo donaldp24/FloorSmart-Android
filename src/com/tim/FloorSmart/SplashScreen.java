@@ -13,7 +13,7 @@ import com.tim.FloorSmart.Global.GlobalData;
 import com.tim.FloorSmart.Scan.ScanManager;
 import com.tim.FloorSmart.Scan.ScanManagerListener;
 
-public class SplashScreen extends Activity {
+public class SplashScreen extends BaseActivity {
 
     private ScanManager manager;
 

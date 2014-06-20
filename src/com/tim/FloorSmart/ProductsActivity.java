@@ -19,7 +19,7 @@ import com.tim.FloorSmart.Scan.ScanManager;
 
 import java.util.ArrayList;
 
-public class ProductsActivity extends Activity{
+public class ProductsActivity extends BaseActivity{
 
     private ScanManager manager;
 

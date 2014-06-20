@@ -17,7 +17,7 @@ import com.tim.FloorSmart.Scan.ScanManager;
 
 import java.util.ArrayList;
 
-public class RecordActivity extends Activity{
+public class RecordActivity extends BaseActivity{
     private static int ACTIVITY_RESULT_JOBS = 0;
     private static int ACTIVITY_RESULT_LOCATION = 1;
     private static int ACTIVITY_RESULT_PRODUCT = 2;
@@ -39,6 +39,9 @@ public class RecordActivity extends Activity{
 
     RelativeLayout rlPause;
     RelativeLayout rlRecording;
+
+    Button btnPause;
+    Button btnRecording;
 
     ListView listSelectView;
     SelectViewItemAdapter adapter;
@@ -163,7 +166,8 @@ public class RecordActivity extends Activity{
             @Override
             public void onClick(View v) {
                 Intent readingIntent = new Intent(RecordActivity.this, ReadingActivity.class);
-                readingIntent.putExtra(CommonDefs.ACTIVITY_TAG_LOC_PRODUCT_ID, selectedLocProduct.locProductID);
+                if (selectedLocProduct != null)
+                    readingIntent.putExtra(CommonDefs.ACTIVITY_TAG_LOC_PRODUCT_ID, selectedLocProduct.locProductID);
                 startActivity(readingIntent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
@@ -180,6 +184,23 @@ public class RecordActivity extends Activity{
         });
 
         rlPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCancelClicked();
+            }
+        });
+
+
+
+        btnRecording = (Button)findViewById(R.id.btnRecord);
+        btnPause = (Button)findViewById(R.id.btnPause);
+        btnRecording.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                onSaveClicked();
+            }
+        });
+        btnPause.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 onCancelClicked();
@@ -457,7 +478,7 @@ public class RecordActivity extends Activity{
 
     private boolean isSelectable()
     {
-        return GlobalData.sharedData().isSaved;
+        return !GlobalData.sharedData().isSaved;
     }
 
     private void onJobClick()
@@ -849,7 +870,8 @@ public class RecordActivity extends Activity{
         GlobalData globalData = GlobalData.sharedData();
         float coverage = 0;
         String strCoverage = ((EditText)findViewById(R.id.txtCoverage)).getText().toString();
-        coverage = Float.parseFloat(strCoverage);
+        if (strCoverage.equalsIgnoreCase("") == false)
+            coverage = Float.parseFloat(strCoverage);
 
         if (globalData.settingArea == GlobalData.AREA_FEET)
             coverage = coverage;
@@ -938,18 +960,21 @@ public class RecordActivity extends Activity{
     private void btnSaveEnabled(boolean bEnable)
     {
         rlRecording.setEnabled(bEnable);
+        btnRecording.setEnabled(bEnable);
         if (bEnable)
-            rlRecording.setBackgroundResource(R.drawable.bt_title_bar_save_disabled);
+            btnRecording.setBackgroundResource(R.drawable.bt_title_bar_save_disabled);
         else
-            rlRecording.setBackgroundResource(R.drawable.bt_title_bar_save);
+            btnRecording.setBackgroundResource(R.drawable.bt_title_bar_save);
     }
 
     private void btnCancelEnabled(boolean bEnable)
     {
         rlPause.setEnabled(bEnable);
+        btnPause.setEnabled(bEnable);
+
         if (bEnable)
-            rlPause.setBackgroundResource(R.drawable.bt_title_bar_cancel_disabled);
+            btnPause.setBackgroundResource(R.drawable.bt_title_bar_cancel_disabled);
         else
-            rlPause.setBackgroundResource(R.drawable.bt_title_bar_cancel);
+            btnPause.setBackgroundResource(R.drawable.bt_title_bar_cancel);
     }
 }

@@ -20,7 +20,7 @@ import com.tim.FloorSmart.Global.GlobalData;
 
 import java.util.ArrayList;
 
-public class JobsArchiveActivity extends Activity{
+public class JobsArchiveActivity extends BaseActivity{
     RelativeLayout mainLayout;
     boolean bInitialized = false;
 

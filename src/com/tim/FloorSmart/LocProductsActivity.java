@@ -20,7 +20,7 @@ import com.tim.FloorSmart.Scan.ScanManager;
 
 import java.util.ArrayList;
 
-public class LocProductsActivity extends Activity{
+public class LocProductsActivity extends BaseActivity{
 
     private ScanManager manager;
 

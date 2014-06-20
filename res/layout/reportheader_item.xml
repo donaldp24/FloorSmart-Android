@@ -3,10 +3,10 @@
 			  android:orientation="vertical"
 			  android:layout_width="440px"
 			  android:layout_height="160px"
-              android:id="@+id/RLReportHeaderItemRoot" android:background="#C2B4A2">
+              android:id="@+id/RLReportHeaderItemRoot">
     <ImageView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="160px"
             android:id="@+id/imgBack" android:src="@drawable/bg_archive_job_tab" android:scaleType="fitXY"/>
     <TextView
             android:layout_width="120px"
@@ -14,7 +14,7 @@
             android:id="@+id/lblLocation" android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
             android:textColor="#FFFFFF" android:textSize="18px" android:gravity="center"
-            android:layout_marginLeft="10px" android:text="Location :" android:layout_marginTop="5px"/>
+            android:layout_marginLeft="50px" android:text="Location :" android:layout_marginTop="5px"/>
     <TextView android:layout_width="260px" android:layout_height="40px" android:id="@+id/txtLocation"
               android:layout_alignParentLeft="false" android:layout_alignParentTop="false" android:textColor="#FFFFFF"
               android:textSize="18px" android:layout_marginLeft="10px"
@@ -22,8 +22,9 @@
               android:layout_alignTop="@+id/lblLocation"/>
     <TextView android:layout_width="120px" android:layout_height="40px" android:id="@+id/lblProduct"
               android:layout_alignParentLeft="false" android:layout_alignParentTop="false" android:textColor="#FFFFFF"
-              android:textSize="18px" android:gravity="center" android:layout_marginLeft="10px"
-              android:text="Product :" android:layout_below="@+id/lblLocation"/>
+              android:textSize="18px" android:gravity="center"
+			  android:text="Product :" android:layout_below="@+id/lblLocation"
+			  android:layout_alignLeft="@+id/lblLocation"/>
     <TextView android:layout_width="260px" android:layout_height="40px" android:id="@+id/txtProduct"
               android:layout_alignParentLeft="false" android:layout_alignParentTop="false" android:textColor="#FFFFFF"
               android:textSize="18px" android:layout_marginLeft="10px" android:text="Location"
@@ -46,11 +47,11 @@
     <TextView android:layout_width="25px" android:layout_height="25px" android:id="@+id/txtUnitFT"
               android:gravity="center_vertical|right" android:textColor="#FFFFFF" android:textSize="14px"
               android:text="ft" android:layout_toRightOf="@+id/txtCoverage" android:layout_below="@+id/txtProductType"
-              android:layout_marginTop="5px"/>
+              android:layout_marginTop="8px"/>
     <TextView android:layout_width="25px" android:layout_height="25px" android:id="@+id/txtUnitM"
               android:gravity="center_vertical|right" android:textColor="#FFFFFF" android:textSize="14px"
               android:text="m" android:layout_toRightOf="@+id/txtCoverage" android:layout_below="@+id/txtProductType"
-              android:layout_marginTop="5px"/>
+              android:layout_marginTop="8px"/>
     <TextView android:layout_width="25px" android:layout_height="15px" android:id="@+id/txtUnit2"
               android:gravity="center_vertical" android:textColor="#FFFFFF" android:textSize="10px"
               android:text="2" android:layout_toRightOf="@+id/txtUnitFT" android:layout_below="@+id/txtProductType"

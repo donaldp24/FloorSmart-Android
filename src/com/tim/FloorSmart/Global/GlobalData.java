@@ -3,6 +3,7 @@ package com.tim.FloorSmart.Global;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.tim.FloorSmart.ReadingActivity;
 
 /**
  * Created by donald on 5/8/14.
@@ -38,6 +39,8 @@ public class GlobalData {
     // singleton
     private static GlobalData _sharedData;
     public static Context _mainContext;
+    public static ReadingActivity _readingActivity;
+    public static Activity _currentActivity;
 
     // properties (setting)
     public int  settingTemp; // temperature unit

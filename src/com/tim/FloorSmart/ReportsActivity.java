@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import com.tim.FloorSmart.Scan.ScanManager;
 
-public class ReportsActivity extends Activity{
+public class ReportsActivity extends BaseActivity {
 
     private ScanManager manager;
 

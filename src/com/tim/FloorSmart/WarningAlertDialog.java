@@ -31,7 +31,7 @@ public class WarningAlertDialog extends Dialog {
             }
         };
 
-        handler.sendEmptyMessageDelayed(0, 5000);
+        handler.sendEmptyMessageDelayed(0, 8000);
 
         ((TextView)findViewById(R.id.txtTitle)).setText(title);
         ((TextView)findViewById(R.id.txtBody)).setText(body);

@@ -18,7 +18,7 @@ import com.tim.FloorSmart.Scan.ScanManager;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ReadingActivity extends Activity{
+public class ReadingActivity extends BaseActivity {
 
     private ScanManager manager;
 
@@ -26,7 +26,7 @@ public class ReadingActivity extends Activity{
     boolean bInitialized = false;
 
     Date curDate;
-    FSLocProduct _curLocProduct;
+    FSLocProduct _curLocProduct = null;
     boolean isFromRecorded = false;
 
     ArrayList<FSReading> arrOverallreadings;
@@ -43,8 +43,8 @@ public class ReadingActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.readings);
 
-        long loc_id = getIntent().getLongExtra(CommonDefs.ACTIVITY_TAG_LOC_PRODUCT_ID, -1);
-        if (loc_id != -1)
+        long loc_id = getIntent().getLongExtra(CommonDefs.ACTIVITY_TAG_LOC_PRODUCT_ID, 0);
+        if (loc_id != 0)
             _curLocProduct = DataManager.sharedInstance().getLocProductWithID(loc_id);
         isFromRecorded = getIntent().getBooleanExtra(CommonDefs.ACTIVITY_TAG_FRRECORD, false);
 
@@ -134,12 +134,16 @@ public class ReadingActivity extends Activity{
                 finish();
             }
         });
+
+        GlobalData._readingActivity = ReadingActivity.this;
     }
 
     @Override
     protected void onStart()
     {
         super.onStart();
+
+        GlobalData._readingActivity = this;
 
         Date now = new Date();
         GlobalData globalData = GlobalData.sharedData();
@@ -213,7 +217,14 @@ public class ReadingActivity extends Activity{
 
     }
 
-    private void initDateTable()
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        GlobalData._readingActivity = null;
+    }
+
+    public void initDateTable()
     {
         if (curDate == null)
             curDate = new Date();
@@ -234,9 +245,12 @@ public class ReadingActivity extends Activity{
 
             setOverallData();
         }
+
+        adapter.setData(arrOverallreadings);
+        listView.setAdapter(adapter);
     }
 
-    private void scrolltoEndList()
+    public void scrolltoEndList()
     {
         listView.post(new Runnable() {
             @Override
@@ -355,7 +369,7 @@ public class ReadingActivity extends Activity{
         confirmDialog.show();
     }
 
-    private void showWarning()
+    public void showWarning()
     {
         if (arrOverallreadings.size() >= 2)
         {
@@ -400,7 +414,7 @@ public class ReadingActivity extends Activity{
                 String bodyText = "";
                 if (_curLocProduct.locProductType == FSProduct.FSPRODUCTTYPE_FINISHED)
                 {
-                    bodyText = String.format(" NWFA Guidelines require 40 readings \n per 10000sqft for finished material");
+                    bodyText = String.format(" NWFA Guidelines require 40 readings \n per 1000sqft for finished material");
                 }
                 else
                 {

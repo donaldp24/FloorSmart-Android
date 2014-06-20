@@ -140,7 +140,7 @@ public class ScanManager {
                         {
                             mScanning = false;
                             mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                            CommonMethods.Log("Stopped scan");
+                            CommonMethods.Log("Stopped scan on callback");
                         }
                     }
                 }
@@ -217,7 +217,7 @@ public class ScanManager {
                     {
                         mScanning = false;
                         mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                        CommonMethods.Log("Stopped scan");
+                        CommonMethods.Log("Stopped scan before starting");
                     }
 
                     if (mStopped == false)
@@ -229,7 +229,7 @@ public class ScanManager {
                             mScanning = true;
                             if (ScanManager.this.listener != null)
                                 ScanManager.this.listener.scanManagerDidStartScanning(ScanManager.this);
-                            CommonMethods.Log("Started scan");
+                            CommonMethods.Log("delay posted Started scan");
                         }
                         else
                         {
@@ -240,7 +240,7 @@ public class ScanManager {
                     else
                     {
                         mScanning = false;
-                        CommonMethods.Log("Stopped scan");
+                        CommonMethods.Log("cancel delay posting with stopping ");
                     }
                 }
             }

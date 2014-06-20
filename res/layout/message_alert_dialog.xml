@@ -15,11 +15,11 @@
             android:layout_height="30px"
             android:id="@+id/txtTitle" android:layout_alignLeft="@+id/imageView" android:layout_alignParentTop="true"
             android:layout_marginTop="65px" android:gravity="center" android:textColor="#FAB22D"
-            android:textSize="16px"/>
+            android:textSize="18px"/>
     <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
               android:id="@+id/txtBody"
               android:layout_alignLeft="@+id/imageView" android:layout_below="@+id/txtTitle"
               android:layout_marginLeft="10px" android:layout_marginRight="10px" android:layout_marginBottom="10px"
-              android:textColor="#FAB22D" android:textSize="13px"/>
+              android:textColor="#FAB22D" android:textSize="15px"/>
 </RelativeLayout>
 

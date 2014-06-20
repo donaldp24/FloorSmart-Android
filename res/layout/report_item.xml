@@ -2,22 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			  android:orientation="vertical"
 			  android:layout_width="440px"
-			  android:layout_height="40px"
+			  android:layout_height="50px"
               android:id="@+id/RLReportItemRoot" android:background="#C2B4A2">
     <ImageView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="50px"
             android:id="@+id/imgBack" android:src="@drawable/bg_product_list_bar" android:scaleType="fitXY"/>
     <TextView
             android:layout_width="370px"
-            android:layout_height="40px"
+            android:layout_height="50px"
             android:id="@+id/lblReadingDate" android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
             android:textColor="#FFFFFF" android:textSize="18px" android:gravity="center"
             android:layout_marginLeft="10px" android:text="Date: 01/05/2014"/>
     <ImageView
             android:layout_width="25px"
-            android:layout_height="fill_parent"
+            android:layout_height="50px"
             android:id="@+id/imgDel" android:src="@drawable/bt_arrow_right1" android:layout_centerHorizontal="true"
             android:layout_toRightOf="@+id/lblReadingDate" android:layout_marginLeft="10px"/>
 </RelativeLayout>

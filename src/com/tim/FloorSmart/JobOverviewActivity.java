@@ -18,7 +18,7 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 
-public class JobOverviewActivity extends Activity{
+public class JobOverviewActivity extends BaseActivity{
 
     RelativeLayout mainLayout;
     boolean bInitialized = false;
@@ -191,6 +191,9 @@ public class JobOverviewActivity extends Activity{
         });
 
         listView.setAdapter(adapter);
+
+        for (int i = 0; i < adapter.getGroupCount(); i++)
+            listView.expandGroup(i);
     }
 
     public class FSReportListNodeObject

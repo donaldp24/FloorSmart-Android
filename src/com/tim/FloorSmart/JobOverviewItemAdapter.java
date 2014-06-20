@@ -93,19 +93,19 @@ public class JobOverviewItemAdapter extends BaseExpandableListAdapter {
         if (GlobalData.sharedData().settingArea == GlobalData.AREA_FEET)
         {
             convertView.findViewById(R.id.txtUnitM).setVisibility(View.INVISIBLE);
-            convertView.findViewById(R.id.txtUnitM).setVisibility(View.VISIBLE);
+            convertView.findViewById(R.id.txtUnitFT).setVisibility(View.VISIBLE);
         }
         else
         {
             convertView.findViewById(R.id.txtUnitM).setVisibility(View.VISIBLE);
-            convertView.findViewById(R.id.txtUnitM).setVisibility(View.INVISIBLE);
+            convertView.findViewById(R.id.txtUnitFT).setVisibility(View.INVISIBLE);
             convCoverage = GlobalData.sharedData().sqft2sqm((float)headerdata.locProduct.locProductCoverage);
         }
 
         String strCoverage = String.format("%.2f", convCoverage);
         ((TextView)convertView.findViewById(R.id.txtCoverage)).setText(strCoverage);
 
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return convertView;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
