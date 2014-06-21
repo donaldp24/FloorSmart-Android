@@ -11,6 +11,7 @@ import com.pdfjet.*;
 import com.tim.FloorSmart.Database.*;
 import com.tim.FloorSmart.Global.CommonMethods;
 import com.tim.FloorSmart.Global.GlobalData;
+import com.tim.FloorSmart.PDF.MyTextLine;
 import com.tim.FloorSmart.R;
 
 import java.io.*;
@@ -176,17 +177,22 @@ public class FSReportHelper {
             Font detailFont = new Font(pdf, CoreFont.HELVETICA);
             detailFont.setSize(fontSize);
 
-            TextLine labelText = new TextLine(labelFont, label);
-            TextLine detailText = new TextLine(detailFont, details);
+            MyTextLine labelText = new MyTextLine(labelFont, label);
+            MyTextLine detailText = new MyTextLine(detailFont, details);
 
             Rect labelFrame = getRectWithOriginSize(origin, labelText, 700, 300);
 
             Rect detailsFrame = getRectWithOriginSize(new Point(0, 0), detailText, 300, 100);
             totalFrame = new Rect(origin.x, origin.y, origin.x, origin.y);
 
+            int detailWidth = detailsFrame.width();
+            int detailHeight = detailsFrame.height();
+
             if (newLineSeparator) {
                 detailsFrame.left = origin.x;
                 detailsFrame.top = origin.y + labelFrame.height() + 10;
+                detailsFrame.right = detailsFrame.left + detailWidth;
+                detailsFrame.bottom = detailsFrame.top + detailHeight;
 
                 totalFrame.right = totalFrame.left + Math.max(labelFrame.width(), detailsFrame.width());
                 totalFrame.bottom = totalFrame.top + labelFrame.height() + detailsFrame.height() + 10;
@@ -194,6 +200,8 @@ public class FSReportHelper {
             else {
                 detailsFrame.left = origin.x + labelFrame.width() + 10;
                 detailsFrame.top = origin.y;
+                detailsFrame.right = detailsFrame.left + detailWidth;
+                detailsFrame.bottom = detailsFrame.top + detailHeight;
 
                 totalFrame.right = totalFrame.left + labelFrame.width() + detailsFrame.width() + 10;
                 totalFrame.bottom = totalFrame.top + Math.max(labelFrame.height(), detailsFrame.height());
@@ -227,7 +235,7 @@ public class FSReportHelper {
     private void renderFirstPage(FSJob aJob, String dateStr) {
         try
         {
-            Page page = new Page(pdf, A4.PORTRAIT);
+            Page page = new Page(pdf, new float[]{A4PAPER_WIDTH_IN_PORTRATE, A4PAPER_HEIGHT_IN_PORTRATE});
             curPage = page;
             drawImage();
 
@@ -261,18 +269,15 @@ public class FSReportHelper {
     private void renderHeader(FSJob job, FSLocation loc) {
         try
         {
-            Page headerPage = new Page(pdf, A4.PORTRAIT);
-            curPage = headerPage;
-
             Font font = new Font(pdf, CoreFont.HELVETICA);
             font.setSize(12);
 
             String strHeader = String.format("Job: %s \t\t Location: %s", job.jobName, loc.locName);
 
-            TextLine txtHeader = new TextLine(font, strHeader);
+            MyTextLine txtHeader = new MyTextLine(font, strHeader);
             float width = txtHeader.getWidth() + 20;
 
-            drawText(strHeader, new Rect(50, 60, (int)width, 20), font);
+            drawText(strHeader, getRealRect(50, 60, (int)width, 20), font);
 
             Point from = new Point(40, 90);
             Point to = new Point(pageSize.cy - 80, 90);
@@ -299,11 +304,11 @@ public class FSReportHelper {
             font.setSize(22);
             String strHeader = String.format("Location: %s", loc.locName);
 
-            TextLine txtLine = new TextLine(font, strHeader);
+            MyTextLine txtLine = new MyTextLine(font, strHeader);
 
             float width = txtLine.getWidth() + 20;
 
-            drawText(strHeader, new Rect(60, (int)ypos, (int)width, 20), font);
+            drawText(strHeader, getRealRect(60, (int)ypos, (int)width, 20), font);
 
             ypos += 30;
 
@@ -312,7 +317,7 @@ public class FSReportHelper {
 
             width = txtLine.getWidth() + 20;
 
-            drawText(strHeader, new Rect(60, (int)ypos, (int)width, 30), font);
+            drawText(strHeader, getRealRect(60, (int)ypos, (int)width, 30), font);
 
             if (locProduct.locProductName.equals(DataManager.FMD_DEFAULT_PRODUCTNAME))
             {
@@ -324,7 +329,7 @@ public class FSReportHelper {
                 txtLine.setText(strHeader);
                 width = txtLine.getWidth() + 20;
 
-                drawText(strHeader, new Rect((int)xpos, (int)ypos, (int)width, 30), font);
+                drawText(strHeader, getRealRect((int)xpos, (int)ypos, (int)width, 30), font);
             }
 
             ypos += 30;
@@ -344,7 +349,7 @@ public class FSReportHelper {
             txtLine.setText(strHeader);
             width = txtLine.getWidth() + 20;
 
-            drawText(strHeader, new Rect(60, (int)ypos, (int)width, 30), font);
+            drawText(strHeader, getRealRect(60, (int)ypos, (int)width, 30), font);
         }
         catch (Exception e)
         {
@@ -361,11 +366,11 @@ public class FSReportHelper {
             font.setSize(18);
             String strDate = String.format("Date: %s", CommonMethods.date2str(date, globalData.settingDateFormat));
 
-            TextLine txtline = new TextLine(font, strDate);
+            MyTextLine txtline = new MyTextLine(font, strDate);
 
             float width = txtline.getWidth() + 20;
 
-            drawText(strDate, new Rect(80, (int)ypos + 10, (int)width, 30), font);
+            drawText(strDate, getRealRect(80, (int)ypos + 10, (int)width, 30), font);
 
             ypos += 25;
         }
@@ -410,10 +415,10 @@ public class FSReportHelper {
             //\t\ts.g.:%ld%%;\t\t;Material:%@;
             //[FSReading getDisplayDepth:lastReading.readDepth], [FSReading getDisplayMaterial:lastReading.readMaterial]
 
-            TextLine txtline = new TextLine(font, strStatistic);
+            MyTextLine txtline = new MyTextLine(font, strStatistic);
             float width = txtline.getWidth() + 20;
 
-            drawText(strStatistic, new Rect((int)xOrigin, (int)yOrigin, (int)width, 30), font);
+            drawText(strStatistic, getRealRect((int)xOrigin, (int)yOrigin, (int)width, 30), font);
 
             ypos += 25;
         }
@@ -438,6 +443,7 @@ public class FSReportHelper {
             ArrayList<String> labels = new ArrayList<String>();
             labels.add("MC Avg (%)");
             labels.add("MC High (%)");
+            labels.add("MC Low (%)");
             labels.add("EMC Avg (%)");
             labels.add("RH Avg (%)");
             labels.add(String.format("Temp Avg (%s)", globalData.getTempUnit()));
@@ -446,7 +452,7 @@ public class FSReportHelper {
             font.setSize(18);
 
             for (int i = 0; i < labels.size(); i++) {
-                drawText(labels.get(i), new Rect((int)(xOrigin + 20 + columnWidth * i), (int)yOrigin + 10, (int)columnWidth - 40, 80), font);
+                drawText(labels.get(i), getRealRect((int)(xOrigin + 20 + columnWidth * i), (int)yOrigin + 10, (int)columnWidth - 40, 80), font);
             }
 
             yOrigin += kRowHeight;
@@ -471,42 +477,42 @@ public class FSReportHelper {
 
             // MC Avg.
             int column = 0;
-            drawText(String.format("%.1f", mcavg), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+            drawText(String.format("%.1f", mcavg), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                     (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                     (int)columnWidth - 20,
                     30), textFont, kEmptyPlaceholder);
 
             // MC High(%)
             column++;
-            drawText(String.format("%.1f", mchigh), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+            drawText(String.format("%.1f", mchigh), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                     (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                     (int)columnWidth - 20,
                     30), textFont, kEmptyPlaceholder);
 
             // MC Low(%)
             column++;
-            drawText(String.format("%.1f", mclow), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+            drawText(String.format("%.1f", mclow), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                     (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                     (int)columnWidth - 20,
                     30), textFont, kEmptyPlaceholder);
 
             // EMC Avg(%)
             column++;
-            drawText(String.format("%.1f", emcavg), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+            drawText(String.format("%.1f", emcavg), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                     (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                     (int)columnWidth - 20,
                     30), textFont, kEmptyPlaceholder);
 
             // RH Avg(%)
             column++;
-            drawText(String.format("%d", Math.round(rhavg)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+            drawText(String.format("%d", Math.round(rhavg)), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                     (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                     (int)columnWidth - 20,
                     30), textFont, kEmptyPlaceholder);
 
             // Temp Avg
             column++;
-            drawText(String.format("%d", Math.round(tempavg)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+            drawText(String.format("%d", Math.round(tempavg)), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                     (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                     (int)columnWidth - 20,
                     30), textFont, kEmptyPlaceholder);
@@ -538,7 +544,7 @@ public class FSReportHelper {
             font.setSize(18);
 
             for (int i = 0; i < labels.size(); i++) {
-                drawText(labels.get(i), new Rect((int)(xOrigin + 20 + columnWidth * i),
+                drawText(labels.get(i), getRealRect((int)(xOrigin + 20 + columnWidth * i),
                         (int)yOrigin + 10,
                         (int)columnWidth - 40,
                         80), font);
@@ -554,28 +560,28 @@ public class FSReportHelper {
 
             // Material
             int column = 0;
-            drawText(String.format("%s", FSReading.getDisplayMaterial(lastReading.readMaterial)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+            drawText(String.format("%s", FSReading.getDisplayMaterial(lastReading.readMaterial)), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                     (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                     (int)columnWidth - 20,
                     30), textFont, kEmptyPlaceholder);
 
             // s.g.
             column++;
-            drawText(String.format("%d", lastReading.readGravity), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+            drawText(String.format("%d", lastReading.readGravity), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                     (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                     (int)columnWidth - 20,
                     30), textFont, kEmptyPlaceholder);
 
             // Depth
             column++;
-            drawText(String.format("%s", FSReading.getDisplayDepth(lastReading.readDepth)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+            drawText(String.format("%s", FSReading.getDisplayDepth(lastReading.readDepth)), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                     (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                     (int)columnWidth - 20,
                     30), textFont, kEmptyPlaceholder);
 
             // Battery(%)
             column++;
-            drawText(String.format("%d", lastReading.readBattery), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+            drawText(String.format("%d", lastReading.readBattery), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                     (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                     (int)columnWidth - 20,
                     30), textFont, kEmptyPlaceholder);
@@ -611,7 +617,7 @@ public class FSReportHelper {
             Font font = new Font(pdf, CoreFont.HELVETICA_BOLD);
             font.setSize(18);
             for (int i = 0; i < labels.size(); i++) {
-                drawText(labels.get(i), new Rect((int)(xOrigin + 20 + columnWidth * i),
+                drawText(labels.get(i), getRealRect((int)(xOrigin + 20 + columnWidth * i),
                         (int)yOrigin + 10, (int)columnWidth - 40, 80), font);
             }
 
@@ -627,21 +633,21 @@ public class FSReportHelper {
 
                 // No.
                 int column = 0;
-                drawText(String.format("%d", (int)i + 1), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                drawText(String.format("%d", (int)i + 1), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                         (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                         (int)columnWidth - 20,
                         30), textFont, kEmptyPlaceholder);
 
                 // MC(%)
                 column++;
-                drawText(String.format("%s", reading.getDisplayRealMCValue()), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                drawText(String.format("%s", reading.getDisplayRealMCValue()), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                         (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                         (int)columnWidth - 20,
                         30), textFont, kEmptyPlaceholder);
 
                 // RH(%)
                 column++;
-                drawText(String.format("%d", Math.round(reading.readConvRH)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                drawText(String.format("%d", Math.round(reading.readConvRH)), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                         (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                         (int)columnWidth - 20,
                         30), textFont, kEmptyPlaceholder);
@@ -651,21 +657,21 @@ public class FSReportHelper {
                 float temp = (float)reading.readConvTemp;
                 if (globalData.settingTemp == GlobalData.TEMP_FAHRENHEIT) //f
                     temp = FSReading.getFTemperature(temp);
-                drawText(String.format("%d", Math.round(temp)), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                drawText(String.format("%d", Math.round(temp)), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                         (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                         (int)columnWidth - 20,
                         30), textFont, kEmptyPlaceholder);
 
                 // Emc
                 column++;
-                drawText(String.format("%.1f", reading.getEmcValue()), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                drawText(String.format("%.1f", reading.getEmcValue()), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                         (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                         (int)columnWidth - 20,
                         30), textFont, kEmptyPlaceholder);
 
                 // Time
                 column++;
-                drawText(CommonMethods.date2str(reading.readTimestamp, "HH:mm"), new Rect((int)(xOrigin + 10 + (columnWidth * column)),
+                drawText(CommonMethods.date2str(reading.readTimestamp, "HH:mm"), getRealRect((int)(xOrigin + 10 + (columnWidth * column)),
                         (int)(yOrigin + 10 + (kRowHeight * (i - startIndex))),
                         (int)columnWidth - 20,
                         30), textFont, kEmptyPlaceholder);
@@ -717,8 +723,11 @@ public class FSReportHelper {
 
             // render first page
             renderFirstPage(aJob, dateStr);
-            currentPage++;
             drawPageNumber(currentPage + 1);
+            currentPage++;
+
+            Page newPage = new Page(pdf, new float[]{A4PAPER_WIDTH_IN_PORTRATE, A4PAPER_HEIGHT_IN_PORTRATE});
+            curPage = newPage;
 
             // render contents page
             boolean isStart = true;
@@ -742,8 +751,11 @@ public class FSReportHelper {
 
                     // page break and render header
                     if (isInPage(yPos + kSubtitleHeight) == false) {
-                        currentPage++;
                         drawPageNumber(currentPage + 1);
+                        currentPage++;
+
+                        Page newPage1 = new Page(pdf, new float[]{A4PAPER_WIDTH_IN_PORTRATE, A4PAPER_HEIGHT_IN_PORTRATE});
+                        curPage = newPage1;
 
                         renderHeader(aJob, loc);
                         yPos = kHeaderHeight;
@@ -766,8 +778,11 @@ public class FSReportHelper {
 
                         // page break and render header
                         if (isInPage(yPos + kDateHeight + kStatisticTableHeight + kLastReadingTableHeight) == false) {
-                            currentPage++;
                             drawPageNumber(currentPage + 1);
+                            currentPage++;
+
+                            Page newPage1 = new Page(pdf, new float[]{A4PAPER_WIDTH_IN_PORTRATE, A4PAPER_HEIGHT_IN_PORTRATE});
+                            curPage = newPage1;
 
                             renderHeader(aJob, loc);
                             yPos = kHeaderHeight;
@@ -792,10 +807,13 @@ public class FSReportHelper {
                         isStart = false;
                         while (m < count) {
 
-                            if (isStart == false)
+                            if (isStart == true)
                             {
-                                currentPage++;
                                 drawPageNumber(currentPage + 1);
+                                currentPage++;
+
+                                //Page newPage1 = new Page(pdf, new float[]{A4PAPER_WIDTH_IN_PORTRATE, A4PAPER_HEIGHT_IN_PORTRATE});
+                                //curPage = newPage1;
 
                                 renderHeader(aJob, loc);
                                 yPos = kHeaderHeight;
@@ -827,8 +845,8 @@ public class FSReportHelper {
 
             if (yPos > kHeaderHeight)
             {
-                currentPage++;
                 drawPageNumber(currentPage + 1);
+                currentPage++;
             }
 
             // Close the PDF context and write the contents out.
@@ -897,8 +915,10 @@ public class FSReportHelper {
             Font theFont = new Font(pdf, CoreFont.HELVETICA);
             theFont.setSize(16);
 
-            TextLine txtLine = new TextLine(theFont, pageNumberString);
-            txtLine.setPosition(kBorderInset - txtLine.getWidth() / 2, pageSize.cy - 80.0 - txtLine.getHeight() / 2);
+            MyTextLine txtLine = new MyTextLine(theFont, pageNumberString);
+            //txtLine.setPosition(kBorderInset - txtLine.getWidth() / 2, pageSize.cy - 80.0 - txtLine.getHeight() / 2);
+            txtLine.setRect(kBorderInset, pageSize.cy - 80.0f, pageSize.cx - 2*kBorderInset, txtLine.getHeight(), Align.CENTER);
+
             txtLine.drawOn(curPage);
         }
         catch (Exception e)
@@ -921,9 +941,10 @@ public class FSReportHelper {
                 strDisplay = placeholder;
 
             curPage.setPenColor(0, 0, 0);
-            TextLine txtLine = new TextLine(font, strDisplay);
+            MyTextLine txtLine = new MyTextLine(font, strDisplay);
 
-            txtLine.setPosition(renderingRect.left - txtLine.getWidth() / 2, renderingRect.top - txtLine.getHeight() / 2);
+            //txtLine.setPosition(renderingRect.left - txtLine.getWidth() / 2, renderingRect.top - txtLine.getHeight() / 2);
+            txtLine.setRect(renderingRect, Align.CENTER);
             txtLine.drawOn(curPage);
         }
         catch (Exception e)
@@ -937,7 +958,7 @@ public class FSReportHelper {
         {
             curPage.setPenColor(0, 0, 0);
 
-            TextLine txtLine = new TextLine(font, textToDraw);
+            MyTextLine txtLine = new MyTextLine(font, textToDraw);
             txtLine.setPosition(renderingRect.left, renderingRect.top);
             txtLine.drawOn(curPage);
         }
@@ -967,9 +988,10 @@ public class FSReportHelper {
     private void drawImage() {
         try
         {
-            BufferedInputStream in = new BufferedInputStream(GlobalData._mainContext.getAssets().open("pdfimgs/ReportLogo.png"));
+            InputStream in = GlobalData._mainContext.getResources().openRawResource(R.raw.reportlogo);
 
             Image demoImage = new Image(pdf, in, ImageType.PNG);
+            demoImage.scaleBy(0.5f);
             demoImage.setPosition(pageSize.cx - demoImage.getWidth() - 50.f, 40.f);
             demoImage.drawOn(curPage);
         }
@@ -982,14 +1004,12 @@ public class FSReportHelper {
     private void drawLogoImage() {
         try
         {
-            AssetManager assetManager = GlobalData._mainContext.getAssets();
-            InputStream in = assetManager.open("pdfimgs/ReportLogoBottomCenter.jpg");
+            InputStream in = GlobalData._mainContext.getResources().openRawResource(R.raw.reportlogobottomcenter);
 
-            Image demoImage = new Image(pdf, in, ImageType.JPG);
-
-            float scale = 5.0f;
-            float imageWidth = demoImage.getWidth() / scale;
-            float imageHeight = demoImage.getHeight() / scale;
+            Image demoImage = new Image(pdf, in, ImageType.PNG);
+            demoImage.scaleBy(0.2f);
+            float imageWidth = demoImage.getWidth();
+            float imageHeight = demoImage.getHeight();
             demoImage.setPosition(pageSize.cx / 2.0 - imageWidth / 2.0 , pageSize.cy - imageHeight - kBorderInset - kMarginInset - 200);
             demoImage.drawOn(curPage);
         }
@@ -1036,7 +1056,7 @@ public class FSReportHelper {
         }
     }
 
-    private Rect getRectWithOriginSize(Point pt, TextLine txtLabel, int widthMax, int heightMax)
+    private Rect getRectWithOriginSize(Point pt, MyTextLine txtLabel, int widthMax, int heightMax)
     {
         Size labelSize = new Size((int)txtLabel.getWidth(), (int)txtLabel.getHeight());
         if (widthMax != 0 && txtLabel.getWidth() > widthMax)
@@ -1051,5 +1071,12 @@ public class FSReportHelper {
         rcRet.bottom = pt.y + labelSize.cy;
 
         return rcRet;
+    }
+
+    private Rect getRealRect(float left, float top, float width, float height)
+    {
+        Rect retRC = new Rect((int)left, (int)top, (int)(left + width), (int)(top + height));
+
+        return retRC;
     }
 }
