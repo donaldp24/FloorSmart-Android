@@ -812,8 +812,8 @@ public class FSReportHelper {
                                 drawPageNumber(currentPage + 1);
                                 currentPage++;
 
-                                //Page newPage1 = new Page(pdf, new float[]{A4PAPER_WIDTH_IN_PORTRATE, A4PAPER_HEIGHT_IN_PORTRATE});
-                                //curPage = newPage1;
+                                Page newPage1 = new Page(pdf, new float[]{A4PAPER_WIDTH_IN_PORTRATE, A4PAPER_HEIGHT_IN_PORTRATE});
+                                curPage = newPage1;
 
                                 renderHeader(aJob, loc);
                                 yPos = kHeaderHeight;
