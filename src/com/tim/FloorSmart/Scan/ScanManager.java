@@ -34,6 +34,8 @@ public class ScanManager {
                 @Override
                 public void onLeScan(final BluetoothDevice device, int rssi, final byte[] scanRecord)
                 {
+                    //byte[] records = {0x02,0x01,0x04,0x0F,0xFF,0x91,0x33,0xB9,0xDE,0x55,0xE2,0x68,0xC0,0x64,0x01,0x32,0x00,0x00,0x4E,0x15,0x09,0x57,0x61,0x67,0x6E,0x65,0x72,0x4D,0x65,0x74,0x65,0x72,0x42,0x4C,0x45,0x52,0x65,0x61,0x64,0x65,0x72,0x02,0x0A,0x00,0x00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00};
+
                     if (mCalled)
                         return;
 
@@ -46,6 +48,7 @@ public class ScanManager {
                     byte[] emulatorServiceUuid = null;
                     HashMap<String, Object> sensorData = null;
                     int offset = 0;
+
 
                     // parsing scanRecord
                     int index = 0;
@@ -66,7 +69,7 @@ public class ScanManager {
                         byte[] data = Arrays.copyOfRange(scanRecord, index + 1, index + length);
 
                         // manufactureData
-                        if (type == 0xff)
+                        if ((int)(type & 0xff) == 0xff)
                             manufacturedData = Arrays.copyOfRange(scanRecord, index + 1, index + length);
                         if (type == 0x07)
                         {
