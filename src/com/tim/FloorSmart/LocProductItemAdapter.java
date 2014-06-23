@@ -143,6 +143,9 @@ public class LocProductItemAdapter extends BaseAdapter {
         rlRootItem.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (currentFocus != null)
+                    return;
+
                 mActivity.clickItem((Integer)v.getTag());
             }
         });

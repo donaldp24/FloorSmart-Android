@@ -518,7 +518,7 @@ public class RecordActivity extends BaseActivity{
 
         if (selectedJob == null)
         {
-            Toast.makeText(RecordActivity.this, "Please select a job", Toast.LENGTH_SHORT).show();
+            CommonMethods.showAlertMessage(RecordActivity.this, "Please select a job");
             return;
         }
 
@@ -552,7 +552,7 @@ public class RecordActivity extends BaseActivity{
 
         if (selectedJob == null)
         {
-            Toast.makeText(RecordActivity.this, "Please select a job", Toast.LENGTH_SHORT).show();
+            CommonMethods.showAlertMessage(RecordActivity.this, "Please select a job");
             return;
         }
 
@@ -577,7 +577,7 @@ public class RecordActivity extends BaseActivity{
 
         if (selectedJob == null)
         {
-            Toast.makeText(RecordActivity.this, "Please select a job", Toast.LENGTH_SHORT).show();
+            CommonMethods.showAlertMessage(RecordActivity.this, "Please select a job");
             return;
         }
 
@@ -595,7 +595,7 @@ public class RecordActivity extends BaseActivity{
 
         if (selectedJob == null)
         {
-            Toast.makeText(RecordActivity.this, "Please select a job", Toast.LENGTH_SHORT).show();
+            CommonMethods.showAlertMessage(RecordActivity.this, "Please select a job");
             return;
         }
 
@@ -854,7 +854,7 @@ public class RecordActivity extends BaseActivity{
         ScanManager manager = ScanManager.managerWithListner(this, ScanManagerListenerInstance.sharedInstance());
         if (manager == null)
         {
-            Toast.makeText(RecordActivity.this, "Please turn on bluetooth", Toast.LENGTH_SHORT).show();
+            CommonMethods.showAlertMessage(RecordActivity.this, "Please turn on bluetooth");
             return;
         }
 
@@ -863,7 +863,7 @@ public class RecordActivity extends BaseActivity{
 
         if (selectedJob == null)
         {
-            Toast.makeText(RecordActivity.this, "Please select a job", Toast.LENGTH_SHORT).show();
+            CommonMethods.showAlertMessage(RecordActivity.this, "Please select a job");
             return;
         }
 
@@ -888,7 +888,7 @@ public class RecordActivity extends BaseActivity{
 
         if (selectedLocation == null)
         {
-            Toast.makeText(RecordActivity.this, "Please select a location", Toast.LENGTH_SHORT).show();
+            CommonMethods.showAlertMessage(RecordActivity.this, "Please select a location");
             return;
         }
 
@@ -926,7 +926,7 @@ public class RecordActivity extends BaseActivity{
 
         if (selectedLocProduct == null)
         {
-            Toast.makeText(RecordActivity.this, "Please select a product", Toast.LENGTH_SHORT).show();
+            CommonMethods.showAlertMessage(RecordActivity.this, "Please select a product");
             return;
         }
 

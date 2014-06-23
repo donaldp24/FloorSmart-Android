@@ -17,6 +17,7 @@ import com.tim.FloorSmart.Database.DataManager;
 import com.tim.FloorSmart.Database.FSJob;
 import com.tim.FloorSmart.Database.FSLocation;
 import com.tim.FloorSmart.Global.CommonDefs;
+import com.tim.FloorSmart.Global.CommonMethods;
 import com.tim.FloorSmart.Global.GlobalData;
 
 import java.util.ArrayList;
@@ -136,14 +137,14 @@ public class LocationsActivity extends BaseActivity{
 
                 if (locName.equals(""))
                 {
-                    Toast.makeText(LocationsActivity.this, "Please input location name to add!", Toast.LENGTH_SHORT).show();
+                    CommonMethods.showAlertMessage(LocationsActivity.this, "Please input location name to add!");
                     return;
                 }
 
                 DataManager _instance = DataManager.sharedInstance(LocationsActivity.this);
                 if (_instance.isExistSameLocation(_curJob.jobID, locName))
                 {
-                    Toast.makeText(LocationsActivity.this, "Location " + locName + " is already exist in this job", Toast.LENGTH_SHORT).show();
+                    CommonMethods.showAlertMessage(LocationsActivity.this, "Location " + locName + " is already exist in this job");
                     return;
                 }
 
@@ -155,6 +156,9 @@ public class LocationsActivity extends BaseActivity{
 
                 ((EditText)findViewById(R.id.txtLocationName)).setText("");
                 initTableData();
+
+                hideSoftKeyboard();
+                scrolltoEndList();
             }
         });
 
@@ -181,6 +185,7 @@ public class LocationsActivity extends BaseActivity{
         if(viewText!=null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(viewText.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+            inputMethodManager.hideSoftInputFromWindow(viewText.getWindowToken(), 0);
             getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
@@ -224,7 +229,7 @@ public class LocationsActivity extends BaseActivity{
         {
             if (DataManager.sharedInstance(LocationsActivity.this).isExistSameLocation(_curJob.jobID, newname))
             {
-                Toast.makeText(LocationsActivity.this, "Location " + newname + " is already exist in this job", Toast.LENGTH_SHORT).show();
+                CommonMethods.showAlertMessage(LocationsActivity.this, "Location " + newname + " is already exist in this job");
                 return false;
             }
 
@@ -252,7 +257,7 @@ public class LocationsActivity extends BaseActivity{
                 GlobalData _instance = GlobalData.sharedData();
                 if (_instance.isSaved && _instance.selectedLocID == loc.locID)
                 {
-                    Toast.makeText(LocationsActivity.this, "Recording is for this Location\nPlease 'Cancel' recording first to delete this location.", Toast.LENGTH_SHORT).show();
+                    CommonMethods.showAlertMessage(LocationsActivity.this, "Recording is for this Location\nPlease 'Cancel' recording first to delete this location.");
                     return;
                 }
 
@@ -280,5 +285,16 @@ public class LocationsActivity extends BaseActivity{
     {
         super.onResume();
         hideSoftKeyboard();
+    }
+
+    public void scrolltoEndList()
+    {
+        listLocations.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                listLocations.setSelection(locationAdapter.getCount() - 1);
+            }
+        });
     }
 }

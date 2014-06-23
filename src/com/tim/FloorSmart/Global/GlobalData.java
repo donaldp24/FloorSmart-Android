@@ -39,8 +39,8 @@ public class GlobalData {
     // singleton
     private static GlobalData _sharedData;
     public static Context _mainContext;
-    public static ReadingActivity _readingActivity;
     public static Activity _currentActivity;
+    public static boolean bFromRecord = false;
     public static String pdfCacheDir = "";
 
     // properties (setting)

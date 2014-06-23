@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.tim.FloorSmart.Database.*;
 import com.tim.FloorSmart.Global.CommonDefs;
+import com.tim.FloorSmart.Global.CommonMethods;
 import com.tim.FloorSmart.Global.GlobalData;
 import com.tim.FloorSmart.Scan.ScanManager;
 
@@ -156,7 +157,7 @@ public class LocProductsActivity extends BaseActivity{
 
                 if (productName.equals(""))
                 {
-                    Toast.makeText(LocProductsActivity.this, "Please input product name to add!", Toast.LENGTH_SHORT).show();
+                    CommonMethods.showAlertMessage(LocProductsActivity.this, "Please input product name to add!");
                     return;
                 }
 
@@ -166,7 +167,7 @@ public class LocProductsActivity extends BaseActivity{
                 {
                     if (_instance.isExistSameProduct(productName, finishNum))
                     {
-                        Toast.makeText(LocProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(finishNum) + ") is already exist", Toast.LENGTH_SHORT).show();
+                        CommonMethods.showAlertMessage(LocProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(finishNum) + ") is already exist");
                         return;
                     }
 
@@ -197,7 +198,7 @@ public class LocProductsActivity extends BaseActivity{
                     {
                         if (DataManager.sharedInstance(LocProductsActivity.this).isExistSameLocProduct(curLoc.locID, productName, finishNum))
                         {
-                            Toast.makeText(LocProductsActivity.this, "Product '" + productName + "(" + FSProduct.getDisplayProductType(finishNum) + ")' is already exist in this Location", Toast.LENGTH_SHORT).show();
+                            CommonMethods.showAlertMessage(LocProductsActivity.this, "Product '" + productName + "(" + FSProduct.getDisplayProductType(finishNum) + ")' is already exist in this Location");
                             return;
                         }
 
@@ -219,6 +220,9 @@ public class LocProductsActivity extends BaseActivity{
 
                 ((EditText)findViewById(R.id.txtProductName)).setText("");
                 initTableData();
+
+                hideSoftKeyboard();
+                scrolltoEndList();
             }
         });
 
@@ -340,6 +344,7 @@ public class LocProductsActivity extends BaseActivity{
         if(viewText!=null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(viewText.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+            inputMethodManager.hideSoftInputFromWindow(viewText.getWindowToken(), 0);
             getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
@@ -357,14 +362,41 @@ public class LocProductsActivity extends BaseActivity{
         listLocProducts.setAdapter(locproductAdapter);
     }
 
+    private void changeViewResult(boolean bExist)
+    {
+        if (bExist == true)
+        {
+            ((TextView)findViewById(R.id.txtSearching)).setVisibility(View.INVISIBLE);
+            listLocProducts.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            ((TextView)findViewById(R.id.txtSearching)).setVisibility(View.VISIBLE);
+            listLocProducts.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void initTableDataArray()
     {
+        boolean bExistData = false;
+
         String searchTxt = ((EditText)findViewById(R.id.txtProductName)).getText().toString();
         DataManager _instance = DataManager.sharedInstance(LocProductsActivity.this);
         if (bSwitchOn == true)
+        {
             arrProducts = _instance.getProducts(searchTxt);
+            bExistData = arrProducts.size() > 0;
+        }
         else
+        {
             arrLocProducts = _instance.getLocProducts(curLoc, searchTxt);
+            bExistData = arrLocProducts.size() > 0;
+        }
+
+        if (searchTxt.equals("") || bExistData == true)
+            changeViewResult(true);
+        else
+            changeViewResult(false);
     }
 
     @Override
@@ -401,7 +433,7 @@ public class LocProductsActivity extends BaseActivity{
                     GlobalData _instance = GlobalData.sharedData();
                     if (_instance.isSaved && _instance.selectedLocProductID == arrLocProducts.get((Integer) v.getTag()).locProductID)
                     {
-                        Toast.makeText(LocProductsActivity.this, "Recording is for this Product.\nPlease 'Cancel' recording first to delete this product.", Toast.LENGTH_SHORT).show();
+                        CommonMethods.showAlertMessage(LocProductsActivity.this, "Recording is for this Product.\nPlease 'Cancel' recording first to delete this product.");
                         return;
                     }
 
@@ -436,7 +468,7 @@ public class LocProductsActivity extends BaseActivity{
             DataManager _instance = DataManager.sharedInstance(LocProductsActivity.this);
             if (_instance.isExistSameProduct(productName, producttype))
             {
-                Toast.makeText(LocProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(producttype) + ") is already exist", Toast.LENGTH_SHORT).show();
+                CommonMethods.showAlertMessage(LocProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(producttype) + ") is already exist");
                 return false;
             }
 
@@ -456,7 +488,7 @@ public class LocProductsActivity extends BaseActivity{
             DataManager _instance = DataManager.sharedInstance(LocProductsActivity.this);
             if (_instance.isExistSameLocProduct(curLoc.locID, productName, producttype))
             {
-                Toast.makeText(LocProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(producttype) + ") is already exist", Toast.LENGTH_SHORT).show();
+                CommonMethods.showAlertMessage(LocProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(producttype) + ") is already exist");
                 return false;
             }
 
@@ -479,5 +511,16 @@ public class LocProductsActivity extends BaseActivity{
 
             return true;
         }
+    }
+
+    public void scrolltoEndList()
+    {
+        listLocProducts.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                listLocProducts.setSelection(locproductAdapter.getCount() - 1);
+            }
+        });
     }
 }

@@ -63,18 +63,20 @@ public class ScanManagerListenerInstance implements ScanManagerListener {
             GlobalData._currentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (GlobalData._readingActivity != null)
+                    /*if (GlobalData._readingActivity != null)
                     {
                         GlobalData._readingActivity.initDateTable();
                         GlobalData._readingActivity.scrolltoEndList();
                         GlobalData._readingActivity.showWarning();
                     }
-                    else
+                    else*/
                     {
                         Intent readingIntent = new Intent(GlobalData._mainContext, ReadingActivity.class);
+                        readingIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         readingIntent.putExtra(CommonDefs.ACTIVITY_TAG_LOC_PRODUCT_ID, GlobalData.sharedData().selectedLocProductID);
                         readingIntent.putExtra(CommonDefs.ACTIVITY_TAG_FRRECORD, true);
                         GlobalData._currentActivity.startActivity(readingIntent);
+                        GlobalData.bFromRecord = true;
                     }
                 }
             });

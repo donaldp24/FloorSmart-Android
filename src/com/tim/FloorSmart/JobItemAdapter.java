@@ -130,6 +130,9 @@ public class JobItemAdapter extends BaseAdapter {
         rootItem.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (currentFocus != null)
+                    return;
+
                 mActivity.clickItem((Integer)v.getTag());
             }
         });

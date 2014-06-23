@@ -8,16 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.os.Looper;
-import android.widget.AutoCompleteTextView;
-import android.widget.Toast;
 import com.tim.FloorSmart.Global.CommonMethods;
-import com.tim.FloorSmart.Global.GlobalData;
 import com.tim.FloorSmart.R;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -189,7 +183,7 @@ public class ScanManager {
     public boolean testBleFeature(Activity activity)
     {
         if (!activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(activity, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            CommonMethods.showAlertMessage(activity, activity.getString(R.string.ble_not_supported));
             return false;
         }
 

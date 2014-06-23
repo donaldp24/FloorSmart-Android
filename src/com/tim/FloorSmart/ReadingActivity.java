@@ -134,16 +134,12 @@ public class ReadingActivity extends BaseActivity {
                 finish();
             }
         });
-
-        GlobalData._readingActivity = ReadingActivity.this;
     }
 
     @Override
     protected void onStart()
     {
         super.onStart();
-
-        GlobalData._readingActivity = this;
 
         Date now = new Date();
         GlobalData globalData = GlobalData.sharedData();
@@ -172,8 +168,8 @@ public class ReadingActivity extends BaseActivity {
             String procName = _curLocProduct.locProductName;
 
             ((TextView)findViewById(R.id.txtName)).setText(jobName);
-            ((TextView)findViewById(R.id.txtLocation)).setText(getString(R.string.record_curreading_location) + locName);
-            ((TextView)findViewById(R.id.txtProduct)).setText(getString(R.string.record_curreading_product) + String.format("%s (%s)", procName, FSProduct.getDisplayProductType((int)_curLocProduct.locProductType)));
+            ((TextView)findViewById(R.id.txtLocation)).setText(getString(R.string.record_curreading_location) + " " + locName);
+            ((TextView)findViewById(R.id.txtProduct)).setText(getString(R.string.record_curreading_product) + String.format(" %s (%s)", procName, FSProduct.getDisplayProductType((int)_curLocProduct.locProductType)));
 
             coverage = (float)_curLocProduct.locProductCoverage;
         }
@@ -221,7 +217,6 @@ public class ReadingActivity extends BaseActivity {
     protected void onDestroy()
     {
         super.onDestroy();
-        GlobalData._readingActivity = null;
     }
 
     public void initDateTable()
@@ -426,5 +421,23 @@ public class ReadingActivity extends BaseActivity {
                 alertDlg.show();
             }
         }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        if (GlobalData.bFromRecord == true)
+        {
+            if (bInitialized == true)
+            {
+                initDateTable();
+                scrolltoEndList();
+                showWarning();
+            }
+        }
+
+        GlobalData.bFromRecord = false;
     }
 }

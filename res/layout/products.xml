@@ -16,6 +16,10 @@
                 android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="26px" android:gravity="center"
                 />
     </RelativeLayout>
+    <TextView android:layout_width="200px" android:layout_height="50px" android:text="@string/searching"
+              android:id="@+id/txtSearching" android:layout_centerHorizontal="true" android:layout_alignParentTop="true"
+              android:layout_marginTop="220px" android:textColor="#FFFFFF" android:textSize="20px"
+              android:gravity="center"/>
     <ListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

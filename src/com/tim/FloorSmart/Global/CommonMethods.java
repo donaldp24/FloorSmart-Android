@@ -1,6 +1,10 @@
 package com.tim.FloorSmart.Global;
 
+import android.content.Context;
+import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -89,5 +93,19 @@ public class CommonMethods {
         Date date3 = CommonMethods.str2date(str1, CommonDefs.DATE_FORMAT);
         Date date4 = CommonMethods.str2date(str2, CommonDefs.DATE_FORMAT);
         return date3.compareTo(date4);
+    }
+
+    public static void showAlertMessage(Context ctx, String msg)
+    {
+        Toast newToast = Toast.makeText(ctx, msg, Toast.LENGTH_SHORT);
+        newToast.setGravity(Gravity.CENTER, 0, 0);
+        newToast.show();
+    }
+
+    public static void showAlertMessage(Context ctx, int msgid)
+    {
+        Toast newToast = Toast.makeText(ctx, msgid, Toast.LENGTH_SHORT);
+        newToast.setGravity(Gravity.CENTER, 0, -50);
+        newToast.show();
     }
 }

@@ -72,6 +72,8 @@
     <string name="product_finished">finished</string>
     <string name="product_subfloor">subfloor</string>
 
+    <string name="searching">Searching...</string>
+
     <string-array
             name="product_array">
         <item>finished</item>

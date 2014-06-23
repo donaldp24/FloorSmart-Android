@@ -17,6 +17,7 @@ import android.widget.*;
 import com.tim.FloorSmart.Database.DataManager;
 import com.tim.FloorSmart.Database.FSJob;
 import com.tim.FloorSmart.Global.CommonDefs;
+import com.tim.FloorSmart.Global.CommonMethods;
 import com.tim.FloorSmart.Global.GlobalData;
 
 import java.util.ArrayList;
@@ -174,14 +175,14 @@ public class JobsActivity extends BaseActivity{
 
                 if (jobName.equals(""))
                 {
-                    Toast.makeText(JobsActivity.this, "Please input job name to add!", Toast.LENGTH_SHORT).show();
+                    CommonMethods.showAlertMessage(JobsActivity.this, "Please input job name to add!");
                     return;
                 }
 
                 DataManager _instance = DataManager.sharedInstance(JobsActivity.this);
                 if (_instance.isExistSameJob(jobName))
                 {
-                    Toast.makeText(JobsActivity.this, "Job " + jobName + " is already exist", Toast.LENGTH_SHORT).show();
+                    CommonMethods.showAlertMessage(JobsActivity.this, "Job " + jobName + " is already exist");
                     return;
                 }
 
@@ -191,6 +192,9 @@ public class JobsActivity extends BaseActivity{
 
                 ((EditText)findViewById(R.id.txtJobName)).setText("");
                 initTableData();
+
+                hideSoftKeyboard();
+                scrolltoEndList();
             }
         });
 
@@ -258,8 +262,23 @@ public class JobsActivity extends BaseActivity{
         if(viewText!=null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(viewText.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+            inputMethodManager.hideSoftInputFromWindow(viewText.getWindowToken(), 0);
             getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        }
+    }
+
+    private void changeViewResult(boolean bExist)
+    {
+        if (bExist == true)
+        {
+            ((TextView)findViewById(R.id.txtSearching)).setVisibility(View.INVISIBLE);
+            listJobs.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            ((TextView)findViewById(R.id.txtSearching)).setVisibility(View.VISIBLE);
+            listJobs.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -285,7 +304,7 @@ public class JobsActivity extends BaseActivity{
         DataManager _instance = DataManager.sharedInstance(JobsActivity.this);
         if (_instance.isExistSameJob(newJobName))
         {
-            Toast.makeText(this, "Job " + newJobName + " is already exist", Toast.LENGTH_SHORT).show();
+            CommonMethods.showAlertMessage(this, "Job " + newJobName + " is already exist");
             return false;
         }
 
@@ -329,7 +348,7 @@ public class JobsActivity extends BaseActivity{
                 FSJob curJob = arrJobNames.get((Integer)v.getTag());
                 if (_instance.isSaved && _instance.selectedJobID == curJob.jobID)
                 {
-                    Toast.makeText(JobsActivity.this, "Recording is for this job now.\n Please 'Cancel' recording first to archive this job.", Toast.LENGTH_LONG).show();
+                    CommonMethods.showAlertMessage(JobsActivity.this, "Recording is for this job now.\n Please 'Cancel' recording first to archive this job.");
                     return;
                 }
 
@@ -359,6 +378,11 @@ public class JobsActivity extends BaseActivity{
         String searchTxt = ((EditText)findViewById(R.id.txtJobName)).getText().toString();
         DataManager _instance = DataManager.sharedInstance(JobsActivity.this);
         arrJobNames = _instance.getJobs(0, searchTxt);
+
+        if (searchTxt.equals("") || arrJobNames.size() > 0)
+            changeViewResult(true);
+        else
+            changeViewResult(false);
     }
 
     @Override
@@ -374,9 +398,15 @@ public class JobsActivity extends BaseActivity{
         initTableData();
     }
 
-    public void removeMainFocus()
+    public void scrolltoEndList()
     {
-        EditText viewText = (EditText)findViewById(R.id.txtJobName);
-        viewText.clearFocus();
+        listJobs.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                listJobs.setSelection(jobAdapter.getCount() - 1);
+            }
+        });
     }
+
 }

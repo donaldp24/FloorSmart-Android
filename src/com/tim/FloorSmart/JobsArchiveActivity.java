@@ -16,6 +16,7 @@ import android.widget.*;
 import com.tim.FloorSmart.Database.DataManager;
 import com.tim.FloorSmart.Database.FSJob;
 import com.tim.FloorSmart.Global.CommonDefs;
+import com.tim.FloorSmart.Global.CommonMethods;
 import com.tim.FloorSmart.Global.GlobalData;
 
 import java.util.ArrayList;
@@ -167,10 +168,29 @@ public class JobsArchiveActivity extends BaseActivity{
             }
         });
 
+        /*
         Button btnSearch = (Button)findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                initTableData();
+            }
+        });*/
+
+        EditText txtSearchField = (EditText)findViewById(R.id.txtJobName);
+        txtSearchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
                 initTableData();
             }
         });
@@ -196,6 +216,20 @@ public class JobsArchiveActivity extends BaseActivity{
         }
     }
 
+    private void changeViewResult(boolean bExist)
+    {
+        if (bExist == true)
+        {
+            ((TextView)findViewById(R.id.txtSearching)).setVisibility(View.INVISIBLE);
+            listJobs.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            ((TextView)findViewById(R.id.txtSearching)).setVisibility(View.VISIBLE);
+            listJobs.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void initTableData()
     {
         initTableDataArray();
@@ -211,6 +245,11 @@ public class JobsArchiveActivity extends BaseActivity{
         String searchTxt = ((EditText)findViewById(R.id.txtJobName)).getText().toString();
         DataManager _instance = DataManager.sharedInstance(JobsArchiveActivity.this);
         arrJobNames = _instance.getJobs(1, searchTxt);
+
+        if (searchTxt.equals("") || arrJobNames.size() > 0)
+            changeViewResult(true);
+        else
+            changeViewResult(false);
     }
 
     public void resendJob(int itemid)
@@ -228,7 +267,7 @@ public class JobsArchiveActivity extends BaseActivity{
                 FSJob curJob = arrJobNames.get((Integer)v.getTag());
                 if (_instance.isSaved && _instance.selectedJobID == curJob.jobID)
                 {
-                    Toast.makeText(JobsArchiveActivity.this, "Recording is for this job now.\n Please 'Cancel' recording first to delete this job.", Toast.LENGTH_LONG).show();
+                    CommonMethods.showAlertMessage(JobsArchiveActivity.this, "Recording is for this job now.\n Please 'Cancel' recording first to delete this job.");
                     return;
                 }
 
@@ -268,7 +307,7 @@ public class JobsArchiveActivity extends BaseActivity{
                 FSJob curJob = arrJobNames.get((Integer)v.getTag());
                 if (_instance.isSaved && _instance.selectedJobID == curJob.jobID)
                 {
-                    Toast.makeText(JobsArchiveActivity.this, "Recording is for this job now.\n Please 'Cancel' recording first to delete this job.", Toast.LENGTH_LONG).show();
+                    CommonMethods.showAlertMessage(JobsArchiveActivity.this, "Recording is for this job now.\n Please 'Cancel' recording first to delete this job.");
                     return;
                 }
 

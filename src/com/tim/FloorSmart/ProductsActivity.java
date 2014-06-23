@@ -15,6 +15,7 @@ import android.widget.*;
 import com.tim.FloorSmart.Database.DataManager;
 import com.tim.FloorSmart.Database.FSProduct;
 import com.tim.FloorSmart.Global.CommonDefs;
+import com.tim.FloorSmart.Global.CommonMethods;
 import com.tim.FloorSmart.Scan.ScanManager;
 
 import java.util.ArrayList;
@@ -146,14 +147,14 @@ public class ProductsActivity extends BaseActivity{
 
                 if (productName.equals(""))
                 {
-                    Toast.makeText(ProductsActivity.this, "Please input product name to add!", Toast.LENGTH_SHORT).show();
+                    CommonMethods.showAlertMessage(ProductsActivity.this, "Please input product name to add!");
                     return;
                 }
 
                 DataManager _instance = DataManager.sharedInstance(ProductsActivity.this);
                 if (_instance.isExistSameProduct(productName, finishNum))
                 {
-                    Toast.makeText(ProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(finishNum) + ") is already exist", Toast.LENGTH_SHORT).show();
+                    CommonMethods.showAlertMessage(ProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(finishNum) + ") is already exist");
                     return;
                 }
 
@@ -164,6 +165,9 @@ public class ProductsActivity extends BaseActivity{
 
                 ((EditText)findViewById(R.id.txtProductName)).setText("");
                 initTableData();
+
+                hideSoftKeyboard();
+                scrolltoEndList();
             }
         });
 
@@ -215,6 +219,7 @@ public class ProductsActivity extends BaseActivity{
         if(viewText!=null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(viewText.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+            inputMethodManager.hideSoftInputFromWindow(viewText.getWindowToken(), 0);
             getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
@@ -230,11 +235,30 @@ public class ProductsActivity extends BaseActivity{
         listProducts.setAdapter(productAdapter);
     }
 
+    private void changeViewResult(boolean bExist)
+    {
+        if (bExist == true)
+        {
+            ((TextView)findViewById(R.id.txtSearching)).setVisibility(View.INVISIBLE);
+            listProducts.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            ((TextView)findViewById(R.id.txtSearching)).setVisibility(View.VISIBLE);
+            listProducts.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void initTableDataArray()
     {
         String searchTxt = ((EditText)findViewById(R.id.txtProductName)).getText().toString();
         DataManager _instance = DataManager.sharedInstance(ProductsActivity.this);
         arrProducts = _instance.getProducts(searchTxt);
+
+        if (searchTxt.equals("") || arrProducts.size() > 0)
+            changeViewResult(true);
+        else
+            changeViewResult(false);
     }
 
     @Override
@@ -292,7 +316,7 @@ public class ProductsActivity extends BaseActivity{
         DataManager _instance = DataManager.sharedInstance(ProductsActivity.this);
         if (_instance.isExistSameProduct(productName, producttype))
         {
-            Toast.makeText(ProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(producttype) + ") is already exist", Toast.LENGTH_SHORT).show();
+            CommonMethods.showAlertMessage(ProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(producttype) + ") is already exist");
             return false;
         }
 
@@ -303,5 +327,16 @@ public class ProductsActivity extends BaseActivity{
         _instance.updateProductToDatabase(_curProduct);
 
         return true;
+    }
+
+    public void scrolltoEndList()
+    {
+        listProducts.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                listProducts.setSelection(productAdapter.getCount() - 1);
+            }
+        });
     }
 }
