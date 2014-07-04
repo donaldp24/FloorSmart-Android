@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.FloorSmart.Scan.ScanManager;
 
 public class ReportsActivity extends BaseActivity {
@@ -99,5 +100,17 @@ public class ReportsActivity extends BaseActivity {
     {
         super.onResume();
         hideSoftKeyboard();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(ReportsActivity.this).activityStart(this); // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(ReportsActivity.this).activityStop(this); // Add this method.
     }
 }

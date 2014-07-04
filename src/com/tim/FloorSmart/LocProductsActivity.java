@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.FloorSmart.Database.*;
 import com.tim.FloorSmart.Global.CommonDefs;
 import com.tim.FloorSmart.Global.CommonMethods;
@@ -307,6 +308,13 @@ public class LocProductsActivity extends BaseActivity{
         }
 
         ((TextView)findViewById(R.id.lblLocation)).setText(getString(R.string.product_loc_location) + " " + jobName + "." + locName);
+        EasyTracker.getInstance(LocProductsActivity.this).activityStart(this); // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(LocProductsActivity.this).activityStop(this); // Add this method.
     }
 
     public void clickItem(int position)

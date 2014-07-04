@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.FloorSmart.Global.CommonDefs;
 import com.tim.FloorSmart.Global.GlobalData;
 import com.tim.FloorSmart.Scan.ScanManager;
@@ -249,5 +250,17 @@ public class SettingsActivity extends BaseActivity {
             rlTimeUS.setBackgroundResource(R.drawable.bt_ustime);
             rlEuropean.setBackgroundResource(R.drawable.bt_eurotime_selected);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(SettingsActivity.this).activityStart(this); // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(SettingsActivity.this).activityStop(this); // Add this method.
     }
 }

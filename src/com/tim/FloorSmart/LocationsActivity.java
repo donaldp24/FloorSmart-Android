@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.FloorSmart.Database.DataManager;
 import com.tim.FloorSmart.Database.FSJob;
 import com.tim.FloorSmart.Database.FSLocation;
@@ -296,5 +297,17 @@ public class LocationsActivity extends BaseActivity{
                 listLocations.setSelection(locationAdapter.getCount() - 1);
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(LocationsActivity.this).activityStart(this); // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(LocationsActivity.this).activityStop(this); // Add this method.
     }
 }

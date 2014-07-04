@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.FloorSmart.Database.*;
 import com.tim.FloorSmart.Global.CommonDefs;
 import com.tim.FloorSmart.Global.CommonMethods;
@@ -474,6 +475,13 @@ public class RecordActivity extends BaseActivity{
         }
 
         ((TextView)findViewById(R.id.txtCoverage)).setText(String.format("%.2f", coverage));
+        EasyTracker.getInstance(RecordActivity.this).activityStart(this); // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(RecordActivity.this).activityStop(this); // Add this method.
     }
 
     private boolean isSelectable()

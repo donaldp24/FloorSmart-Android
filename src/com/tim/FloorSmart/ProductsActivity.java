@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.FloorSmart.Database.DataManager;
 import com.tim.FloorSmart.Database.FSProduct;
 import com.tim.FloorSmart.Global.CommonDefs;
@@ -338,5 +339,17 @@ public class ProductsActivity extends BaseActivity{
                 listProducts.setSelection(productAdapter.getCount() - 1);
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(ProductsActivity.this).activityStart(this); // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(ProductsActivity.this).activityStop(this); // Add this method.
     }
 }

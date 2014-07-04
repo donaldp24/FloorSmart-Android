@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.FloorSmart.Database.DataManager;
 import com.tim.FloorSmart.Database.FSJob;
 import com.tim.FloorSmart.Global.CommonDefs;
@@ -409,4 +410,15 @@ public class JobsActivity extends BaseActivity{
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(JobsActivity.this).activityStart(this); // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(JobsActivity.this).activityStop(this); // Add this method.
+    }
 }

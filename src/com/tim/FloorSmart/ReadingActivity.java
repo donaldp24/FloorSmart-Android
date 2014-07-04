@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.FloorSmart.Database.*;
 import com.tim.FloorSmart.Global.CommonDefs;
 import com.tim.FloorSmart.Global.CommonMethods;
@@ -210,7 +211,13 @@ public class ReadingActivity extends BaseActivity {
         }
 
         ((TextView)findViewById(R.id.txtCoverage)).setText(strCoverage);
+        EasyTracker.getInstance(ReadingActivity.this).activityStart(this); // Add this method.
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(ReadingActivity.this).activityStop(this); // Add this method.
     }
 
     @Override
