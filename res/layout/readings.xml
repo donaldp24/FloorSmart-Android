@@ -35,17 +35,16 @@
         <TextView
                 android:layout_width="220px"
                 android:layout_height="fill_parent"
-                android:text="Mercy Hospital"
                 android:id="@+id/txtName" android:layout_alignParentLeft="true" android:layout_centerVertical="true"
                 android:layout_marginLeft="20px" android:gravity="center_vertical" android:textColor="#FFFFFF"
                 android:textSize="20px"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="25px" android:text="Location: First floor, South Wing"
+        <TextView android:layout_width="wrap_content" android:layout_height="25px" android:text="Location: "
                   android:id="@+id/txtLocation"
                   android:gravity="center_vertical" android:textColor="#FFFFFF"
                   android:textSize="12px" android:layout_toRightOf="@+id/txtName"
                   android:layout_alignTop="@+id/txtName" android:layout_marginTop="5px"/>
         <TextView android:layout_width="wrap_content" android:layout_height="25px"
-                  android:text="Product: 514 Weye OSB" android:id="@+id/txtProduct"
+                  android:text="Product: " android:id="@+id/txtProduct"
                   android:gravity="center_vertical" android:textColor="#FFFFFF" android:textSize="12px"
                   android:layout_toRightOf="@+id/txtName" android:layout_below="@+id/txtLocation"/>
         <TextView android:layout_width="wrap_content" android:layout_height="25px"
