@@ -85,16 +85,12 @@ public class JobOverviewActivity extends BaseActivity{
             }
         });
 
-        ImageView imgReport = (ImageView)findViewById(R.id.imgReports);
-        imgReport.setOnClickListener(new View.OnClickListener() {
+        ImageView imgJobs = (ImageView)findViewById(R.id.imgJobs);
+        imgJobs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent reportIntent = new Intent(JobOverviewActivity.this, JobsActivity.class);
-                reportIntent.putExtra(CommonDefs.ACTIVITY_TAG_REPORT, CommonDefs.ACTIVITY_REPORTS);
-                startActivity(reportIntent);
-
+                startActivity(new Intent(JobOverviewActivity.this, JobsActivity.class));
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                finish();
             }
         });
 
