@@ -34,6 +34,7 @@ public class JobOverviewActivity extends BaseActivity{
     ExpandableListView listView;
     JobOverviewItemAdapter adapter;
 
+    long lastTick = -1;
     /**
      * Called when the activity is first created.
      */
@@ -119,6 +120,12 @@ public class JobOverviewActivity extends BaseActivity{
         rlPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Date curTick = new Date();
+                long millis = curTick.getTime();
+                if (millis - lastTick < 1000)
+                    return;
+
+                lastTick = millis;
                 // Do Print
                 GlobalData.pdfCacheDir = SetPDFCacheDir(getApplicationContext().getCacheDir());
                 FSReportHelper helper = new FSReportHelper();

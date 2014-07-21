@@ -686,7 +686,7 @@ public class FSReportHelper {
     private String createReportForJob(FSJob aJob) {
         Date aDate = new Date();
 
-        String fileName = String.format("%s_%s.pdf", aJob.jobName, CommonMethods.date2str(aDate, "MM_dd_HH_mm"));
+        String fileName = String.format("%s_%s.pdf", aJob.jobName, CommonMethods.date2str(aDate, "MM_dd_HH_mm_ss"));
         String  fullPDFPath = GlobalData.pdfCacheDir + "/" + fileName;
 
         try // Delete file if exists

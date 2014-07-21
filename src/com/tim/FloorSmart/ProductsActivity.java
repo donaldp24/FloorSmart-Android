@@ -124,6 +124,14 @@ public class ProductsActivity extends BaseActivity{
             }
         });
 
+        RelativeLayout rlSelectTypeRegion = (RelativeLayout)findViewById(R.id.RLSelectTypeRegion);
+        rlSelectTypeRegion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeDropList(-1);
+            }
+        });
+
         RelativeLayout rlItemFinished = (RelativeLayout)findViewById(R.id.RLItemFinished);
         rlItemFinished.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -68,6 +68,11 @@
                 android:id="@+id/txtCurrentType" android:layout_alignParentLeft="true" android:layout_centerVertical="true"
                 android:layout_marginLeft="15px" android:textColor="#000000" android:gravity="center_vertical"
                 android:textSize="16px"/>
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" android:id="@+id/RLSelectTypeRegion"
+                android:layout_margin="8px">
+        </RelativeLayout>
     </RelativeLayout>
     <RelativeLayout
             android:layout_width="148px"
