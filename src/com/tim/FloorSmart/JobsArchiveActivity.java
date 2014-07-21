@@ -205,14 +205,14 @@ public class JobsArchiveActivity extends BaseActivity{
             }
         });
     }
-
+    /*
     public void clickItem(int position)
     {
         Intent overviewIntent = new Intent(JobsArchiveActivity.this, JobOverviewActivity.class);
         overviewIntent.putExtra(CommonDefs.ACTIVITY_TAG_JOBID, arrJobNames.get(position).jobID);
         startActivity(overviewIntent);
     }
-
+    */
     public void hideSoftKeyboard() {
         View viewText = findViewById(R.id.txtJobName);
 
