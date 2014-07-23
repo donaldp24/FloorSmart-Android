@@ -22,10 +22,13 @@ public class ScanManager {
     private static ScanManager _sharedInstance = null;
     private ScanManagerListener listener = null;
     private BluetoothAdapter mBluetoothAdapter = null;
-    private static final long SCAN_PERIOD = 5000;
+    private static final long SCAN_PERIOD = 1000;
     private boolean mCalled = false;
+    private static final long PACKET_INTERVAL = 5000;
 
     private static final int kPackageID = 0x9133B9DE;
+    private static long mLastTakingTime = -1;
+    private HashMap<String, Object> beforeData = null;
 
     // Device scan callback.
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
@@ -36,10 +39,12 @@ public class ScanManager {
                 {
                     //byte[] records = {0x02,0x01,0x04,0x0F,0xFF,0x91,0x33,0xB9,0xDE,0x55,0xE2,0x68,0xC0,0x64,0x01,0x32,0x00,0x00,0x4E,0x15,0x09,0x57,0x61,0x67,0x6E,0x65,0x72,0x4D,0x65,0x74,0x65,0x72,0x42,0x4C,0x45,0x52,0x65,0x61,0x64,0x65,0x72,0x02,0x0A,0x00,0x00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00};
 
-                    if (mCalled)
-                        return;
+                    //synchronized (mBluetoothAdapter) {
+                        if (mCalled)
+                            return;
 
-                    mCalled = true;
+                        mCalled = true;
+                    //}
 
                     CommonMethods.Log("didDiscoverPeripheral:name=[%s]", device.getName());
                     CommonMethods.Log("scanRecord : %s", ScanManager.bytesToHex(scanRecord));
@@ -81,6 +86,8 @@ public class ScanManager {
                         index += length;
                     }
 
+                    long currTime = System.currentTimeMillis();
+
                     // parse sensor data
                     if (manufacturedData != null)
                     {
@@ -101,7 +108,15 @@ public class ScanManager {
                             sensorData = parser.parseData(manufacturedData, offset);
 
                             if (listener != null)
-                                listener.didFindSensor(ScanManager.this, sensorData);
+                            {
+                                if ((mLastTakingTime == -1 || currTime - mLastTakingTime > PACKET_INTERVAL) ||
+                                        listener.isSame(beforeData, sensorData) == false)
+                                {
+                                    mLastTakingTime = currTime;
+                                    beforeData = sensorData;
+                                    listener.didFindSensor(ScanManager.this, sensorData);
+                                }
+                            }
                         }
                     }
                     else if (emulatorServiceUuid != null)
@@ -122,7 +137,15 @@ public class ScanManager {
                             sensorData = parser.parseData(emulatorServiceUuid, offset);
 
                             if (listener != null)
-                                listener.didFindSensor(ScanManager.this, sensorData);
+                            {
+                                if ((mLastTakingTime == -1 || currTime - mLastTakingTime > PACKET_INTERVAL) ||
+                                        listener.isSame(beforeData, sensorData) == false)
+                                {
+                                    mLastTakingTime = currTime;
+                                    beforeData = sensorData;
+                                    listener.didFindSensor(ScanManager.this, sensorData);
+                                }
+                            }
                         }
                     }
                     else
@@ -138,6 +161,37 @@ public class ScanManager {
                             mScanning = false;
                             mBluetoothAdapter.stopLeScan(mLeScanCallback);
                             CommonMethods.Log("Stopped scan on callback");
+
+                            // start immediately
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    synchronized (mBluetoothAdapter) {
+                                        if (mStopped == false)
+                                        {
+                                            //mHandler.postDelayed(this, SCAN_PERIOD);
+                                            mCalled = false;
+                                            if (mBluetoothAdapter.startLeScan(mLeScanCallback))
+                                            {
+                                                mScanning = true;
+                                                if (ScanManager.this.listener != null)
+                                                    ScanManager.this.listener.scanManagerDidStartScanning(ScanManager.this);
+                                                CommonMethods.Log("delay posted Started scan");
+                                            }
+                                            else
+                                            {
+                                                mScanning = false;
+                                                CommonMethods.Log("failed to start scan");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            mScanning = false;
+                                            CommonMethods.Log("cancel delay posting with stopping ");
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }
                 }
@@ -205,6 +259,7 @@ public class ScanManager {
     public void startScan()
     {
         // Stops scanning after a pre-defined scan period.
+        /*
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -242,7 +297,7 @@ public class ScanManager {
                 }
             }
         }, SCAN_PERIOD);
-
+        */
         synchronized (mBluetoothAdapter)
         {
             mStopped = false;

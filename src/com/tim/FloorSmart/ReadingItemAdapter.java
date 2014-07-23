@@ -96,6 +96,8 @@ public class ReadingItemAdapter extends BaseAdapter {
         if (item != null)
         {
             ((TextView)convertView.findViewById(R.id.lblTime)).setText(String.format("%s hrs", CommonMethods.date2str(item.readTimestamp, "HH:mm")));
+            //((TextView)convertView.findViewById(R.id.lblTime)).setText(String.format("%s hrs", CommonMethods.date2str(item.readTimestamp, "mm:ss")));
+
             ((TextView)convertView.findViewById(R.id.lblMC)).setText(String.format("%s", item.getDisplayRealMCValue()));
             ((TextView)convertView.findViewById(R.id.lblEMC)).setText(String.format("%.1f", item.getEmcValue()));
             ((TextView)convertView.findViewById(R.id.lblRH)).setText(String.format("%d", Math.round(item.readConvRH)));

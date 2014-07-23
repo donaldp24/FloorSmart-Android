@@ -99,4 +99,52 @@ public class ScanManagerListenerInstance implements ScanManagerListener {
         if (globalData.isSaved == false)
             return;
     }
+
+    @Override
+    public boolean isSame(HashMap<String, Object> beforeData, HashMap<String, Object> currData)
+    {
+        if (beforeData == null)
+        {
+            if (currData == null)
+                return true;
+            else
+                return false;
+        }
+        FSReading beforeReading = new FSReading();
+
+
+        beforeReading.readUuid = (String)beforeData.get(ReadingParser.kSensorDataUuidKey);
+        beforeReading.readRH = (Integer)(beforeData.get(ReadingParser.kSensorDataRHKey));
+        beforeReading.readConvRH = (Float)(beforeData.get(ReadingParser.kSensorDataConvRHKey));
+        beforeReading.readTemp = (Integer)(beforeData.get(ReadingParser.kSensorDataTemperatureKey));
+        beforeReading.readConvTemp = (Float)(beforeData.get(ReadingParser.kSensorDataConvTempKey));
+        beforeReading.readBattery = (Integer)(beforeData.get(ReadingParser.kSensorDataBatteryKey));
+        beforeReading.readDepth = (Integer)(beforeData.get(ReadingParser.kSensorDataDepthKey));
+        beforeReading.readGravity = (Integer)(beforeData.get(ReadingParser.kSensorDataGravityKey));
+        beforeReading.readMaterial = (Integer)(beforeData.get(ReadingParser.kSensorDataMaterialKey));
+        beforeReading.readMC = (Integer)(beforeData.get(ReadingParser.kSensorDataMCKey));
+
+        FSReading reading = new FSReading();
+        reading.readUuid = (String)currData.get(ReadingParser.kSensorDataUuidKey);
+        reading.readRH = (Integer)(currData.get(ReadingParser.kSensorDataRHKey));
+        reading.readConvRH = (Float)(currData.get(ReadingParser.kSensorDataConvRHKey));
+        reading.readTemp = (Integer)(currData.get(ReadingParser.kSensorDataTemperatureKey));
+        reading.readConvTemp = (Float)(currData.get(ReadingParser.kSensorDataConvTempKey));
+        reading.readBattery = (Integer)(currData.get(ReadingParser.kSensorDataBatteryKey));
+        reading.readDepth = (Integer)(currData.get(ReadingParser.kSensorDataDepthKey));
+        reading.readGravity = (Integer)(currData.get(ReadingParser.kSensorDataGravityKey));
+        reading.readMaterial = (Integer)(currData.get(ReadingParser.kSensorDataMaterialKey));
+        reading.readMC = (Integer)(currData.get(ReadingParser.kSensorDataMCKey));
+
+        if (reading.readMC == beforeReading.readMC &&
+                reading.readMaterial == beforeReading.readMaterial &&
+                reading.readGravity == beforeReading.readGravity &&
+                reading.readDepth == beforeReading.readDepth &&
+                reading.readBattery == beforeReading.readBattery &&
+                reading.readTemp == beforeReading.readTemp &&
+                reading.readRH == beforeReading.readRH)
+            return true;
+        return false;
+
+    }
 }
